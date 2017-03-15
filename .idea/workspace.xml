@@ -1,7 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d092e0db-f4a4-4a52-8119-24718f88e4c8" name="Default" comment="" />
+    <list default="true" id="d092e0db-f4a4-4a52-8119-24718f88e4c8" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/amenities_manager/forms.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/household_manager/forms.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/household_manager/templates/household_manager/File-Manager.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/household_manager/templates/household_manager/Household-Manager.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/household_manager/urls.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/landuse_manager/forms.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/LICENSE" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/LICENSE" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/README.md" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/README.md" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/clockpicker.js" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/clockpicker.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/css/materialize.css" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/css/materialize.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/css/materialize.min.css" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/css/materialize.min.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/material-design-icons/LICENSE.txt" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/material-design-icons/LICENSE.txt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/material-design-icons/Material-Design-Icons.eot" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/material-design-icons/Material-Design-Icons.eot" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/material-design-icons/Material-Design-Icons.svg" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/material-design-icons/Material-Design-Icons.svg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/material-design-icons/Material-Design-Icons.ttf" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/material-design-icons/Material-Design-Icons.ttf" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/material-design-icons/Material-Design-Icons.woff" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/material-design-icons/Material-Design-Icons.woff" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/material-design-icons/Material-Design-Icons.woff2" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/material-design-icons/Material-Design-Icons.woff2" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Bold.eot" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Bold.eot" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Bold.ttf" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Bold.ttf" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Bold.woff" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Bold.woff" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Bold.woff2" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Bold.woff2" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Light.eot" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Light.eot" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Light.ttf" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Light.ttf" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Light.woff" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Light.woff" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Light.woff2" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Light.woff2" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Medium.eot" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Medium.eot" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Medium.ttf" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Medium.ttf" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Medium.woff" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Medium.woff" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Medium.woff2" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Medium.woff2" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Regular.eot" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Regular.eot" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Regular.ttf" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Regular.ttf" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Regular.woff" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Regular.woff" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Regular.woff2" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Regular.woff2" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Thin.eot" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Thin.eot" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Thin.ttf" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Thin.ttf" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Thin.woff" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Thin.woff" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/font/roboto/Roboto-Thin.woff2" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/font/roboto/Roboto-Thin.woff2" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/js/application.js" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/js/application.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/js/jquery-1.12.4.min.js" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/js/jquery-1.12.4.min.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/js/materialize.js" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/js/materialize.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/materialize/js/materialize.min.js" afterPath="$PROJECT_DIR$/amenities_manager/static/css/materialize/js/materialize.min.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/personalized.css" afterPath="$PROJECT_DIR$/amenities_manager/static/css/personalized.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/css/test.css" afterPath="$PROJECT_DIR$/amenities_manager/static/css/test.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/advanced_reserve.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/advanced_reserve.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/api-google-platform.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/api-google-platform.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/init.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/init.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-3.1.0.min.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-3.1.0.min.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-timepicker-1.3.5/AUTHORS" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-timepicker-1.3.5/AUTHORS" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-timepicker-1.3.5/CHANGELOG" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-timepicker-1.3.5/CHANGELOG" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-timepicker-1.3.5/LICENSE-GPL" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-timepicker-1.3.5/LICENSE-GPL" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-timepicker-1.3.5/LICENSE-MIT" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-timepicker-1.3.5/LICENSE-MIT" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-timepicker-1.3.5/README.md" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-timepicker-1.3.5/README.md" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-timepicker-1.3.5/jquery.timepicker.css" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-timepicker-1.3.5/jquery.timepicker.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-timepicker-1.3.5/jquery.timepicker.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-timepicker-1.3.5/jquery.timepicker.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-timepicker-1.3.5/jquery.timepicker.min.css" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-timepicker-1.3.5/jquery.timepicker.min.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery-timepicker-1.3.5/jquery.timepicker.min.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery-timepicker-1.3.5/jquery.timepicker.min.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/jquery.rateyo.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/jquery.rateyo.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/login.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/login.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/logout.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/logout.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/navbar.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/navbar.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/page_init.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/page_init.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/prompt.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/prompt.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/js/test.js" afterPath="$PROJECT_DIR$/amenities_manager/static/js/test.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/heatmap.js" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/heatmap.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/images/layers-2x.png" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/images/layers-2x.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/images/layers.png" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/images/layers.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/images/marker-icon-2x.png" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/images/marker-icon-2x.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/images/marker-icon.png" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/images/marker-icon.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/images/marker-shadow.png" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/images/marker-shadow.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/leaflet-heat.js" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/leaflet-heat.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/leaflet-heatmap.js" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/leaflet-heatmap.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/leaflet-src.js" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/leaflet-src.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/leaflet-src.map" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/leaflet-src.map" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/leaflet.css" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/leaflet.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/static/amenities_manager/leaflet/leaflet.js" afterPath="$PROJECT_DIR$/amenities_manager/static/leaflet/leaflet.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amenities_manager/models.py" afterPath="$PROJECT_DIR$/amenities_manager/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amenities_manager/templates/amenities_manager/File-Manager.html" afterPath="$PROJECT_DIR$/amenities_manager/templates/amenities_manager/File-Manager.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amenities_manager/views.py" afterPath="$PROJECT_DIR$/amenities_manager/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/household_manager/models.py" afterPath="$PROJECT_DIR$/household_manager/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/household_manager/views.py" afterPath="$PROJECT_DIR$/household_manager/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/landuse_manager/models.py" afterPath="$PROJECT_DIR$/landuse_manager/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/landuse_manager/templates/landuse_manager/File-Manager.html" afterPath="$PROJECT_DIR$/landuse_manager/templates/landuse_manager/File-Manager.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/landuse_manager/views.py" afterPath="$PROJECT_DIR$/landuse_manager/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plexus/settings.py" afterPath="$PROJECT_DIR$/plexus/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plexus/urls.py" afterPath="$PROJECT_DIR$/plexus/urls.py" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,12 +103,14 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="Amenities-Manager.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/amenities_manager/templates/amenities_manager/Amenities-Manager.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/amenities_manager/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1300">
-              <caret line="52" column="46" lean-forward="false" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
-              <folding />
+            <state relative-caret-position="772">
+              <caret line="57" column="50" lean-forward="false" selection-start-line="57" selection-start-column="50" selection-end-line="57" selection-end-column="50" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -28,51 +118,71 @@
       <file leaf-file-name="File-Manager.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/amenities_manager/templates/amenities_manager/File-Manager.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3300">
-              <caret line="132" column="43" lean-forward="false" selection-start-line="132" selection-start-column="43" selection-end-line="132" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/amenities_manager/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+            <state relative-caret-position="242">
+              <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
               <folding>
-                <element signature="e#0#35#0" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="e#6012#6018#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/plexus/settings.py">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/household_manager/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1550">
-              <caret line="107" column="0" lean-forward="true" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="662">
+              <caret line="61" column="37" lean-forward="false" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Landuse-Manager.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/landuse_manager/templates/landuse_manager/Landuse-Manager.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/landuse_manager/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2425">
-              <caret line="97" column="103" lean-forward="false" selection-start-line="97" selection-start-column="85" selection-end-line="97" selection-end-column="103" />
+            <state relative-caret-position="924">
+              <caret line="57" column="50" lean-forward="false" selection-start-line="57" selection-start-column="50" selection-end-line="57" selection-end-column="50" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/amenities_manager/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="22">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="File-Manager.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/landuse_manager/templates/landuse_manager/File-Manager.html">
+        <entry file="file://$PROJECT_DIR$/household_manager/templates/household_manager/File-Manager.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2975">
-              <caret line="119" column="37" lean-forward="false" selection-start-line="119" selection-start-column="37" selection-end-line="119" selection-end-column="37" />
-              <folding />
+            <state relative-caret-position="-190">
+              <caret line="88" column="22" lean-forward="false" selection-start-line="88" selection-start-column="22" selection-end-line="88" selection-end-column="22" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="e#6012#6018#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -93,7 +203,15 @@
       <find>Amenities-Va</find>
       <find>landuse-</find>
       <find>ameniti</find>
+      <find>household</find>
+      <find>amenity</find>
+      <find>DocumentForm</find>
+      <find>Document</find>
     </findStrings>
+    <replaceStrings>
+      <replace>landuse</replace>
+      <replace>household</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -102,17 +220,24 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/amenities_manager/templates/amenities_manager/index.html" />
-        <option value="$PROJECT_DIR$/plexus/settings.py" />
         <option value="$PROJECT_DIR$/amenities_manager/urls.py" />
         <option value="$PROJECT_DIR$/amenities_manager/apps.py" />
         <option value="$PROJECT_DIR$/landuse_manager/urls.py" />
-        <option value="$PROJECT_DIR$/plexus/urls.py" />
-        <option value="$PROJECT_DIR$/landuse_manager/views.py" />
         <option value="$PROJECT_DIR$/amenities_manager/templates/amenities_manager/Amenities-Manager.html" />
-        <option value="$PROJECT_DIR$/landuse_manager/templates/landuse_manager/File-Manager.html" />
         <option value="$PROJECT_DIR$/landuse_manager/templates/landuse_manager/Landuse-Manager.html" />
-        <option value="$PROJECT_DIR$/amenities_manager/templates/amenities_manager/File-Manager.html" />
+        <option value="$PROJECT_DIR$/plexus/settings.py" />
+        <option value="$PROJECT_DIR$/household_manager/templates/landuse_manager/Landuse-Manager.html" />
+        <option value="$PROJECT_DIR$/plexus/urls.py" />
+        <option value="$PROJECT_DIR$/household_manager/urls.py" />
+        <option value="$PROJECT_DIR$/amenities_manager/models.py" />
+        <option value="$PROJECT_DIR$/household_manager/models.py" />
+        <option value="$PROJECT_DIR$/landuse_manager/models.py" />
+        <option value="$PROJECT_DIR$/landuse_manager/views.py" />
+        <option value="$PROJECT_DIR$/landuse_manager/templates/landuse_manager/File-Manager.html" />
+        <option value="$PROJECT_DIR$/household_manager/templates/landuse_manager/File-Manager.html" />
         <option value="$PROJECT_DIR$/amenities_manager/views.py" />
+        <option value="$PROJECT_DIR$/amenities_manager/templates/amenities_manager/File-Manager.html" />
+        <option value="$PROJECT_DIR$/household_manager/views.py" />
       </list>
     </option>
   </component>
@@ -137,7 +262,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -164,23 +289,132 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="landuse_manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="household_manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="household_manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="household_manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="amenities_manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="amenities_manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="amenities_manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Plexus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="amenities_manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\ME\OneDrive - De La Salle University - Manila\Thesis\Project\plexus\landuse_manager" />
-      <recent name="C:\Users\ME\OneDrive - De La Salle University - Manila\Thesis\Project\plexus\amenities_manager\templates\amenities_manager" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\xtiangabe\Desktop\Plexus\amenities_manager\static" />
       <recent name="C:\Users\ME\OneDrive - De La Salle University - Manila\Thesis\Project\plexus\amenities_manager" />
       <recent name="C:\Users\ME\OneDrive - De La Salle University - Manila\Thesis\Project\plexus\amenities_manager\static\amenities_manager" />
+      <recent name="C:\Users\ME\OneDrive - De La Salle University - Manila\Thesis\Project\plexus\amenities_manager\templates\amenities_manager" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\xtiangabe\Desktop\Plexus\landuse_manager" />
+      <recent name="C:\Users\xtiangabe\Desktop\Plexus\household_manager" />
+      <recent name="C:\Users\xtiangabe\Desktop\Plexus\amenities_manager" />
+      <recent name="C:\Users\ME\OneDrive - De La Salle University - Manila\Thesis\Project\plexus\landuse_manager" />
       <recent name="C:\Users\ME\OneDrive - De La Salle University - Manila\Thesis\Project\plexus\amenities_manager\templates\amenities_manager" />
     </key>
   </component>
@@ -337,9 +571,10 @@
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16458334" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20835537" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32875144" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -351,7 +586,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -380,11 +614,70 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/amenities_manager/templates/amenities_manager/Amenities-Manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1144">
+          <caret line="52" column="46" lean-forward="false" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/amenities_manager/templates/amenities_manager/File-Manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2904">
+          <caret line="132" column="43" lean-forward="false" selection-start-line="132" selection-start-column="43" selection-end-line="132" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/amenities_manager/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plexus/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/landuse_manager/templates/landuse_manager/Landuse-Manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2134">
+          <caret line="97" column="103" lean-forward="false" selection-start-line="97" selection-start-column="85" selection-end-line="97" selection-end-column="103" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/landuse_manager/templates/landuse_manager/File-Manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2618">
+          <caret line="119" column="37" lean-forward="false" selection-start-line="119" selection-start-column="37" selection-end-line="119" selection-end-column="37" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#input#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="e#6010#6016#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/amenities_manager/templates/amenities_manager/Amenities-Manager.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1300">
@@ -406,7 +699,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -423,7 +716,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2975">
           <caret line="119" column="37" lean-forward="false" selection-start-line="119" selection-start-column="37" selection-end-line="119" selection-end-column="37" />
-          <folding />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#input#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="e#6010#6016#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -446,20 +748,13 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/amenities_manager/templates/amenities_manager/index.html" />
     <entry file="file://$PROJECT_DIR$/landuse_manager/apps.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/landuse_manager/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -494,13 +789,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/amenities_manager/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/amenities_manager/tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -515,27 +803,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plexus/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="6" column="58" lean-forward="false" selection-start-line="6" selection-start-column="58" selection-end-line="6" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/landuse_manager/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/landuse_manager/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
-          <caret line="22" column="50" lean-forward="true" selection-start-line="22" selection-start-column="50" selection-end-line="22" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/landuse_manager/coors.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="25">
@@ -543,60 +810,210 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/amenities_manager/urls.py">
+    <entry file="file://$PROJECT_DIR$/plexus/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/landuse_manager/templates/landuse_manager/File-Manager.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2975">
-          <caret line="119" column="37" lean-forward="false" selection-start-line="119" selection-start-column="37" selection-end-line="119" selection-end-column="37" />
+        <state relative-caret-position="700">
+          <caret line="128" column="44" lean-forward="false" selection-start-line="128" selection-start-column="44" selection-end-line="128" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/landuse_manager/templates/landuse_manager/Landuse-Manager.html">
+    <entry file="file://$PROJECT_DIR$/household_manager/templates/landuse_manager/Landuse-Manager.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2425">
-          <caret line="97" column="103" lean-forward="false" selection-start-line="97" selection-start-column="85" selection-end-line="97" selection-end-column="103" />
+        <state relative-caret-position="396">
+          <caret line="18" column="30" lean-forward="false" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/household_manager/templates/household_manager/Household-Manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/amenities_manager/templates/amenities_manager/Amenities-Manager.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1300">
-          <caret line="52" column="46" lean-forward="false" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
+        <state relative-caret-position="214">
+          <caret line="27" column="20" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="531" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/amenities_manager/templates/amenities_manager/File-Manager.html">
+    <entry file="file://$PROJECT_DIR$/landuse_manager/templates/landuse_manager/Landuse-Manager.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3300">
-          <caret line="132" column="43" lean-forward="false" selection-start-line="132" selection-start-column="43" selection-end-line="132" selection-end-column="43" />
+        <state relative-caret-position="434">
+          <caret line="97" column="103" lean-forward="false" selection-start-line="97" selection-start-column="85" selection-end-line="97" selection-end-column="103" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/landuse_manager/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#32#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/household_manager/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#32#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plexus/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding>
+            <element signature="e#1#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/household_manager/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="32" lean-forward="false" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/household_manager/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/landuse_manager/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/amenities_manager/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/landuse_manager/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="63" lean-forward="false" selection-start-line="11" selection-start-column="63" selection-end-line="11" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/amenities_manager/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="63" lean-forward="false" selection-start-line="11" selection-start-column="63" selection-end-line="11" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/landuse_manager/templates/landuse_manager/File-Manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="88" column="20" lean-forward="false" selection-start-line="88" selection-start-column="20" selection-end-line="88" selection-end-column="20" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#input#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="e#6010#6016#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/amenities_manager/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/household_manager/templates/household_manager/File-Manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-190">
+          <caret line="88" column="22" lean-forward="false" selection-start-line="88" selection-start-column="22" selection-end-line="88" selection-end-column="22" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#6012#6018#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/amenities_manager/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+        <state relative-caret-position="772">
+          <caret line="57" column="50" lean-forward="false" selection-start-line="57" selection-start-column="50" selection-end-line="57" selection-end-column="50" />
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plexus/settings.py">
+    <entry file="file://$PROJECT_DIR$/amenities_manager/templates/amenities_manager/File-Manager.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1550">
-          <caret line="107" column="0" lean-forward="true" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="242">
+          <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#form#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#6012#6018#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/landuse_manager/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="924">
+          <caret line="57" column="50" lean-forward="false" selection-start-line="57" selection-start-column="50" selection-end-line="57" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/household_manager/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="662">
+          <caret line="61" column="37" lean-forward="false" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

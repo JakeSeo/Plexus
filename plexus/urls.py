@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^amenities_manager/', include('amenities_manager.urls')),
     url(r'^landuse_manager/', include('landuse_manager.urls')),
+    url(r'^household_manager/', include('household_manager.urls')),
 ]
