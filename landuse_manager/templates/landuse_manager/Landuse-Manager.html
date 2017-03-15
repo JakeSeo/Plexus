@@ -1,0 +1,468 @@
+{% load staticfiles %}
+
+<html>
+    <head>
+        <title>VIA - Amenities Manager</title>
+        <meta name="viewport" content="initial-scale=1.0">
+        <meta charset="utf-8">
+
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="{% static 'amenities_manager/css/personalized.css' %}" />
+        <link type="text/css" rel="stylesheet" href="{% static 'amenities_manager/css/materialize/css/materialize.min.css' %}" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.0/leaflet.draw.css"/>
+        <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.css">
+
+        <script src="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.0/leaflet.draw.js"></script>
+        <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
+        <script src="{% static 'amenities_manager/leaflet/heatmap.js' %}"></script>
+        <script src="{% static 'amenities_manager/leaflet/leaflet-heatmap.js' %}"></script>
+
+        <!----- LEAFLET.DRAW STUFF -------->
+        <!--script src="{% static 'leaflet/leaflet-draw/Control.Draw.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/Leaflet.Draw.Event.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/Leaflet.draw.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/Toolbar.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/Tooltip.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/draw/DrawToolbar.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Circle.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Feature.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Marker.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Polygon.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Polyline.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Rectangle.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.SimpleShape.js' %}"></script-->
+    </head>
+
+    <body>
+        <!--Import jQuery before materialize.js-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="{% static 'amenities_manager/css/materialize/js/materialize.min.js' %}"></script>
+
+        <ul id="dropdownData" class="dropdown-content row">
+            <li><a href="{% url 'amenities_manager:choose' %}">Amenities</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Households</a></li>
+            <li class="divider"></li>
+            <li><a href="{% url 'landuse_manager:choose' %}">Land Use</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Roads</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Routes</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Stops</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">TAZ</a></li>
+        </ul>
+
+        <ul id="dropdownAna" class="dropdown-content row">
+            <li><a href="#!">Passenger Dispersion</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Road Network</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Robustness</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Route Measure Capacity</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Stop Network</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Transport Network</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Travel Demand</a></li>
+        </ul>
+
+
+        <nav>
+            <div class="nav-wrapper row" style = "background-color: black !important">
+                <a href="#!" class="brand-logo col s2 left" style="margin-left: 40px !important;">Plexus</a>
+                <ul class="hide-on-med-and-down col s10 right">
+                    <li><a class="dropdown-button" href="#!" data-activates="dropdownData">Data<i class="material-icons right">arrow_drop_down</i></a></li>
+                    <li><a class="dropdown-button" href="#!" data-activates="dropdownAna">Analysis<i class="material-icons right">arrow_drop_down</i></a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="body-content row">
+            <div class="row file-title-row">
+                <form class="input-field col s6 input-file-name">
+                    <input type="text" style = "border-bottom: 0 !important;" value="Landuse-Valenzuela">
+                </form>
+                <!--div class="right col s1">&nbsp;</div-->
+                <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;">Save</a>
+            </div>
+            <div class = "side-nav-bg col s2" style="padding:0 !important;margin:0 !important;">
+                <div id="init-div" class="row">
+                    <form class = "row font-ten">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">search</i>
+                            <input id="icon_search" type="text" class="validate">
+                            <label for="icon_search">Search</label>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class = "col s1">
+                            &nbsp;
+                        </div>
+                        <table class = "left-summary-table bordered col s10">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="summary-div" class="row" style="display:none;">
+                    <form class = "row font-ten">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">search</i>
+                            <input id="icon_search" type="text" class="validate">
+                            <label for="icon_search">Search</label>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class = "col s1">
+                            &nbsp;
+                        </div>
+                        <table class = "left-summary-table bordered col s10">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="edit-div" class = "row" style="display:none;">
+                    <div class="row">
+                        <div class = "row cancel-editing-button">
+                            Editing Features
+                            <div class="right" onclick="cancel()">X</div>
+                        </div>
+                    </div>
+                    <div class="row content-fields">
+                        <div class="row field-element">
+                             <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="col s10 field-label">
+                                    Type
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <select id = "a-type" class="browser-default select-side col s10">
+                                    <option value="1" disabled selected>Sustenance</option>
+                                    <option value="2">Education</option>
+                                    <option value="3">Transport</option>
+                                    <option value="4">Healthcare</option>
+                                    <option value="5">Finance</option>
+                                    <option value="6">Commerce</option>
+                                    <option value="7">Others</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row field-element">
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="col s10 field-label">
+                                    Amenity Name
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="input-field col s10">
+                                    <input id="a-name" type="text" class="input-textfld validate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row field-element">
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="col s10 field-label">
+                                    Latitude
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="input-field col s10">
+                                    <input id="a-lat" type="text" class="input-textfld validate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row field-element">
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="col s10 field-label">
+                                    Longitude
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="input-field col s10">
+                                    <input id="a-long" type="text" class="input-textfld validate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row field-element">
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="col s10 field-label">
+                                    Maximum Capacity
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="input-field col s10">
+                                    <input id="a-capacity" type="text" class="input-textfld validate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                        <a class="green btn col s12" style="font-size: 14px !important;" onclick="save();">Save</a>
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                        <a class="red btn col s12" style="font-size: 14px !important;">Remove</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--div class = "side-nav-bg col s2" style="padding:0 !important;margin:0 !important;">
+                <!--form class = "row font-ten">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">search</i>
+                        <input id="icon_search" type="text" class="validate">
+                        <label for="icon_search">Search</label>
+                    </div>
+                </form-->
+                <!--form class = "row">
+                    <div class="row">
+                        <div class = "right cancel-editing-button">X</div>
+                    </div>
+                    <div class="row content-fields">
+                        <div class="row field-element">
+                            <div class="row field-label col s12">
+                                Type
+                            </div>
+                            <div class="row input-field col s12">
+                                <select id = "type-select" class="browser-default select-side">
+                                    <option value="1" disabled selected>Restaurant</option>
+                                    <option value="2">Grocery</option>
+                                    <option value="3">Household</option>
+                                    <option value="4">Cafe</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row field-element">
+                            <div class="row field-label col s12">
+                                Amenity Name
+                            </div>
+                            <div class="row input-field col s12">
+                                <input placeholder="Amenity Name" type="text" class="input-textfld validate" value="Jollibee">
+                            </div>
+                        </div>
+                        <div class="row field-element">
+                            <div class="row field-label col s12">
+                                Latitude
+                            </div>
+                            <div class="row input-field col s12">
+                                <input placeholder="Amenity Name" type="text" class="input-textfld validate" value="105.234">
+                            </div>
+                        </div>
+                        <div class="row field-element">
+                            <div class="row field-label col s12">
+                                Longitude
+                            </div>
+                            <div class="row input-field col s12">
+                                <input placeholder="Amenity Name" type="text" class="input-textfld validate" value="25.109">
+                            </div>
+                        </div>
+                        <div class="row field-element">
+                            <div class="row field-label col s12">
+                                Maximum Capacity
+                            </div>
+                            <div class="row input-field col s12">
+                                <input placeholder="Amenity Name" type="text" class="input-textfld validate" value="200">
+                            </div>
+                        </div>
+                            <!--div class="row input-field col s12">
+                                <input placeholder="Amenity Name" id="first_name" type="text" class="input-textfld validate" value="Jollibee">
+                                <label class = "input-label" for="first_name">Amenity Name</label>
+                            </div>
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                        <a class="red btn col s12" style="font-size: 14px !important;">Remove</a>
+                    </div>
+                </form>
+            </div-->
+
+            <div id="mapid" class="col s10 main-bg"></div>
+        </div>
+
+
+
+
+
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+
+    <script>
+
+
+        var markers = {}; //will contain the amenities
+        var names = {}; //will contain the amenities
+        var capacities = {}; //will contain the amenities
+        var types = {}; //will contain the amenity types
+
+        function copyToClipboard(text) {
+          window.prompt("Copy Lat/Long values to clipboard: Ctrl+C, Enter", text);
+        }
+
+        function cancel() {
+            document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;
+          }
+
+        function save() {
+            //save shit here
+            names["LatLng("+document.getElementById('a-lat').value +", "+ document.getElementById('a-long').value+")"] = document.getElementById('a-name').value;
+            capacities["LatLng("+document.getElementById('a-lat').value +", "+ document.getElementById('a-long').value+")"] = document.getElementById('a-capacity').value;
+            types["LatLng("+document.getElementById('a-lat').value +", "+ document.getElementById('a-long').value+")"] = document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value;
+
+            document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;
+        }
+
+        /******************************* MAP *************************************/
+
+        var map = L.map('mapid', {editable: true}).setView([14.5995, 120.9842], 15);
+
+        /*mymap.on('click', function(e) {
+            copyToClipboard(e.latlng.lat + ", " + e.latlng.lng);
+        });*/
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            maxZoom: 18,
+            id: 'xgb7.1jd5j7o2',
+            accessToken: 'pk.eyJ1IjoieGdiNyIsImEiOiJjaXR6dGgxaHEwZnJjMm9vODRjbXk2NTczIn0.JGHOHRx1UpItrRAG1B0Fyw'
+        }).addTo(map);
+
+        /******************** EDIT STUFF ****************************/
+
+    var editableLayers = new L.FeatureGroup();
+    map.addLayer(editableLayers);
+
+    var MyCustomMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/marker-icon.png' %}"
+        }
+    });
+
+    var options = {
+        //position: 'topright',
+        draw: {
+            polyline: false,
+            polygon: false,
+            circle: false,
+            rectangle: false,
+            marker: {
+                icon: new MyCustomMarker()
+                //add more marker stuff here
+            }
+        },
+        edit: false/*{
+            featureGroup: editableLayers, //REQUIRED!!
+            remove: false
+        }*/
+    };
+
+    var drawControl = new L.Control.Draw(options);
+    map.addControl(drawControl);
+
+    map.on('draw:created', function (e) {
+        var type = e.layerType,
+            layer = e.layer;
+
+        document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
+        document.getElementById('a-lat').value = layer.getLatLng().lat;
+        document.getElementById('a-long').value = layer.getLatLng().lng;
+        markers["LatLng("+layer.getLatLng().lat +", "+ layer.getLatLng().long+")"] = e;
+        //names[layer.getLatLng()] = document.getElementById('a-name').value;
+        //capacities[layer.getLatLng()] = document.getElementById('a-capacity').value;
+        //document.getElementById('a-capacity').value = capacities[layer.getLatLng()];
+        //document.getElementById('a-name').value = names[layer.getLatLng()];
+
+        if (type === 'marker') {
+            layer.bindPopup(layer.getLatLng().toString()).openPopup();
+            layer.on('click', function () {
+                //Write code to adjust the icon
+                //layer.icon = someNewIcon;
+
+                //Store a ref. to the menu item, and use that ref here to manage the view state
+                document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
+                document.getElementById('a-lat').value = layer.getLatLng().lat;
+                document.getElementById('a-long').value = layer.getLatLng().lng;
+                document.getElementById('a-capacity').value = capacities["LatLng("+layer.getLatLng().lat +", "+ layer.getLatLng().lng+")"];
+                document.getElementById('a-name').value = names["LatLng("+layer.getLatLng().lat +", "+ layer.getLatLng().lng+")"];
+                document.getElementById('a-type').selectedIndex=types["LatLng("+layer.getLatLng().lat +", "+ layer.getLatLng().lng+")"]-1;
+            });
+        }
+
+        editableLayers.addLayer(layer);
+    });
+
+
+    /*marker.on('mouseover', function () {
+        //Write code to adjust the icon
+        marker.icon = someNewIcon;
+
+        //Store a ref. to the menu item, and use that ref here to manage the view state
+        currentActive.removeClass('active');
+        $(this.target).addClass('active');
+    });*/
+    </script>
+
+
+
+
+  </body>
+</html>

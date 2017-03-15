@@ -1,0 +1,23 @@
+.blue{
+	background-color: blue;
+}
+
+.red{
+	background-color: red;
+}
+
+.green{
+	background-color: green;
+}
+
+.yellow{
+	background-color: yellow;
+}
+
+.pink{
+	background-color: pink;
+}
+
+body {
+	background-color: green;
+}
