@@ -1,0 +1,1034 @@
+
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+    <title>VIA - Amenities Manager</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/personalized.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/materialize/css/materialize.min.css' %}"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.0/leaflet.draw.css"/>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.css">
+
+    <script src="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.0/leaflet.draw.js"></script>
+    <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
+    <script src="{% static 'leaflet/heatmap.js' %}"></script>
+    <script src="{% static 'leaflet/leaflet-heatmap.js' %}"></script>
+</head>
+
+<body>
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="{% static 'css/materialize/js/materialize.min.js' %}"></script>
+
+
+<div id="file-modal" class="modal medium-modal">
+    <div class="modal-content file-select-table ">
+        <table class="bordered highlight">
+            <thead>
+            <tr>
+                <th data-field="id">Name</th>
+                <th data-field="name">Date Modified</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>Amenities-1</td>
+                <td>March 3, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-2</td>
+                <td>March 1, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-3</td>
+                <td>March 1, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-Valenzuela</td>
+                <td>January 31, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-1</td>
+                <td>March 3, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-2</td>
+                <td>March 1, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-3</td>
+                <td>March 1, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-Valenzuela</td>
+                <td>January 31, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-1</td>
+                <td>March 3, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-2</td>
+                <td>March 1, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-3</td>
+                <td>March 1, 2017</td>
+            </tr>
+            <tr>
+                <td>Amenities-Valenzuela</td>
+                <td>January 31, 2017</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="modal-action modal-close waves-effect waves-green btn-flat active-btn">Add</button>
+    </div>
+</div>
+
+
+<!--div id="file-modal" class="modal medium-modal">
+  <div class="modal-content left-align">
+    <h5>
+      <i class="material-icons medium green-text text-accent-4 left">done</i>
+      Changes successfully saved!
+    </h5>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-action modal-close waves-effect waves-green btn-flat active-btn">Ok</button>
+  </div>
+</div-->
+
+<ul id="dropdownData" class="dropdown-content row">
+    <li><a href="#!">Amenities</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Households</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Land Use</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Roads</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Routes</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Stops</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">TAZ</a></li>
+</ul>
+
+<ul id="dropdownAna" class="dropdown-content row">
+    <li><a href="#!">Passenger Dispersion</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Road Network</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Robustness</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Route Measure Capacity</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Stop Network</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Transport Network</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Travel Demand</a></li>
+</ul>
+
+
+<nav>
+    <div class="nav-wrapper row" style="background-color: black !important">
+        <a href="#!" class="brand-logo col s2 left" style="margin-left: 40px !important;">Plexus</a>
+        <ul class="hide-on-med-and-down col s10 right">
+            <li><a class="dropdown-button" href="#!" data-activates="dropdownData">Data<i class="material-icons right">arrow_drop_down</i></a>
+            </li>
+            <li><a class="dropdown-button" href="#!" data-activates="dropdownAna">Analysis<i
+                    class="material-icons right">arrow_drop_down</i></a></li>
+        </ul>
+    </div>
+</nav>
+<div class="row file-title-row">
+    <form class="input-field col s6 input-file-name">
+        <input type="text" style="border-bottom: 0 !important;" value="TravelDemand-Valenzuela">
+    </form>
+    <!--div class="right col s1">&nbsp;</div-->
+    <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;">Save</a>
+</div>
+<div class="body-content row">
+    <div class="side-nav-bg col s2" style="padding:0 !important;margin:0 !important;height:100% !important;">
+        <div class="row content-fields" style="margin-top: 20px; height:100% !important;">
+            <div class="row input-field col s12">
+                <ul class="collection with-header">
+                    <li class="collection-item" style="font-size:20px !important;">
+                        <div>Amenities<a id="add-amenity-file" class="secondary-content"><i
+                                class="black-text material-icons">add</i></a></div>
+                    </li>
+                    <div id="amenity-included-files">
+
+                    </div>
+                </ul>
+            </div>
+            <div class="row input-field col s12">
+                <ul class="collection with-header">
+                    <li class="collection-item" style="font-size:20px !important;">
+                        <div>Households<a id="add-household-file" class="secondary-content"><i
+                                class="black-text material-icons">add</i></a></div>
+                    </li>
+                    <div id="household-included-files">
+
+                    </div>
+                </ul>
+            </div>
+            <div class="row input-field col s12">
+                <ul class="collection with-header">
+                    <li class="collection-item" style="font-size:20px !important;">
+                        <div>Land Use<a id="edit-landuse" class="secondary-content"><i
+                                class="black-text material-icons">mode_edit</i></a></div>
+                    </li>
+                    <div id="landuse-included-files">
+
+                    </div>
+                </ul>
+            </div>
+            <div class="row input-field col s12">
+                <ul class="collection with-header">
+                    <li class="collection-item" style="font-size:20px !important;">
+                        <div>TAZ<a id="add-trafficzone-file" class="secondary-content"><i
+                                class="black-text material-icons">add</i></a></div>
+                    </li>
+                    <div id="trafficzone-included-files">
+
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--div class = "map-bg col s8">
+    </div-->
+
+    <div id="mapid" class="col s8 main-bg"></div>
+
+    <div class="side-nav-bg col s2">
+        <div id="runanalysis" class="row" style="margin-top:20px; margin-bottom:20px !important;">
+            <a id="run-analysis-btn" class="light-green btn col s10" style="font-size: 14px !important; margin-left:18px !important;">Run
+                Analysis</a>
+        </div>
+        <div class="row">
+            <div>
+                <ul class="tabs" style="font-size:10px;width:100px !important;overflow-x: hidden !important;">
+                    <li class="tab col s3 custom-tab"><a class="active" href="#inbox">Summary</a></li>
+                    <li class="tab col s3 custom-tab"><a href="#unread">Details</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" id="inbox">
+            <div class="row" style="margin-bottom:10px !important;">
+                <div class="col s1">
+                    &nbsp;
+                </div>
+                <table class="left-summary-table bordered col s10">
+                    <tbody>
+                    <tr>
+                        <td>Amenities</td>
+                        <td id="amenity-summary">0</td>
+                    </tr>
+                    <tr>
+                        <td>Land Use</td>
+                        <td id="landuse-summary">0</td>
+                    </tr>
+                    <tr>
+                        <td>Households</td>
+                        <td id="household-summary">0</td>
+                    </tr>
+                    <tr>
+                        <td>Traffic Analysis Zones</td>
+                        <td id="trafficzone-summary">0</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="row">
+                <p class="filters-header">Filters</p>
+
+                <p class="modes-header">Types of trips</p>
+                <div class="trips-checkboxes">
+                    <form action="#">
+                        <input type="checkbox" id="test5" class="chk"/>
+                        <label class="checkbox-style" for="test5" style="padding-left:20px;padding-right:20px"> Trips
+                            Generated </label>
+                        <input type="checkbox" id="test6"/>
+                        <label for="test6" class="checkbox-style" style="padding-left:20px;padding-right:20px"> Trips
+                            Attracted</label>
+                    </form>
+                </div>
+
+                <p class="modes-header">Modes of transportation</p>
+
+                <div class="trips-checkboxes">
+                    <form action="#">
+                        <input type="checkbox" id="test1"/>
+                        <label for="test1" class="checkbox-style"
+                               style="padding-left:20px;padding-right:20px">Jeep</label>
+                        <input type="checkbox" id="test2"/>
+                        <label for="test2" class="checkbox-style"
+                               style="padding-left:20px;padding-right:20px">Bus</label>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="unread">
+            <div class="col s1">
+                &nbsp;
+            </div>
+            <table class="left-summary-table bordered col s10"
+                   style="height:350px !important; overflow-y:scroll !important;">
+                <thead>
+                <tr>
+                    <th data-field="id">Zone 1</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Amenities</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Land Use</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>House</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Traffic Analysis Zones</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Total Trips Produced</td>
+                    <td>27,000</td>
+                </tr>
+                <tr>
+                    <td>Total Trips Attracted</td>
+                    <td>27,000</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="amenity-modal" class="modal medium-modal">
+    <div class="row">
+        <ul id="amenity-modal-ul" class="collection">
+
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button id="amenity-modal-ok-btn" class="modal-action modal-close waves-effect waves-green btn-flat active-btn">
+            Ok
+        </button>
+    </div>
+</div>
+
+<div id="household-modal" class="modal medium-modal">
+    <div class="row">
+        <ul id="household-modal-ul" class="collection">
+
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button id="household-modal-ok-btn" class="modal-action modal-close waves-effect waves-green btn-flat active-btn">
+            Ok
+        </button>
+    </div>
+</div>
+
+<div id="trafficzone-modal" class="modal medium-modal">
+    <div class="row">
+        <ul id="trafficzone-modal-ul" class="collection">
+
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button id="trafficzone-modal-ok-btn" class="modal-action modal-close waves-effect waves-green btn-flat active-btn">
+            Ok
+        </button>
+    </div>
+</div>
+
+<div id="delete-modal" class="modal medium-modal">
+    <div class="modal-content row" >
+        <div class="col s12 m12 l12">
+            <form action="">
+                <h5 name="delete-modal-message">This file will be removed. Are you sure?</h5>
+            </form>
+        </div>
+    </div>
+     <div class="modal-footer">
+        <a id="delete-file" class="modal-action waves-effect waves-green btn-flat active-btn">Remove</a>
+        <a id="cancel-delete-file" class="modal-action modal-close waves-effect waves-green btn-flat green-text text-accent-4">Cancel</a>
+    </div>
+</div>
+
+<div id="edit-landuse-modal" class="modal medium-modal">
+    <div class="row">
+        <ul id="edit-landuse-modal-ul" class="collection">
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button id="edit-landuse-modal-ok-btn" class="modal-action waves-effect waves-green btn-flat active-btn">
+            Ok
+        </button>
+    </div>
+</div>
+
+<div id="loader-modal" class="modal small-modal" style="height:200px !important; width:200px !important;position:absolute !important;
+                              top:0 !important;bottom:0 !important; left:0 !important; right:0 !important;">
+    <div class="preloader-wrapper big active" style="position:absolute !important;top:0 !important;bottom:0 !important; 
+                                                    left:0 !important; right:0 !important;">
+      <div class="spinner-layer spinner-blue">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+<!----------------------------------------------------- SCRIPTS ------------------------------------------->
+
+<script type="text/javascript">
+        //zone_landuse_settings[2].setStyle({fillColor: '#800026'});
+        //mymap.removeLayer(zone_landuse_settings[2]);
+        var amenity_files = [];
+        var amenity_summaries = [];
+        var household_files = [];
+        var household_summaries = [];
+        var trafficzone_files = [];
+        var trafficzone_summaries = [];
+
+        var zone_landuse_settings = ['commercial','parks','industrial','agriculture','residential',
+                                     'commercial','parks','industrial','agriculture','residential',
+                                     'commercial','parks','industrial','agriculture','residential',
+                                     'utilities','other'];
+        var landuse_categories = ['commercial','parks','industrial','agriculture','residential',
+                                  'utilities','other'];
+        var traffic_analysis_zones_layers = [];
+        var to_delete;
+        
+        $("#run-analysis-btn").click(function(){
+            if(amenity_files.length>0 && household_files.length>0){
+                $("#loader-modal").openModal({dismissible:false});
+                $.ajax({
+                    url: "{% url 'travel_demand_analysis:run_analysis' %}",
+                    method: "POST",
+                    data: {
+                        "amenity_files[]" : amenity_files,
+                        "household_files[]" : household_files,
+                        "trafficzone_files[]": trafficzone_files,
+                        "zone_landuse_settings[]": zone_landuse_settings
+                    },// This is the default though, you don't actually need to always mention it
+                    success: function(data) {
+                        $("#loader-modal").closeModal();
+                        alert(data);
+                    },
+                    failure: function(data) { 
+                        alert('Error occurred.');
+                    }
+                }); 
+            }else{
+                alert("amenity or household files are empty!");
+            }
+        });
+        
+        $( document ).ready(function() {
+            $.ajaxSetup({ 
+                 beforeSend: function(xhr, settings) {
+                     function getCookie(name) {
+                         var cookieValue = null;
+                         if (document.cookie && document.cookie != '') {
+                             var cookies = document.cookie.split(';');
+                             for (var i = 0; i < cookies.length; i++) {
+                                 var cookie = jQuery.trim(cookies[i]);
+                                 // Does this cookie string begin with the name we want?
+                                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                     break;
+                                 }
+                             }
+                         }
+                         return cookieValue;
+                     }
+                     if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                         // Only send the token to relative URLs i.e. locally.
+                         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                     }
+                 } 
+            });
+            
+        });
+        
+        $("#add-amenity-file").click(function(){
+            var ulDiv = $("#amenity-modal").find("#amenity-modal-ul");
+            $(ulDiv).empty();
+            {% if amenity_filenames %}
+                {% for file in amenity_filenames%}
+                var liDiv = $("<li></li>").addClass("collection-item");
+                var inputDiv = $("<input />").addClass("with-gap").attr("name","file-checkbox")
+                               .attr("id","{{file}}")
+                               .attr("value","{{file}}")
+                               .attr("type","checkbox");
+                if(amenity_files.indexOf('{{file}}') != -1){
+                    $(inputDiv).attr("disabled","disabled").attr("checked","checked");
+                }
+                var labelDiv = $("<label></label>").addClass("black-text").attr("for","{{file}}")
+                               .attr("name", "file-label").html("{{file}}");
+                liDiv.append(inputDiv).append(labelDiv);
+                ulDiv.append(liDiv);
+                {% endfor %}
+            {% else %}
+                var h5Elem = $("<h5></h5>").addClass("center").html("There are currently no uploaded amenity files.");
+                ulDiv.append(h5Elem);
+            {% endif %}
+
+            $("#amenity-modal").openModal();
+        });
+
+        $("#add-household-file").click(function(){
+            var ulDiv = $("#household-modal").find("#household-modal-ul");
+            $(ulDiv).empty();
+            {% if household_filenames %}
+                {% for file in household_filenames%}
+                var liDiv = $("<li></li>").addClass("collection-item");
+                var inputDiv = $("<input />").addClass("with-gap").attr("name","file-checkbox")
+                               .attr("id","{{file}}")
+                               .attr("value","{{file}}")
+                               .attr("type","checkbox");
+                if(household_files.indexOf('{{file}}') != -1){
+                    $(inputDiv).attr("disabled","disabled").attr("checked","checked");
+                }
+                var labelDiv = $("<label></label>").addClass("black-text").attr("for","{{file}}")
+                               .attr("name", "file-label").html("{{file}}");
+                liDiv.append(inputDiv).append(labelDiv);
+                ulDiv.append(liDiv);
+                {% endfor %}
+            {% else %}
+                var h5Elem = $("<h5></h5>").addClass("center").html("There are currently no uploaded household files.");
+                ulDiv.append(h5Elem);
+            {% endif %}
+
+            $("#household-modal").openModal();
+        });
+        
+        $("#add-trafficzone-file").click(function(){
+            var ulDiv = $("#trafficzone-modal").find("#trafficzone-modal-ul");
+            $(ulDiv).empty();
+            {% if trafficzone_filenames %}
+                {% for file in trafficzone_filenames%}
+                var liDiv = $("<li></li>").addClass("collection-item");
+                var inputDiv = $("<input />").addClass("with-gap").attr("name","file-checkbox")
+                               .attr("id","{{file}}")
+                               .attr("value","{{file}}")
+                               .attr("type","checkbox");
+                if(trafficzone_files.indexOf('{{file}}') != -1){
+                    $(inputDiv).attr("disabled","disabled").attr("checked","checked");
+                }
+                var labelDiv = $("<label></label>").addClass("black-text").attr("for","{{file}}")
+                               .attr("name", "file-label").html("{{file}}");
+                liDiv.append(inputDiv).append(labelDiv);
+                ulDiv.append(liDiv);
+                {% endfor %}
+            {% else %}
+                var h5Elem = $("<h5></h5>").addClass("center").html("There are currently no uploaded trafficzone files.");
+                ulDiv.append(h5Elem);
+            {% endif %}
+
+            $("#trafficzone-modal").openModal();
+        });
+        
+        $("#edit-landuse").click(function(){
+            $("#edit-landuse-modal").openModal({dismissible:false});
+        });
+
+        $("#household-list").click(function(){
+            $("#household-modal").openModal({
+                ready: function(){
+
+                },
+                complete: function(){
+
+                }
+            });
+        });
+        
+        function initializeLanduseModal(){
+            var ulDiv = $("#edit-landuse-modal").find("#edit-landuse-modal-ul");
+            $(ulDiv).empty();
+            
+            var selectDiv = $("<select></select>").addClass("browser-default col s6").attr("style", "height:2rem").attr("name","landuse-selector");
+            var option = $("<option></option>").attr("disabled","disabled").attr("selected","selected").val("invalid").html("Select land use");
+            option.appendTo(selectDiv);
+            for(var x=0; x<landuse_categories.length; x++){
+                var option = $("<option></option>").val(landuse_categories[x]).html(landuse_categories[x]);
+                option.appendTo(selectDiv);
+            }
+            for(var x=0; x<traffic_analysis_zones_layers.length; x++){
+                var liDiv = $("<li></li>").addClass("collection-item").addClass("row");
+                var nameDiv = $("<div></div>").addClass("col s6").html("Zone "+(x+1));
+                nameDiv.appendTo(liDiv);
+                $(selectDiv).clone().appendTo(liDiv);
+                liDiv.appendTo(ulDiv);
+            }
+        }
+
+        $("#edit-landuse-modal-ok-btn").click(function() {
+            var bool_landuse = 0;
+            selectDivs = $("#edit-landuse-modal").find("[name='landuse-selector']");
+            for(var x=0; x<zone_landuse_settings.length; x++){
+                val_lu = $(selectDivs[x]).val();
+                alert("VALLU "+val_lu);
+                if(val_lu == null){
+                    bool_landuse = 1;
+                    alert("BOOL: "+bool_landuse);
+                    break;
+                }else{
+                    zone_landuse_settings[x] = val_lu;
+                }
+            }
+            
+            if(bool_landuse == 0){
+                alert("CLOSE MODAL");
+                $("#edit-landuse-modal").closeModal();
+            }else{
+                bool_landuse = 0;
+                alert("Not all zones have land use.");
+            }
+        });
+
+        $("#household-modal-ok-btn").click(function() {
+            var file_rows = $("#household-modal").find("[name='file-checkbox']");
+                for(var i=0; i<file_rows.length; i++){
+                    var filename = $(file_rows[i]).val();
+                    if($(file_rows[i]).is(':checked')){
+                        if(household_files.indexOf(filename) == -1){
+                            count = 0;
+                            $.ajax({
+                                url: "{% url 'travel_demand_analysis:analysis_add_household' %}",
+                                method: "POST",
+                                data: {
+                                    "household_filename" : filename
+                                },
+                                success: function(data) {
+                                    //alert(data);
+                                    //json_response = JSON.parse(data);
+                                    filename = data.household_filename;
+                                    count = data.no_households;
+                                    household_files.push(filename);
+                                    household_summaries.push(count);
+                                    refresh_household_list();
+                                },
+                                failure: function(data) { 
+                                    alert('Error occurred.');
+                                }
+                            }); 
+                        }
+                    }else{
+                        if(household_files.indexOf(filename) != -1){
+                            removeFromArray(household_files, filename);
+                            household_summaries.splice(index, 1);
+                            refresh_household_list();
+                        }
+                    }
+                }
+         });
+         
+         $("#trafficzone-modal-ok-btn").click(function() {
+            var file_rows = $("#trafficzone-modal").find("[name='file-checkbox']");
+                for(var i=0; i<file_rows.length; i++){
+                    var filename = $(file_rows[i]).val();
+                    if($(file_rows[i]).is(':checked')){
+                        if(trafficzone_files.indexOf(filename) == -1){
+                            count = 0;
+                            $.ajax({
+                                url: "{% url 'travel_demand_analysis:analysis_add_trafficzone' %}",
+                                method: "POST",
+                                data: {
+                                    "trafficzone_filename" : filename
+                                },
+                                success: function(data) {
+                                    filename = data.trafficzone_filename;
+                                    count = data.no_trafficzones;
+                                    trafficzone_files.push(filename);
+                                    //zone_landuse_settings = new Array(count);
+                                    json_response = JSON.parse(data.zone_geojson);
+                                    console.log(json_response.features.length+" LENK");
+                                    $(json_response.features).each(function(key, data) {
+                                        data.properties.trips = 0;
+                                        traffic_analysis_zones_layers.push(L.geoJSON(data, {style: style}).addTo(mymap));
+                                    });
+                                    refresh_trafficzone_list();
+                                    initializeLanduseModal();
+                                },
+                                failure: function(data) { 
+                                    alert('Error occurred.');
+                                }
+                            }); 
+                        }
+                    }else{
+                        if(trafficzone_files.indexOf(filename) != -1){
+                            removeFromArray(trafficzone_files, filename);
+                            trafficzone_summaries.splice(index, 1);
+                            refresh_trafficzone_list();
+                        }
+                    }
+                }
+         });
+         
+         function getColor(d) {
+            return d > 1000 ? '#800026' :
+                   d > 500  ? '#BD0026' :
+                   d > 200  ? '#E31A1C' :
+                   d > 100  ? '#FC4E2A' :
+                   d > 50   ? '#FD8D3C' :
+                   d > 20   ? '#FEB24C' :
+                   d > 10   ? '#FED976' :
+                              '#FFEDA0';
+        }
+
+        function style(feature) {
+            return {
+                fillColor: getColor(feature.properties.trips),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+
+        
+        function computeTotal(arr){
+            total = 0;
+            for(var i=0; i<arr.length; i++){
+                total += arr[i];
+            }
+            return total;
+        }
+        
+        $("#amenity-modal-ok-btn").click(function() {
+            var file_rows = $("#amenity-modal").find("[name='file-checkbox']");
+                for(var i=0; i<file_rows.length; i++){
+                    var filename = $(file_rows[i]).val();
+                    if($(file_rows[i]).is(':checked')){
+                        if(amenity_files.indexOf(filename) == -1){
+                            count = 0;
+                            $.ajax({
+                                url: "{% url 'travel_demand_analysis:analysis_add_amenity' %}",
+                                method: "POST",
+                                data: {
+                                    "amenity_filename" : filename
+                                },
+                                success: function(data) {
+                                    //alert(data);
+                                    //json_response = JSON.parse(data);
+                                    filename = data.amenity_filename;
+                                    count = data.no_amenities;
+                                    amenity_files.push(filename);
+                                    amenity_summaries.push(count);
+                                    refresh_amenity_list();
+                                },
+                                failure: function(data) { 
+                                    alert('Error occurred.');
+                                }
+                            }); 
+                        }
+                    }else{
+                        if(amenity_files.indexOf(filename) != -1){
+                            index = removeFromArray(amenity_files, filename);
+                            amenity_summaries.splice(index, 1);
+                            refresh_amenity_list();
+                            //alert("Amenities total: "+computeTotal(amenity_summaries));
+                        }
+                    }
+                }
+            
+         });
+
+        function refresh_amenity_list(){
+            $("#amenity-summary").html(computeTotal(amenity_summaries));
+            var mainDiv = $('#amenity-included-files');
+            $(mainDiv).empty();
+            {% for file in amenity_filenames %}
+            if(amenity_files.indexOf('{{file}}') != -1){
+                var listDiv = $("<li></li>").addClass("collection-item").attr("name", "{{file}}").html('{{file}}');
+                var aDiv = $("<a></a>").addClass("secondary-content").attr("onclick","deletefile('amenity','{{file}}')");
+                var iDiv = $("<i></i>").addClass("black-text material-icons").html('delete');
+                //var deleteBtn = $("<button></button>").addClass("col s4 btn waves-effect").html("delete").attr("onclick","deletefile('amenity','{{file}}')");
+                aDiv.append(iDiv);
+                listDiv.append(aDiv);
+                mainDiv.append(listDiv);
+            }
+            {% endfor %}
+            $('#amenity-modal').closeModal();
+        }
+        
+        function refresh_trafficzone_list(){
+            $("#trafficzone-summary").html(zone_landuse_settings.length);
+            var mainDiv = $('#trafficzone-included-files');
+            $(mainDiv).empty();
+            {% for file in trafficzone_filenames %}
+            if(trafficzone_files.indexOf('{{file}}') != -1){
+                var listDiv = $("<li></li>").addClass("collection-item").attr("name", "{{file}}").html('{{file}}');
+                var aDiv = $("<a></a>").addClass("secondary-content").attr("onclick","deletefile('amenity','{{file}}')");
+                var iDiv = $("<i></i>").addClass("black-text material-icons").html('delete');
+                //var deleteBtn = $("<button></button>").addClass("col s4 btn waves-effect").html("delete").attr("onclick","deletefile('amenity','{{file}}')");
+                aDiv.append(iDiv);
+                listDiv.append(aDiv);
+                mainDiv.append(listDiv);
+            }
+            {% endfor %}
+            $('#trafficzone-modal').closeModal();
+        }
+
+        function refresh_household_list(){
+            //alert("WENT IN REFRESH HOUSEHOLD");
+            $("#household-summary").html(computeTotal(household_summaries));
+            var mainDiv = $('#household-included-files');
+            $(mainDiv).empty();
+            {% for file in household_filenames %}
+            //alert("WENT IN THE FORLOOP");
+            if(household_files.indexOf('{{file}}') != -1){
+                //alert("WENT IN THE FORLOOP ififififif");
+                var listDiv = $("<li></li>").addClass("collection-item").attr("name", "{{file}}").html('{{file}}');
+                var aDiv = $("<a></a>").addClass("secondary-content").attr("onclick","deletefile('household','{{file}}')");
+                var iDiv = $("<i></i>").addClass("black-text material-icons").html('delete');
+                //var deleteBtn = $("<button></button>").addClass("col s4 btn waves-effect").html("delete").attr("onclick","deletefile('household','{{file}}')");
+                aDiv.append(iDiv);
+                listDiv.append(aDiv);
+                mainDiv.append(listDiv);
+            }
+            {% endfor %}
+            $('#household-modal').closeModal();
+        }
+
+
+        function deletefile(type, filename){
+            to_delete = new File(filename, type);
+            $("#delete-modal").find("[name='delete-modal-message']").html(filename+" will be removed. Are you sure?");
+            $("#delete-modal").openModal();
+
+            /*if(type=="amenity"){
+                removeFromArray(amenity_files, item);
+                $("#amenity-included-files").find("[name='"+item+"']").remove();
+            }else if(type=="household"){
+                removeFromArray(household_files, item);
+                $("#household-included-files").remove( "#"+item );
+            }*/
+        }
+
+
+        function removeFromArray(array, item) {
+            var index = array.indexOf(item);
+            array.splice(index, 1);
+            return index;
+        }
+
+        function File(name, type) {
+            this.name = name;
+            this.type = type;
+        }
+        
+        //function TrafficAnalysisZone(zone_no, )
+
+        $("#delete-file").click(function(){
+
+            type = to_delete.type;
+            filename = to_delete.name;
+            alert(type+":"+filename);
+            if(type=="amenity"){
+                index = removeFromArray(amenity_files, filename);
+                amenity_summaries.splice(index, 1);
+                $("#amenity-included-files").find("[name='"+filename+"']").remove();
+            }else if(type=="household"){
+                index = removeFromArray(household_files, filename);
+                household_summaries.splice(index, 1);
+                $("#household-included-files").find("[name='"+filename+"']").remove();
+            }
+            $("#delete-modal").closeModal();
+        });
+
+        //END OF XGB SCRIPT
+
+        /*$("#runanalysis").click(function(){
+
+            $("#file-modal").openModal({
+                ready: function(){
+
+                },
+                complete: function(){
+
+                }
+            });
+        });*/
+    
+        var originalContent;
+
+        function showModify(){
+          originalContent = $('#side-nav-holder').html();
+          var modifyContent = $('#modify-content').html()
+          $('#side-nav-holder').fadeOut('slow', function() {
+              $('#side-nav-holder').replaceWith("<div id='side-nav-holder' class='side-nav-bg col s3' style='display:none'>" + modifyContent + "</div>");
+              $('#side-nav-holder').fadeIn('slow');
+          });
+        }
+
+        function showOriginal(){
+          $('#side-nav-holder').fadeOut('slow', function() {
+              $('#side-nav-holder').replaceWith("<div id='side-nav-holder' class='side-nav-bg col s3' style='display:none'>" + originalContent + "</div>");
+              $('#side-nav-holder').fadeIn('slow');
+          });
+        }
+
+
+        function copyToClipboard(text) {
+          window.prompt("Copy Lat/Long values to clipboard: Ctrl+C, Enter", text);
+        }
+
+        function addAmenity(){
+          $('#amenity-tbody').append('<tr><td><input placeholder="Placeholder" type="text" style="height:auto !important; font-size:11px !important;text-align: center"></td><td><input placeholder="Placeholder" type="text" style="height:auto !important; font-size:11px !important;text-align: center"></td><td><input placeholder="Placeholder" type="text" style="height:auto !important; font-size:11px !important;text-align: center"></td><td><input placeholder="Placeholder" type="text" style="height:auto !important; font-size:11px !important;text-align: center"></td></tr>');
+
+          var mydiv = $("#amenity-tbody");
+          mydiv.scrollTop(mydiv.prop("scrollHeight"));
+        }
+
+    
+        /******************************* MAP *************************************/
+        
+        var mymap = L.map('mapid', {editable: true}).setView([14.5995, 120.9842], 15);
+
+        /*mymap.on('click', function(e) {
+            copyToClipboard(e.latlng.lat + ", " + e.latlng.lng);
+        });*/
+        
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            maxZoom: 18,
+            id: 'xgb7.1jd5j7o2',
+            accessToken: 'pk.eyJ1IjoieGdiNyIsImEiOiJjaXR6dGgxaHEwZnJjMm9vODRjbXk2NTczIn0.JGHOHRx1UpItrRAG1B0Fyw'
+        }).addTo(mymap);
+
+    /************** HEAT MAP ************************/
+    
+    
+            // don't forget to include leaflet-heatmap.js
+        var quakePoints = [{lat: 14.600943832220155, lng:120.97576087340713, count: 3},{lat: 14.600435096555684, lng:120.975734051317, count: 1},{lat: 14.600243022580464, lng:120.97485428676009, count: 3} ]
+        ;
+
+    
+    /************************ EDIT SUTFF ****************/
+    
+        
+    var amenities = new L.LayerGroup();
+    var drawnItems = new L.FeatureGroup();
+    drawnItems.addLayer(amenities);
+    mymap.addLayer(drawnItems);
+    mymap.on('click', function(e) {
+           L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+
+        });
+    
+    
+    /*var heat = L.heatLayer(quakePoints, {radius: 100,
+                                    blur: 15, 
+                                    maxZoom: 17,
+                                    }).addTo(mymap);*/
+
+    
+    /******************* TOOLBAR STUFF **********************/
+    
+    var heat = L.heatLayer(quakePoints, {radius: 20,
+                                    blur: 20, 
+                                    maxZoom: 17,
+                                    gradient: {
+                                      0.2: '#ffffb2',
+                                      0.4: '#fd8d3c',
+                                      0.6: '#fd8d3c',
+                                      0.8: '#f03b20',
+                                      1: '#bd0026'
+                                      },
+                                    }).addTo(mymap);
+    
+    var MyCustomMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/marker-icon.png' %}"
+        }
+    });
+
+    var options = {
+        draw: {
+            polyline: false, 
+            polygon: false, 
+            circle: false, 
+            rectangle: false,
+            marker: false
+        },
+        edit: false
+    };
+
+    var drawControl = new L.Control.Draw(options);
+    mymap.addControl(drawControl);
+
+   mymap.on(L.Draw.Event.Created, function (e) {
+        var type = e.layerType,
+            layer = e.layer;
+
+        if (type === 'marker') {
+            layer.bindPopup('A popup!');
+            
+        }
+
+        drawnItems.addLayer(layer);
+    });
+    
+    //L.marker([14.597541234521131, 120.9778980910778]).addTo(mymap);
+    
+    
+    
+
+
+</script>
+
+
+</body>
+</html>

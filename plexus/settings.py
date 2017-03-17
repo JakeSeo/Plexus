@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'amenities_manager.apps.AmenitiesManagerConfig',
     'household_manager.apps.HouseholdManagerConfig',
     'landuse_manager.apps.LanduseManagerConfig',
+    'travel_demand_analysis.apps.TravelDemandAnalysisConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
