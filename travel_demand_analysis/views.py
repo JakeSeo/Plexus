@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 import json
 import os
 import geojson
+import pygeoj
 import os.path, time
 from .custom_models.constants import *
 from .custom_models.FourStepModel import TripGeneration
@@ -85,11 +86,17 @@ def analysis_add_amenity(request):
     if request.is_ajax() and request.POST:
         amenity_filename = request.POST.get('amenity_filename')
         file_path = "media/amenities/" + str(amenity_filename)
-        num_lines = 0
-        for line in open(file_path, encoding="utf-8").readlines(): num_lines = num_lines + 1
+
+        with open(file_path, encoding="utf-8") as f:
+            json_data = json.load(f)
+        amenity_dump = json.dumps(json_data)
+
         data = {}
-        data['no_amenities'] = num_lines
+        data['no_amenities'] = len(json_data)
         data['amenity_filename'] = amenity_filename
+        data['amenities_json'] = amenity_dump
+
+
         return HttpResponse(json.dumps(data), content_type='application/json')
     return HttpResponse("Non ajax post request")
 

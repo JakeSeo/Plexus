@@ -392,6 +392,7 @@
 
 <script type="text/javascript">
         var taz_analyzed = [];
+        var amenities_marker = []
         //zone_landuse_settings[2].setStyle({fillColor: '#800026'});
         //mymap.removeLayer(zone_landuse_settings[2]);
         var amenity_files = [];
@@ -777,6 +778,12 @@
                                     count = data.no_amenities;
                                     amenity_files.push(filename);
                                     amenity_summaries.push(count);
+                                    amenities_json = JSON.parse(data.amenities_json);
+
+                                    $(amenities_json).each(function(key, data) {
+                                        amenities_marker.push(data);
+                                    });
+
                                     refresh_amenity_list();
                                 },
                                 failure: function(data) { 
@@ -810,6 +817,11 @@
                 mainDiv.append(listDiv);
             }
             {% endfor %}
+
+            for(x in amenities_json){
+                L.geoJSON(amenities_json[x]).addTo(mymap);
+            }
+
             $('#amenity-modal').closeModal();
         }
         
