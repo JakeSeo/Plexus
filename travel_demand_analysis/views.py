@@ -13,9 +13,9 @@ import pandas as pd
 
 
 def travel_analysis(request):
-    amenity_directory = "/media/amenities"
-    household_directory = "/media/households"
-    trafficzone_directory = "/media/trafficzones"
+    amenity_directory = "media/amenities"
+    household_directory = "media/households"
+    trafficzone_directory = "media/trafficzones"
     if not os.path.exists(amenity_directory):
         print("MAKE DIR1")
         os.makedirs(amenity_directory)
@@ -26,13 +26,13 @@ def travel_analysis(request):
         print("MAKE DIR3")
         os.makedirs(trafficzone_directory)
 
-    amenity_filenames = os.listdir("/media/amenities")
+    amenity_filenames = os.listdir(amenity_directory)
     for file in amenity_filenames:
         if not file.endswith("_cleaned.json"):
             amenity_filenames.remove(file)
 
-    household_filenames = os.listdir("/media/households")
-    trafficzone_filenames = os.listdir("/media/trafficzones")
+    household_filenames = os.listdir(household_directory)
+    trafficzone_filenames = os.listdir(trafficzone_directory)
 
     print("FILES: "+str(household_filenames)+":"+str(amenity_filenames)+":"+str(trafficzone_filenames))
 
