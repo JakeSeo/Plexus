@@ -3,7 +3,6 @@ from django.template import loader
 from django.shortcuts import render, redirect
 import json
 import os
-import pygeoj
 import geojson
 import os.path, time
 from .custom_models.constants import *
