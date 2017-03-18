@@ -1,5 +1,7 @@
+
 {% load staticfiles %}
 
+<!DOCTYPE html>
 <html>
     <head>
         <title>VIA - Amenities Manager</title>
@@ -7,13 +9,13 @@
         <meta charset="utf-8">
         
         <!--Import materialize.css-->
-        <link type="text/css" rel="stylesheet" href="{% static 'amenities_manager/css/personalized.css' %}" />
-        <link type="text/css" rel="stylesheet" href="{% static 'amenities_manager/css/materialize/css/materialize.min.css' %}" />
+        <link type="text/css" rel="stylesheet" href="{% static 'css/personalized.css' %}" />
+        <link type="text/css" rel="stylesheet" href="{% static 'css/materialize/css/materialize.min.css' %}" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
         <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
         
-        
+
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.0/leaflet.draw.css"/>
@@ -25,36 +27,21 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.0/leaflet.draw.js"></script>
         <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
-        <script src="{% static 'amenities_manager/leaflet/heatmap.js' %}"></script>
-        <script src="{% static 'amenities_manager/leaflet/leaflet-heatmap.js' %}"></script>
-        
-        <!----- LEAFLET.DRAW STUFF -------->
-        <!--script src="{% static 'leaflet/leaflet-draw/Control.Draw.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/Leaflet.Draw.Event.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/Leaflet.draw.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/Toolbar.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/Tooltip.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/draw/DrawToolbar.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Circle.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Feature.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Marker.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Polygon.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Polyline.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.Rectangle.js' %}"></script>
-        <script src="{% static 'leaflet/leaflet-draw/draw/handler/Draw.SimpleShape.js' %}"></script-->
+        <script src="{% static 'leaflet/heatmap.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-heatmap.js' %}"></script>
     </head>
   
     <body>
         <!--Import jQuery before materialize.js-->
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src="{% static 'amenities_manager/css/materialize/js/materialize.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'css/materialize/js/materialize.min.js' %}"></script>
      
         <ul id="dropdownData" class="dropdown-content row">
-            <li><a href="{% url 'amenities_manager:choose' %}">Amenities</a></li>
+            <li><a href="#!">Amenities</a></li>
             <li class="divider"></li>
             <li><a href="#!">Households</a></li>
             <li class="divider"></li>
-            <li><a href="{% url 'landuse_manager:choose' %}">Land Use</a></li>
+            <li><a href="#!">Land Use</a></li>
             <li class="divider"></li>
             <li><a href="#!">Roads</a></li>
             <li class="divider"></li>
@@ -98,7 +85,7 @@
                     <input type="text" style = "border-bottom: 0 !important;" value="Amenities-Valenzuela">
                 </form>
                 <!--div class="right col s1">&nbsp;</div-->
-                <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;">Save</a>
+                <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;" onClick="exportAmenities();">Export</a>
             </div>
             <div class = "side-nav-bg col s2" style="padding:0 !important;margin:0 !important;">
                 <div id="init-div" class="row">
@@ -213,6 +200,7 @@
                         </div>
                     </div>
                     <div class="row content-fields">
+                        <input type="hidden" id="a-id">
                         <div class="row field-element">
                              <div class="row">
                                 <div class="col s1">
@@ -227,13 +215,14 @@
                                     &nbsp;
                                 </div>
                                 <select id = "a-type" class="browser-default select-side col s10">
-                                    <option value="1" disabled selected>Sustenance</option>
-                                    <option value="2">Education</option>
-                                    <option value="3">Transport</option>
-                                    <option value="4">Healthcare</option>
-                                    <option value="5">Finance</option>
-                                    <option value="6">Commerce</option>
-                                    <option value="7">Others</option>
+                                    <option value="sustenance" selected>Sustenance</option>
+                                    <option value="education">Education</option>
+                                    <option value="transport">Transport</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="finance">Finance</option>
+                                    <option value="commerce">Commerce</option>
+                                    <option value="entertainment">Entertainment</option>
+                                    <option value="other">Others</option>
                                 </select>
                             </div>
                         </div>
@@ -323,76 +312,6 @@
                 </div>
             </div>
             
-
-            <!--div class = "side-nav-bg col s2" style="padding:0 !important;margin:0 !important;">
-                <!--form class = "row font-ten">
-                    <div class="input-field col s12">
-                        <i class="material-icons prefix">search</i>
-                        <input id="icon_search" type="text" class="validate">
-                        <label for="icon_search">Search</label>
-                    </div>
-                </form-->
-                <!--form class = "row">
-                    <div class="row">
-                        <div class = "right cancel-editing-button">X</div>
-                    </div>
-                    <div class="row content-fields">
-                        <div class="row field-element">
-                            <div class="row field-label col s12">
-                                Type
-                            </div>
-                            <div class="row input-field col s12">
-                                <select id = "type-select" class="browser-default select-side">
-                                    <option value="1" disabled selected>Restaurant</option>
-                                    <option value="2">Grocery</option>
-                                    <option value="3">Household</option>
-                                    <option value="4">Cafe</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row field-element">
-                            <div class="row field-label col s12">
-                                Amenity Name
-                            </div>
-                            <div class="row input-field col s12">
-                                <input placeholder="Amenity Name" type="text" class="input-textfld validate" value="Jollibee">
-                            </div>
-                        </div>
-                        <div class="row field-element">
-                            <div class="row field-label col s12">
-                                Latitude
-                            </div>
-                            <div class="row input-field col s12">
-                                <input placeholder="Amenity Name" type="text" class="input-textfld validate" value="105.234">
-                            </div>
-                        </div>
-                        <div class="row field-element">
-                            <div class="row field-label col s12">
-                                Longitude
-                            </div>
-                            <div class="row input-field col s12">
-                                <input placeholder="Amenity Name" type="text" class="input-textfld validate" value="25.109">
-                            </div>
-                        </div>
-                        <div class="row field-element">
-                            <div class="row field-label col s12">
-                                Maximum Capacity
-                            </div>
-                            <div class="row input-field col s12">
-                                <input placeholder="Amenity Name" type="text" class="input-textfld validate" value="200">
-                            </div>
-                        </div>
-                            <!--div class="row input-field col s12">
-                                <input placeholder="Amenity Name" id="first_name" type="text" class="input-textfld validate" value="Jollibee">
-                                <label class = "input-label" for="first_name">Amenity Name</label>
-                            </div>
-                    </div>
-                    <div class="row" style="margin-top:20px;">
-                        <a class="red btn col s12" style="font-size: 14px !important;">Remove</a>
-                    </div>
-                </form>
-            </div-->
-            
             <div id="mapid" class="col s10 main-bg"></div>
         </div>
                 
@@ -410,11 +329,37 @@
     <script>
         
         
-        var markers = {}; //will contain the amenities
-        var names = {}; //will contain the amenities
-        var capacities = {}; //will contain the amenities
-        var types = {}; //will contain the amenity types
+       //data = {{amenities | safe}};
         
+        var markers = {}; //will contain the amenities
+
+        $( document ).ready(function() {
+            $.ajaxSetup({
+                 beforeSend: function(xhr, settings) {
+                     function getCookie(name) {
+                         var cookieValue = null;
+                         if (document.cookie && document.cookie != '') {
+                             var cookies = document.cookie.split(';');
+                             for (var i = 0; i < cookies.length; i++) {
+                                 var cookie = jQuery.trim(cookies[i]);
+                                 // Does this cookie string begin with the name we want?
+                                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                     break;
+                                 }
+                             }
+                         }
+                         return cookieValue;
+                     }
+                     if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                         // Only send the token to relative URLs i.e. locally.
+                         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                     }
+                 }
+            });
+
+        });
+
         function copyToClipboard(text) {
           window.prompt("Copy Lat/Long values to clipboard: Ctrl+C, Enter", text);
         }
@@ -423,12 +368,52 @@
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;
           }
         
+        function exportAmenities()
+        {
+            console.log(markers[0].toGeoJSON());
+            markers_json = []
+            console.log("markers length: "+markers.length);
+            for(x in markers){
+                markers_json.push(markers[x].toGeoJSON());
+            }
+
+            markers_to_export = JSON.stringify(markers_json);
+            console.log("JSONIFIED: "+markers_to_export);
+            /*$.ajax({
+                    url: "{% url 'manageSave' %}",
+                    method: "POST",
+                    data: {
+                        "amenities" : markers_to_export,
+                    },// This is the default though, you don't actually need to always mention it
+                    success: alert("sent to back"),
+                    failure: alert('Error occurred.')
+                }); */
+        }
+        
         function save() {
             //save shit here
-            names["LatLng("+document.getElementById('a-lat').value +", "+ document.getElementById('a-long').value+")"] = document.getElementById('a-name').value;
-            capacities["LatLng("+document.getElementById('a-lat').value +", "+ document.getElementById('a-long').value+")"] = document.getElementById('a-capacity').value;
-            types["LatLng("+document.getElementById('a-lat').value +", "+ document.getElementById('a-long').value+")"] = document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value;
+            markers[document.getElementById('a-id').value].feature.properties.name = document.getElementById('a-name').value;
+            markers[document.getElementById('a-id').value].feature.properties.capacity = document.getElementById('a-capacity').value;
+            markers[document.getElementById('a-id').value].feature.properties.amenity_type = document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value;
             
+            switch(document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value)
+            {
+                case "sustenance": markers[document.getElementById('a-id').value].setIcon(new SustenanceMarker); break;
+                case "education": markers[document.getElementById('a-id').value].setIcon(new EducationMarker); break;
+                case "transport": markers[document.getElementById('a-id').value].setIcon(new TransportMarker); break;
+                case "healthcare": markers[document.getElementById('a-id').value].setIcon(new HealthcareMarker); break;
+                case "finance": markers[document.getElementById('a-id').value].setIcon(new FinanceMarker); break;
+                case "commerce": markers[document.getElementById('a-id').value].setIcon(new CommerceMarker); break;
+                case "entertainment": markers[document.getElementById('a-id').value].setIcon(new EntertainmentMarker); break;
+                case "other": markers[document.getElementById('a-id').value].setIcon(new OtherMarker); break;
+            }
+                    
+            markers[document.getElementById('a-id').value].feature.properties.latitude = document.getElementById("a-lat").value;
+            markers[document.getElementById('a-id').value].feature.properties.longitude = document.getElementById("a-long").value;
+            markers[document.getElementById('a-id').value].feature.properties.amenity_type = document.getElementById("a-type").value;
+            markers[document.getElementById('a-id').value].feature.properties.capacity = document.getElementById("a-capacity").value;
+            markers[document.getElementById('a-id').value].feature.properties.name = document.getElementById("a-name").value;
+            var toGeojson = markers[document.getElementById('a-id').value].toGeoJSON();
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
         }
         
@@ -436,9 +421,9 @@
         
         var map = L.map('mapid', {editable: true}).setView([14.5995, 120.9842], 15);
 
-        /*mymap.on('click', function(e) {
+        map.on('click', function(e) {
             copyToClipboard(e.latlng.lat + ", " + e.latlng.lng);
-        });*/
+        });
         
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -452,7 +437,7 @@
     var editableLayers = new L.FeatureGroup();
     map.addLayer(editableLayers);
 
-    var MyCustomMarker = L.Icon.extend({
+    var OtherMarker = L.Icon.extend({
         options: {
             shadowUrl: null,
             iconAnchor: new L.Point(12, 12),
@@ -461,16 +446,78 @@
         }
     });
 
+    var SustenanceMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_sustenance.png' %}"
+        }
+    });
+
+    var EducationMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_education.png' %}"
+        }
+    });
+
+    var TransportMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_transportation.png' %}"
+        }
+    });
+
+    var HealthcareMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_healthcare.png' %}"
+        }
+    });
+
+    var FinanceMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_finance.png' %}"
+        }
+    });
+
+    var CommerceMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_commerce.png' %}"
+        }
+    });
+        
+    var EntertainmentMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_entertainment.png' %}"
+        }
+    });
+    
+        
     var options = {
-        //position: 'topright',
         draw: {
             polyline: false,
             polygon: false,
             circle: false, 
             rectangle: false,
             marker: {
-                icon: new MyCustomMarker()
-                //add more marker stuff here
+                icon: new SustenanceMarker()
             }
         },
         edit: false/*{
@@ -481,48 +528,140 @@
 
     var drawControl = new L.Control.Draw(options);
     map.addControl(drawControl);
-
+    
     map.on('draw:created', function (e) {
         var type = e.layerType,
-            layer = e.layer;
+            layer = e.layer,
+            feature = layer.feature = layer.feature || {},
+            props = feature.properties = feature.properties || {};
+
         
         document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
-        document.getElementById('a-lat').value = layer.getLatLng().lat;
-        document.getElementById('a-long').value = layer.getLatLng().lng;
-        markers["LatLng("+layer.getLatLng().lat +", "+ layer.getLatLng().long+")"] = e;
-        //names[layer.getLatLng()] = document.getElementById('a-name').value;
-        //capacities[layer.getLatLng()] = document.getElementById('a-capacity').value;
-        //document.getElementById('a-capacity').value = capacities[layer.getLatLng()];
-        //document.getElementById('a-name').value = names[layer.getLatLng()];
+        
+        feature.type = "Feature";
+        layer.feature.properties.id = Object.keys(markers).length;
+        layer.feature.properties.latitude = layer.getLatLng().lat;
+        layer.feature.properties.longitude = layer.getLatLng().lng;
+        layer.feature.properties.capacity = 0;
+        layer.feature.properties.name = "New Amenity";
+        layer.feature.properties.amenity_type = "sustenance";
+        markers[layer.feature.properties.id] = e.layer;
 
+        document.getElementById('a-id').value = layer.feature.properties.id;
+        document.getElementById('a-lat').value = layer.feature.properties.latitude;
+        document.getElementById('a-long').value = layer.feature.properties.longitude;       
+        document.getElementById('a-capacity').value = 0;
+        document.getElementById('a-name').value = "No name";
+        
         if (type === 'marker') {
-            layer.bindPopup(layer.getLatLng().toString()).openPopup();
             layer.on('click', function () {
-                //Write code to adjust the icon
-                //layer.icon = someNewIcon;
-
-                //Store a ref. to the menu item, and use that ref here to manage the view state
                 document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
+                document.getElementById('a-id').value = layer.feature.properties.id;
                 document.getElementById('a-lat').value = layer.getLatLng().lat;
                 document.getElementById('a-long').value = layer.getLatLng().lng;
-                document.getElementById('a-capacity').value = capacities["LatLng("+layer.getLatLng().lat +", "+ layer.getLatLng().lng+")"];
-                document.getElementById('a-name').value = names["LatLng("+layer.getLatLng().lat +", "+ layer.getLatLng().lng+")"];
-                document.getElementById('a-type').selectedIndex=types["LatLng("+layer.getLatLng().lat +", "+ layer.getLatLng().lng+")"]-1;
+                document.getElementById('a-capacity').value =layer.feature.properties.capacity;
+                document.getElementById('a-name').value = layer.feature.properties.name;
+                index = 0;
+                switch(layer.feature.properties.amenity_type)
+                {
+                    case "sustenance": index = 0; break;
+                    case "education":  index = 1; break;
+                    case "transport":  index = 2; break;
+                    case "healthcare":  index = 3; break;
+                    case "finance":  index = 4; break;
+                    case "commerce": index = 5; break;
+                    case "entertainment": index = 6; break;
+                    default:  index = 7; break;
+                }
+                document.getElementById('a-type').selectedIndex=index;
             });
         }
 
         editableLayers.addLayer(layer);
     });
-    
         
-    /*marker.on('mouseover', function () {
-        //Write code to adjust the icon
-        marker.icon = someNewIcon;
+        
+    var gdata = [{
+        "type": "Feature",
+        "properties": {
+            "id": "0",
+            "name": "Jollibee",
+            "latitude": "14.59758276455358",
+            "longitude": "120.97287699580195",
+            "capacity": 100,
+            "amenity_type": "sustenance"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [120.97287699580195, 14.59758276455358]
+        }
+    }, {
+        "type": "Feature",
+        "properties": {
+            "id": "1",
+            "name": "Ospital ng Maynila",
+            "latitude": "14.600697494641814",
+            "longitude": "120.97090288996696",
+            "capacity": 555,
+            "amenity_type": "healthcare"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [120.97090288996696, 14.600697494641814]
+        }
+    }];
+        
+    //makeonload
+    initMap();
+        
+        
+    function initMap(){
+                var selectedFeature = null;
+                var eLayer = L.geoJson(gdata,{
+                    onEachFeature: function(feature,layer){
+                        switch(feature.properties.amenity_type)
+                        {
+                            case "sustenance": layer.setIcon(new SustenanceMarker()); break;
+                            case "education":  layer.setIcon(new EducationMarker()); break;
+                            case "transport":  layer.setIcon(new TransportMarker()); break;
+                            case "healthcare": layer.setIcon(new HealthcareMarker()); break;
+                            case "finance": layer.setIcon(new FinanceMarker()); break;
+                            case "commerce": layer.setIcon(new CommerceMarker()); break;
+                            case "entertainment": layer.setIcon(new EntertainmentMarker()); break;
+                            default: layer.setIcon(new OtherMarker()); break;
+                        }
+                        console.log("INIT names " + feature.properties.name);
+                        markers[feature.properties.id] = layer;
 
-        //Store a ref. to the menu item, and use that ref here to manage the view state
-        currentActive.removeClass('active');
-        $(this.target).addClass('active');
-    });*/
+                        layer.on('click',function(e){
+                            
+                            document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
+                            alert("lat " + layer.feature.properties.latitude);
+                            document.getElementById('a-id').value = layer.feature.properties.id;
+                            document.getElementById('a-lat').value = layer.feature.properties.latitude;
+                            document.getElementById('a-long').value = layer.feature.properties.longitude;
+                            document.getElementById('a-capacity').value = layer.feature.properties.capacity;
+                            document.getElementById('a-name').value = layer.feature.properties.name;
+                            index = 0;
+                            switch(layer.feature.properties.amenity_type)
+                            {
+                                case "sustenance": index = 0; break;
+                                case "education":  index = 1; break;
+                                case "transport":  index = 2; break;
+                                case "healthcare":  index = 3; break;
+                                case "finance":  index = 4; break;
+                                case "commerce": index = 5; break;
+                                case "entertainment": index = 6; break;
+                                default:  index = 7; break;
+                            }
+                            document.getElementById('a-type').selectedIndex=index;
+                            });
+                        }
+                    }
+                );
+                editableLayers.addLayer(eLayer);
+            }
+        
     </script>
 
 

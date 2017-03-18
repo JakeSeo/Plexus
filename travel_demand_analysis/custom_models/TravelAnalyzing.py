@@ -1,9 +1,7 @@
 import geojson
 from geojson import Feature, Polygon, FeatureCollection
 import json
-import pygeoj
 import io
-from shapely.geometry import shape, Point
 import pandas as pd
 # from models.taz import TAZ
 
