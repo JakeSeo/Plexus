@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'household_manager.apps.HouseholdManagerConfig',
     'landuse_manager.apps.LanduseManagerConfig',
     'travel_demand_analysis.apps.TravelDemandAnalysisConfig',
+    'taz_manager.apps.TazManagerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

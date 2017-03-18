@@ -39,18 +39,6 @@ def travel_analysis(request):
     with open('travel_demand_analysis/coors.json', encoding='utf8') as f:
         json_data = json.load(f)
 
-    # if request.method == 'POST':
-    #     form = DocumentForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         newfile = Document()
-    #         newfile.doc_name = form.cleaned_data["name"]
-    #         newfile.document = form.cleaned_data["docfile"]
-    #         original_name, extension = os.path.splitext(newfile.document.name)
-    #         newfile.document.name = "tryc/" + form.cleaned_data["name"] + extension
-    #         newfile.save()
-    #         return redirect('mapdemo2')
-    # else:
-    #     form = DocumentForm()
     return render(request, 'Analysis.html', {
         'coordinates_var': json_data["features"],
         'amenity_filenames': amenity_filenames,
