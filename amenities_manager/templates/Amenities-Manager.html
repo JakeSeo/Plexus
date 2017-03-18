@@ -379,7 +379,7 @@
 
             markers_to_export = JSON.stringify(markers_json);
             console.log("JSONIFIED: "+markers_to_export);
-            /*$.ajax({
+            $.ajax({
                     url: "{% url 'amenities_manager:manageSave' %}",
                     method: "POST",
                     data: {
@@ -387,7 +387,7 @@
                     },// This is the default though, you don't actually need to always mention it
                     success: alert("sent to back"),
                     failure: alert('Error occurred.')
-                }); */
+                });
         }
         
         function save() {

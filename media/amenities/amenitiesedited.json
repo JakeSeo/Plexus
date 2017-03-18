@@ -1,0 +1,38 @@
+[
+    {
+        "geometry": {
+            "coordinates": [
+                120.97287699580195,
+                14.59758276455358
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "sustenance",
+            "capacity": 100,
+            "id": "0",
+            "latitude": "14.59758276455358",
+            "longitude": "120.97287699580195",
+            "name": "Jollibee"
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.97090288996696,
+                14.600697494641814
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "healthcare",
+            "capacity": 555,
+            "id": "1",
+            "latitude": "14.600697494641814",
+            "longitude": "120.97090288996696",
+            "name": "Ospital ng Maynila"
+        },
+        "type": "Feature"
+    }
+]

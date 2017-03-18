@@ -5,6 +5,7 @@ import json
 from amenities_manager.forms import DocumentForm
 from amenities_manager.models import Document, FileManagerDocument
 import os
+import geojson
 import os.path, time
 
 
