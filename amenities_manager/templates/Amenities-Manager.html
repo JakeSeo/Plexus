@@ -380,7 +380,7 @@
             markers_to_export = JSON.stringify(markers_json);
             console.log("JSONIFIED: "+markers_to_export);
             /*$.ajax({
-                    url: "{% url 'manageSave' %}",
+                    url: "{% url 'amenities_manager:manageSave' %}",
                     method: "POST",
                     data: {
                         "amenities" : markers_to_export,
