@@ -51,7 +51,7 @@ def choose(request):
             newfile.document.name = "households/" + original_name + extension
             newfile.doc_name = original_name
             newfile.save()
-            return redirect('file_manager_household')
+            return redirect('household_manager:choose')
     else:
         form = DocumentForm()
 

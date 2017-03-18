@@ -49,7 +49,7 @@ def choose(request):
             newfile.document.name = "landuses/" + original_name + extension
             newfile.doc_name = original_name
             newfile.save()
-            return redirect('file_manager_landuse')
+            return redirect('landuse_manager:choose')
     else:
         form = DocumentForm()
 

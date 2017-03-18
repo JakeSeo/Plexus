@@ -13,9 +13,9 @@ import pandas as pd
 
 
 def travel_analysis(request):
-    amenity_directory = "media/amenities"
-    household_directory = "media/households"
-    trafficzone_directory = "media/trafficzones"
+    amenity_directory = "/media/amenities"
+    household_directory = "/media/households"
+    trafficzone_directory = "/media/trafficzones"
     if not os.path.exists(amenity_directory):
         print("MAKE DIR1")
         os.makedirs(amenity_directory)
@@ -26,13 +26,15 @@ def travel_analysis(request):
         print("MAKE DIR3")
         os.makedirs(trafficzone_directory)
 
-    amenity_filenames = os.listdir("media/amenities")
+    amenity_filenames = os.listdir("/media/amenities")
     for file in amenity_filenames:
         if not file.endswith("_cleaned.json"):
             amenity_filenames.remove(file)
 
-    household_filenames = os.listdir("media/households")
-    trafficzone_filenames = os.listdir("media/trafficzones")
+    household_filenames = os.listdir("/media/households")
+    trafficzone_filenames = os.listdir("/media/trafficzones")
+
+    print("FILES: "+str(household_filenames)+":"+str(amenity_filenames)+":"+str(trafficzone_filenames))
 
     with open('travel_demand_analysis/coors.json', encoding='utf8') as f:
         json_data = json.load(f)
@@ -51,7 +53,6 @@ def travel_analysis(request):
     #     form = DocumentForm()
     return render(request, 'Analysis.html', {
         'coordinates_var': json_data["features"],
-        # 'form': form,
         'amenity_filenames': amenity_filenames,
         'household_filenames': household_filenames,
         'trafficzone_filenames': trafficzone_filenames
@@ -64,7 +65,6 @@ def run_analysis(request):
         household_files = request.POST.getlist('household_files[]')
         trafficzone_files = request.POST.getlist('trafficzone_files[]')
         zone_landuse_settings = request.POST.getlist('zone_landuse_settings[]')
-        # print(str(zone_landuse_settings))
         trip_analyzer = TripAnalyzer(trafficzone_files, household_files, amenity_files, zone_landuse_settings)
         preprocessed_frame = trip_analyzer.trip_analyze()
         preprocessed_frame.to_csv("media/PRE_TRIPGEN_FINISHED.csv", encoding='utf-8')
