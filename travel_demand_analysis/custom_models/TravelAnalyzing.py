@@ -227,5 +227,5 @@ class TripAnalyzer:
         for index, zone in enumerate(self.traffic_analysis_zones):
             pre_tripgen_table.loc[index] = zone.get_attr_vals()
 
-        zone_info_json = json.dumps([ob.__dict__ for ob in self.traffic_analysis_zones], default=lambda o: o.__dict__, indent=4, sort_keys=True)
-        return pre_tripgen_table, zone_info_json
+        #zone_info_json = json.dumps([ob.__dict__ for ob in self.traffic_analysis_zones], default=lambda o: o.__dict__, indent=4, sort_keys=True)
+        return pre_tripgen_table, self.traffic_analysis_zones

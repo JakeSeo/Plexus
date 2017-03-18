@@ -54,11 +54,8 @@ def run_analysis(request):
         trafficzone_files = request.POST.getlist('trafficzone_files[]')
         zone_landuse_settings = request.POST.getlist('zone_landuse_settings[]')
         trip_analyzer = TripAnalyzer(trafficzone_files, household_files, amenity_files, zone_landuse_settings)
-
-        preprocessed_frame, json_objs = trip_analyzer.trip_analyze()
-        #print("JSONOBJSSS____: "+str(json_objs))
+        preprocessed_frame, taz_info_preanalysis = trip_analyzer.trip_analyze()
         preprocessed_frame.to_csv("media/PRE_TRIPGEN_FINISHED.csv", encoding='utf-8')
-        data = pd.read_csv("media/PRE_TRIPGEN_FINISHED.csv", encoding="utf-8")
         trip_generation = TripGeneration("media/PRE_TRIPGEN_FINISHED.csv", "trips")
 
         trip_generation.setProductionParameters(production_attribute_names,
@@ -69,13 +66,17 @@ def run_analysis(request):
                                                 attraction_attribute_coeffiients)
 
         df, overall_trip_production, overall_trip_attraction = trip_generation.printAllZonalTripsProductionAttraction()
-        #print("Sample prod, attr:" + str(overall_trip_production) + " " + str(overall_trip_attraction))
-        df.to_csv("media/SAMPLE_ZONAL_PROD_ATTR.csv", encoding='utf-8')
+        for index, zone_info in enumerate(taz_info_preanalysis):
+            zone_info.trips_produced = overall_trip_production[index]
+            zone_info.trips_attracted = overall_trip_attraction[index]
 
+        zone_info_json = json.dumps([ob.__dict__ for ob in taz_info_preanalysis], default=lambda o: o.__dict__,
+                                    indent=4, sort_keys=True)
+        df.to_csv("media/SAMPLE_ZONAL_PROD_ATTR.csv", encoding='utf-8')
         data = {}
         data['overall_trip_production'] = overall_trip_production
         data['overall_trip_attraction'] = overall_trip_attraction
-        data['taz_json'] = json_objs
+        data['taz_json'] = zone_info_json
 
         return HttpResponse(json.dumps(data), content_type='application/json')
     return HttpResponse("Non ajax post request")
