@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d092e0db-f4a4-4a52-8119-24718f88e4c8" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/templates/amenities_manager/Amenities-Manager.html" afterPath="$PROJECT_DIR$/amenities_manager/templates/Amenities-Manager.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/amenities_manager/templates/amenities_manager/File-Manager.html" afterPath="$PROJECT_DIR$/amenities_manager/templates/File-Manager.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amenities_manager/urls.py" afterPath="$PROJECT_DIR$/amenities_manager/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amenities_manager/views.py" afterPath="$PROJECT_DIR$/amenities_manager/views.py" />
-    </list>
+    <list default="true" id="d092e0db-f4a4-4a52-8119-24718f88e4c8" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -252,8 +246,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-9" />
-    <option name="y" value="-9" />
+    <option name="x" value="706" />
+    <option name="y" value="6" />
     <option name="width" value="1924" />
     <option name="height" value="1048" />
   </component>
@@ -514,7 +508,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1924" height="1048" extended-state="0" />
+    <frame x="706" y="6" width="1924" height="1048" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21896644" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
