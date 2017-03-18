@@ -3,6 +3,7 @@
 {% load staticfiles %}
 <html>
 <head>
+
     <title>VIA - Amenities Manager</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
@@ -233,7 +234,7 @@
             <div>
                 <ul class="tabs" style="font-size:10px;width:100px !important;overflow-x: hidden !important;">
                     <li class="tab col s3 custom-tab"><a class="active" href="#inbox">Summary</a></li>
-                    <li class="tab col s3 custom-tab"><a href="#unread">Details</a></li>
+                    <li class="tab col s3 custom-tab"><a href="#table-zone-details">Details</a></li>
                 </ul>
             </div>
         </div>
@@ -295,44 +296,8 @@
                 </div>
             </div>
         </div>
-        <div class="row" id="unread">
-            <div class="col s1">
-                &nbsp;
-            </div>
-            <table class="left-summary-table bordered col s10"
-                   style="height:350px !important; overflow-y:scroll !important;">
-                <thead>
-                <tr>
-                    <th data-field="id">Zone 1</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Amenities</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>Land Use</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>House</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>Traffic Analysis Zones</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>Total Trips Produced</td>
-                    <td>27,000</td>
-                </tr>
-                <tr>
-                    <td>Total Trips Attracted</td>
-                    <td>27,000</td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="row" id="table-zone-details" style="height:500px !important; overflow-y:scroll !important;">
+
         </div>
     </div>
 </div>
@@ -426,6 +391,7 @@
 <!----------------------------------------------------- SCRIPTS ------------------------------------------->
 
 <script type="text/javascript">
+        var taz_analyzed = [];
         //zone_landuse_settings[2].setStyle({fillColor: '#800026'});
         //mymap.removeLayer(zone_landuse_settings[2]);
         var amenity_files = [];
@@ -458,7 +424,13 @@
                     },// This is the default though, you don't actually need to always mention it
                     success: function(data) {
                         $("#loader-modal").closeModal();
-                        alert(data);
+                        json_response = JSON.parse(data.taz_json);
+                        console.log(json_response.length+" LENK");
+                        $(json_response).each(function(key, data) {
+                            taz_analyzed.push(data);
+                            //console.log(key+":"+data.zone_polygon.__geom__);
+                        });
+                        refresh_zone_details();
                     },
                     failure: function(data) { 
                         alert('Error occurred.');
@@ -468,6 +440,61 @@
                 alert("amenity or household files are empty!");
             }
         });
+
+        function refresh_zone_details(){
+            var zone_details = $("#table-zone-details").empty();
+            for(x in taz_analyzed){
+                var outerDiv = $("<div></div>").addClass("col s12 outer-detail-zone-entry");
+                var tableDiv = $("<table></table>").addClass("left-summary-table bordered col s12").attr("style","height:350px;");
+                var theadDiv = $("<thead></thead>");
+                var trheadDiv = $("<tr></tr>");
+                var th = $("<th></th>").html("Zone "+(x+1));
+
+                th.appendTo(trheadDiv);
+                trheadDiv.appendTo(theadDiv);
+                theadDiv.appendTo(tableDiv);
+
+                var tbodyDiv = $("<tbody></tbody>");
+                var tr_container = $("<tr></tr>");
+                var tdlabel = $("<td></td>").html("Amenities");
+                var tdvalue = $("<td></td>").html(taz_analyzed[x].total_amenities);
+                tdlabel.appendTo(tr_container);
+                tdvalue.appendTo(tr_container);
+                tr_container.appendTo(tbodyDiv);
+
+                tr_container = $("<tr></tr>");
+                tdlabel = $("<td></td>").html("Land Use");
+                tdvalue = $("<td></td>").html(taz_analyzed[x].main_landuse);
+                tdlabel.appendTo(tr_container);
+                tdvalue.appendTo(tr_container);
+                tr_container.appendTo(tbodyDiv);
+
+                tr_container = $("<tr></tr>");
+                tdlabel = $("<td></td>").html("Houses");
+                tdvalue = $("<td></td>").html(taz_analyzed[x].no_hh);
+                tdlabel.appendTo(tr_container);
+                tdvalue.appendTo(tr_container);
+                tr_container.appendTo(tbodyDiv);
+
+                tr_container = $("<tr></tr>");
+                tdlabel = $("<td></td>").html("Total Trips Produced");
+                tdvalue = $("<td></td>").html(taz_analyzed[x].trips_produced);
+                tdlabel.appendTo(tr_container);
+                tdvalue.appendTo(tr_container);
+                tr_container.appendTo(tbodyDiv);
+
+                tr_container = $("<tr></tr>");
+                tdlabel = $("<td></td>").html("Total Trips Attraction");
+                tdvalue = $("<td></td>").html(taz_analyzed[x].trips_produced);
+                tdlabel.appendTo(tr_container);
+                tdvalue.appendTo(tr_container);
+                tr_container.appendTo(tbodyDiv);
+
+                tbodyDiv.appendTo(tableDiv);
+                tableDiv.appendTo(outerDiv);
+                outerDiv.appendTo(zone_details);
+            }
+        }
         
         $( document ).ready(function() {
             $.ajaxSetup({ 
@@ -577,17 +604,6 @@
         $("#edit-landuse").click(function(){
             $("#edit-landuse-modal").openModal({dismissible:false});
         });
-
-        $("#household-list").click(function(){
-            $("#household-modal").openModal({
-                ready: function(){
-
-                },
-                complete: function(){
-
-                }
-            });
-        });
         
         function initializeLanduseModal(){
             var ulDiv = $("#edit-landuse-modal").find("#edit-landuse-modal-ul");
@@ -614,10 +630,10 @@
             selectDivs = $("#edit-landuse-modal").find("[name='landuse-selector']");
             for(var x=0; x<zone_landuse_settings.length; x++){
                 val_lu = $(selectDivs[x]).val();
-                alert("VALLU "+val_lu);
+                //alert("VALLU "+val_lu);
                 if(val_lu == null){
                     bool_landuse = 1;
-                    alert("BOOL: "+bool_landuse);
+                    //alert("BOOL: "+bool_landuse);
                     break;
                 }else{
                     zone_landuse_settings[x] = val_lu;
@@ -625,7 +641,7 @@
             }
             
             if(bool_landuse == 0){
-                alert("CLOSE MODAL");
+                //alert("CLOSE MODAL");
                 $("#edit-landuse-modal").closeModal();
             }else{
                 bool_landuse = 0;
@@ -757,8 +773,6 @@
                                     "amenity_filename" : filename
                                 },
                                 success: function(data) {
-                                    //alert(data);
-                                    //json_response = JSON.parse(data);
                                     filename = data.amenity_filename;
                                     count = data.no_amenities;
                                     amenity_files.push(filename);
@@ -819,12 +833,10 @@
         }
 
         function refresh_household_list(){
-            //alert("WENT IN REFRESH HOUSEHOLD");
             $("#household-summary").html(computeTotal(household_summaries));
             var mainDiv = $('#household-included-files');
             $(mainDiv).empty();
             {% for file in household_filenames %}
-            //alert("WENT IN THE FORLOOP");
             if(household_files.indexOf('{{file}}') != -1){
                 //alert("WENT IN THE FORLOOP ififififif");
                 var listDiv = $("<li></li>").addClass("collection-item").attr("name", "{{file}}").html('{{file}}');
@@ -872,14 +884,16 @@
 
             type = to_delete.type;
             filename = to_delete.name;
-            alert(type+":"+filename);
+            //alert(type+":"+filename);
             if(type=="amenity"){
                 index = removeFromArray(amenity_files, filename);
                 amenity_summaries.splice(index, 1);
+                $("#amenity-summary").html(computeTotal(amenity_summaries));
                 $("#amenity-included-files").find("[name='"+filename+"']").remove();
             }else if(type=="household"){
                 index = removeFromArray(household_files, filename);
                 household_summaries.splice(index, 1);
+                $("#household-summary").html(computeTotal(household_summaries));
                 $("#household-included-files").find("[name='"+filename+"']").remove();
             }
             $("#delete-modal").closeModal();

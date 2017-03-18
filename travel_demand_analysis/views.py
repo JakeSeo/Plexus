@@ -54,7 +54,9 @@ def run_analysis(request):
         trafficzone_files = request.POST.getlist('trafficzone_files[]')
         zone_landuse_settings = request.POST.getlist('zone_landuse_settings[]')
         trip_analyzer = TripAnalyzer(trafficzone_files, household_files, amenity_files, zone_landuse_settings)
-        preprocessed_frame = trip_analyzer.trip_analyze()
+
+        preprocessed_frame, json_objs = trip_analyzer.trip_analyze()
+        #print("JSONOBJSSS____: "+str(json_objs))
         preprocessed_frame.to_csv("media/PRE_TRIPGEN_FINISHED.csv", encoding='utf-8')
         data = pd.read_csv("media/PRE_TRIPGEN_FINISHED.csv", encoding="utf-8")
         trip_generation = TripGeneration("media/PRE_TRIPGEN_FINISHED.csv", "trips")
@@ -67,12 +69,13 @@ def run_analysis(request):
                                                 attraction_attribute_coeffiients)
 
         df, overall_trip_production, overall_trip_attraction = trip_generation.printAllZonalTripsProductionAttraction()
-        print("Sample prod, attr:" + str(overall_trip_production) + " " + str(overall_trip_attraction))
+        #print("Sample prod, attr:" + str(overall_trip_production) + " " + str(overall_trip_attraction))
         df.to_csv("media/SAMPLE_ZONAL_PROD_ATTR.csv", encoding='utf-8')
 
         data = {}
         data['overall_trip_production'] = overall_trip_production
         data['overall_trip_attraction'] = overall_trip_attraction
+        data['taz_json'] = json_objs
 
         return HttpResponse(json.dumps(data), content_type='application/json')
     return HttpResponse("Non ajax post request")
@@ -96,6 +99,7 @@ def analysis_add_household(request):
         file_path = "media/households/" + str(household_filename)
 
         num_lines = 0
+
         for line in open(file_path, encoding="utf-8").readlines(): num_lines += 1
 
         data = {}
