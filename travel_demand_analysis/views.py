@@ -4,7 +4,6 @@ from django.shortcuts import render, redirect
 import json
 import os
 import geojson
-import pygeoj
 import os.path, time
 from .custom_models.constants import *
 from .custom_models.FourStepModel import TripGeneration

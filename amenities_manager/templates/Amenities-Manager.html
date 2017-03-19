@@ -316,7 +316,7 @@
                         <a class="green btn col s12" style="font-size: 14px !important;" onclick="save();">Save</a>
                     </div>
                     <div class="row" style="margin-top:20px;">
-                        <a class="red btn col s12" style="font-size: 14px !important;">Remove</a>
+                        <a class="red btn col s12" style="font-size: 14px !important;" onclick="remove();">Remove</a>
                     </div>
                 </div>
             </div>
@@ -361,11 +361,6 @@
                          }
                          return cookieValue;
                      }
-<<<<<<< HEAD
-                     alert("pasok dito");
-=======
-                     alert("YAY");
->>>>>>> 5a844d7e5360d0da97238892961e690bfff0c9a5
                      if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                          // Only send the token to relative URLs i.e. locally.
                          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
@@ -424,6 +419,12 @@
             markers[document.getElementById('a-id').value].feature.properties.amenity_type = document.getElementById("a-type").value;
             markers[document.getElementById('a-id').value].feature.properties.capacity = document.getElementById("a-capacity").value;
             markers[document.getElementById('a-id').value].feature.properties.name = document.getElementById("a-name").value;
+            document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
+        }
+        
+         function remove() {
+            //save shit here
+            editableLayers.removeLayer(markers[document.getElementById('a-id').value]);
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
         }
         
@@ -666,10 +667,18 @@
                             }
                             document.getElementById('a-type').selectedIndex=index;
                             });
+                        
+                            layer.on('edit',function(e){
+                                
+                                alert("bantut");
+                                
+                            });
+                        
+                            editableLayers.addLayer(layer);
                         }
                     }
                 );
-                editableLayers.addLayer(eLayer);
+                //editableLayers.addLayer(eLayer);
             }
         
     </script>

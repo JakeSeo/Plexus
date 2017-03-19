@@ -348,7 +348,6 @@
         var LU = {}; //will contain the polygons of Land Use
         
          $( document ).ready(function() {
-            alert("pasok dito 1");
             $.ajaxSetup({
                 cache: false,
                  beforeSend: function(xhr, settings) {
@@ -368,7 +367,6 @@
                          return cookieValue;
                      }
                      console.log("wassup");
-                     alert("pasok dito");
                      if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                          // Only send the token to relative URLs i.e. locally.
                          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
@@ -471,10 +469,10 @@
             rectangle: false,
             marker: false,
         },
-        edit: false/*{
+        edit: {
             featureGroup: editableLayers, //REQUIRED!!
             remove: false
-        }*/
+        }
     };
 
     var drawControl = new L.Control.Draw(options);
@@ -630,10 +628,11 @@
                             }
                             document.getElementById('a-type').selectedIndex=index;
                             });
+                        
+                            editableLayers.addLayer(layer);
                         }
                     }
                 );
-                editableLayers.addLayer(eLayer);
             }
         
     </script>
