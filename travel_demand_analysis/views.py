@@ -29,7 +29,10 @@ def travel_analysis(request):
     amenity_filenames = os.listdir(amenity_directory)
     for file in amenity_filenames:
         if not file.endswith("_cleaned.json"):
+            print(str(file)+" NOT ends with _cleaned")
             amenity_filenames.remove(file)
+        else:
+            print(str(file) + " ends with _cleaned")
 
     household_filenames = os.listdir(household_directory)
     trafficzone_filenames = os.listdir(trafficzone_directory)
@@ -74,8 +77,8 @@ def run_analysis(request):
                                     indent=4, sort_keys=True)
         df.to_csv("media/SAMPLE_ZONAL_PROD_ATTR.csv", encoding='utf-8')
         data = {}
-        data['overall_trip_production'] = overall_trip_production
-        data['overall_trip_attraction'] = overall_trip_attraction
+        data['max_trip_produced'] = max(overall_trip_production)
+        data['max_trip_attracted'] = max(overall_trip_attraction)
         data['taz_json'] = zone_info_json
 
         return HttpResponse(json.dumps(data), content_type='application/json')

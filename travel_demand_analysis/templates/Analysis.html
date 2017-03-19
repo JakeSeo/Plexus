@@ -273,12 +273,14 @@
                 <p class="modes-header">Types of trips</p>
                 <div class="trips-checkboxes">
                     <form action="#">
-                        <input type="checkbox" id="test5" class="chk"/>
-                        <label class="checkbox-style" for="test5" style="padding-left:20px;padding-right:20px"> Trips
-                            Generated </label>
-                        <input type="checkbox" id="test6"/>
-                        <label for="test6" class="checkbox-style" style="padding-left:20px;padding-right:20px"> Trips
-                            Attracted</label>
+                        <p>
+                          <input class="with-gap" name="group1" type="radio" id="trip-produced-radio"  />
+                          <label for="trip-produced-radio">Trips Produced</label>
+                        </p>
+                        <p>
+                          <input class="with-gap" name="group1" type="radio" id="trip-attracted-radio"  />
+                          <label for="trip-attracted-radio">Trips Attracted</label>
+                        </p>
                     </form>
                 </div>
 
@@ -391,6 +393,8 @@
 <!----------------------------------------------------- SCRIPTS ------------------------------------------->
 
 <script type="text/javascript">
+        var max_attracted, max_produced;
+        var max_score_basis = 0
         var taz_analyzed = [];
         var amenities_marker = []
         //zone_landuse_settings[2].setStyle({fillColor: '#800026'});
@@ -410,7 +414,26 @@
                                   'utilities','other'];
         var traffic_analysis_zones_layers = [];
         var to_delete;
-        
+
+
+        $('#trip-produced-radio').click(function() {
+           if($('#trip-produced-radio').is(':checked')){
+               max_score_basis = max_produced;
+               for(x in traffic_analysis_zones_layers){
+                   traffic_analysis_zones_layers[x].setStyle(style);
+               }
+           }
+        });
+
+        $('#trip-attracted-radio').click(function() {
+           if($('#trip-attracted-radio').is(':checked')){
+               max_score_basis = max_attracted;
+               for(x in traffic_analysis_zones_layers){
+                   traffic_analysis_zones_layers[x].setStyle(style);
+               }
+           }
+        });
+
         $("#run-analysis-btn").click(function(){
             if(amenity_files.length>0 && household_files.length>0){
                 $("#loader-modal").openModal({dismissible:false});
@@ -425,6 +448,8 @@
                     },// This is the default though, you don't actually need to always mention it
                     success: function(data) {
                         $("#loader-modal").closeModal();
+                        max_attracted = data.max_trip_attracted;
+                        max_produced = data.max_trip_produced;
                         json_response = JSON.parse(data.taz_json);
                         console.log(json_response.length+" LENK");
                         $(json_response).each(function(key, data) {
@@ -709,7 +734,14 @@
                                     console.log(json_response.features.length+" LENK");
                                     $(json_response.features).each(function(key, data) {
                                         data.properties.trips = 0;
-                                        traffic_analysis_zones_layers.push(L.geoJSON(data, {style: style}).addTo(mymap));
+                                        traffic_analysis_zones_layers.push(L.geoJSON(data, {style: {
+                                            fillColor: '#FED976',
+                                            weight: 2,
+                                            opacity: 1,
+                                            color: 'white',
+                                            dashArray: '3',
+                                            fillOpacity: 0.7
+                                        }}).addTo(mymap));
                                     });
                                     refresh_trafficzone_list();
                                     initializeLanduseModal();
@@ -729,26 +761,49 @@
                 }
          });
          
-         function getColor(d) {
-            return d > 1000 ? '#800026' :
-                   d > 500  ? '#BD0026' :
-                   d > 200  ? '#E31A1C' :
-                   d > 100  ? '#FC4E2A' :
-                   d > 50   ? '#FD8D3C' :
-                   d > 20   ? '#FEB24C' :
-                   d > 10   ? '#FED976' :
+        function getColor_production(d) {
+            return d > (max_score_basis *0.9) ? '#800026' :
+                   d > (max_score_basis *0.7)  ? '#BD0026' :
+                   d > (max_score_basis *0.6)  ? '#E31A1C' :
+                   d > (max_score_basis *0.5)  ? '#FC4E2A' :
+                   d > (max_score_basis *0.3)   ? '#FD8D3C' :
+                   d > (max_score_basis *0.2)   ? '#FEB24C' :
+                   d > (max_score_basis *0.6)   ? '#FED976' :
+                              '#FFEDA0';
+        }
+
+        function getColor_attraction(d) {
+            return d > (max_score_basis *0.9) ? '#800026' :
+                   d > (max_score_basis *0.7)  ? '#BD0026' :
+                   d > (max_score_basis *0.6)  ? '#E31A1C' :
+                   d > (max_score_basis *0.5)  ? '#FC4E2A' :
+                   d > (max_score_basis *0.3)   ? '#FD8D3C' :
+                   d > (max_score_basis *0.2)   ? '#FEB24C' :
+                   d > (max_score_basis *0.6)   ? '#FED976' :
                               '#FFEDA0';
         }
 
         function style(feature) {
-            return {
-                fillColor: getColor(feature.properties.trips),
-                weight: 2,
-                opacity: 1,
-                color: 'white',
-                dashArray: '3',
-                fillOpacity: 0.7
-            };
+
+            if(max_score_basis == max_produced){
+                return {
+                    fillColor: getColor_production(feature.properties.trips_produced),
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7
+                };
+            }else{
+                return {
+                    fillColor: getColor_attraction(feature.properties.trips_attracted),
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7
+                };
+            }
         }
 
         
