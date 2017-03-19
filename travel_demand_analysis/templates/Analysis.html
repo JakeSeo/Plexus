@@ -419,8 +419,8 @@
         $('#trip-produced-radio').click(function() {
            if($('#trip-produced-radio').is(':checked')){
                max_score_basis = max_produced;
-               for(x in traffic_analysis_zones_layers){
-                   traffic_analysis_zones_layers[x].setStyle(style);
+               for(x=0; x<traffic_analysis_zones_layers.length; x++){
+                   traffic_analysis_zones_layers[x].setStyle(mystyle(taz_analyzed[x]));
                }
            }
         });
@@ -428,8 +428,8 @@
         $('#trip-attracted-radio').click(function() {
            if($('#trip-attracted-radio').is(':checked')){
                max_score_basis = max_attracted;
-               for(x in traffic_analysis_zones_layers){
-                   traffic_analysis_zones_layers[x].setStyle(style);
+               for(x=0; x<traffic_analysis_zones_layers.length; x++){
+                   traffic_analysis_zones_layers[x].setStyle(mystyle(taz_analyzed[x]));
                }
            }
         });
@@ -456,6 +456,19 @@
                             taz_analyzed.push(data);
                             //console.log(key+":"+data.zone_polygon.__geom__);
                         });
+                        var test1, test2;
+                        for(x in traffic_analysis_zones_layers){
+                            console.log("key:"+x+" zonelayer");
+                            //traffic_analysis_zones_layers[x].setStyle(mystyle(taz_analyzed[x]));
+                            test1=x;
+                        }
+                        for(x in taz_analyzed){
+                            console.log("key:"+x+" sample:"+taz_analyzed[x].trips_produced);
+                            test2=x;
+                        }
+                        var bool = (test1==test2);
+                        console.log("moment of truth: "+bool);
+
                         refresh_zone_details();
                     },
                     failure: function(data) { 
@@ -762,32 +775,30 @@
          });
          
         function getColor_production(d) {
-            return d > (max_score_basis *0.9) ? '#800026' :
-                   d > (max_score_basis *0.7)  ? '#BD0026' :
-                   d > (max_score_basis *0.6)  ? '#E31A1C' :
-                   d > (max_score_basis *0.5)  ? '#FC4E2A' :
-                   d > (max_score_basis *0.3)   ? '#FD8D3C' :
-                   d > (max_score_basis *0.2)   ? '#FEB24C' :
-                   d > (max_score_basis *0.6)   ? '#FED976' :
-                              '#FFEDA0';
+            console.log("currval:"+d+" maxscore:"+max_score_basis);
+            console.log((max_score_basis *0.9)+","+(max_score_basis *0.65)+","+(max_score_basis *0.3)+","+(max_score_basis *0.3));
+            return d > (max_score_basis *0.9) ? '#FF0AE7' :
+                   d > (max_score_basis *0.65)  ? '#B816C6' :
+                   d > (max_score_basis *0.3)  ? '#59279C' :
+                              '#13347C';
         }
 
         function getColor_attraction(d) {
-            return d > (max_score_basis *0.9) ? '#800026' :
-                   d > (max_score_basis *0.7)  ? '#BD0026' :
-                   d > (max_score_basis *0.6)  ? '#E31A1C' :
-                   d > (max_score_basis *0.5)  ? '#FC4E2A' :
-                   d > (max_score_basis *0.3)   ? '#FD8D3C' :
-                   d > (max_score_basis *0.2)   ? '#FEB24C' :
-                   d > (max_score_basis *0.6)   ? '#FED976' :
-                              '#FFEDA0';
+            console.log("currval:"+d+" maxscore:"+max_score_basis);
+            console.log((max_score_basis *0.9)+","+(max_score_basis *0.65)+","+(max_score_basis *0.3)+","+(max_score_basis *0.3));
+            return d > (max_score_basis *0.9) ? '#FF210F' :
+                   d > (max_score_basis *0.65)  ? '#FC612E' :
+                   d > (max_score_basis *0.3)  ? '#FAB857' :
+                              '#F8F977';
         }
+        //console.log("print");
 
-        function style(feature) {
 
+        function mystyle(feature) {
             if(max_score_basis == max_produced){
+                alert("COLOR PRODUCED");
                 return {
-                    fillColor: getColor_production(feature.properties.trips_produced),
+                    fillColor: getColor_production(feature.trips_produced),
                     weight: 2,
                     opacity: 1,
                     color: 'white',
@@ -795,8 +806,9 @@
                     fillOpacity: 0.7
                 };
             }else{
+                alert("COLOR ATTRACTED");
                 return {
-                    fillColor: getColor_attraction(feature.properties.trips_attracted),
+                    fillColor: getColor_attraction(feature.trips_attracted),
                     weight: 2,
                     opacity: 1,
                     color: 'white',

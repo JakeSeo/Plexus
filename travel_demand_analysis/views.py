@@ -26,14 +26,8 @@ def travel_analysis(request):
         print("MAKE DIR3")
         os.makedirs(trafficzone_directory)
 
-    amenity_filenames = os.listdir(amenity_directory)
-    for file in amenity_filenames:
-        if not file.endswith("_cleaned.json"):
-            print(str(file)+" NOT ends with _cleaned")
-            amenity_filenames.remove(file)
-        else:
-            print(str(file) + " ends with _cleaned")
 
+    amenity_filenames = [file for file in os.listdir(amenity_directory) if file.endswith('_cleaned.json')]
     household_filenames = os.listdir(household_directory)
     trafficzone_filenames = os.listdir(trafficzone_directory)
 
