@@ -709,10 +709,8 @@
             selectDivs = $("#edit-landuse-modal").find("[name='landuse-selector']");
             for(var x=0; x<zone_landuse_settings.length; x++){
                 val_lu = $(selectDivs[x]).val();
-                //alert("VALLU "+val_lu);
                 if(val_lu == null){
                     bool_landuse = 1;
-                    //alert("BOOL: "+bool_landuse);
                     break;
                 }else{
                     zone_landuse_settings[x] = val_lu;
@@ -720,7 +718,6 @@
             }
             
             if(bool_landuse == 0){
-                //alert("CLOSE MODAL");
                 $("#edit-landuse-modal").closeModal();
             }else{
                 bool_landuse = 0;
@@ -742,8 +739,6 @@
                                     "household_filename" : filename
                                 },
                                 success: function(data) {
-                                    //alert(data);
-                                    //json_response = JSON.parse(data);
                                     filename = data.household_filename;
                                     count = data.no_households;
                                     household_files.push(filename);
