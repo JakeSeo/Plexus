@@ -1,10 +1,9 @@
-
 {% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>VIA - Amenities Manager</title>
+        <title>VIA - Land Use Manager</title>
         <meta name="viewport" content="initial-scale=1.0">
         <meta charset="utf-8">
         
@@ -15,7 +14,7 @@
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
         <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
         
-
+        
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.0/leaflet.draw.css"/>
@@ -29,7 +28,6 @@
         <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
         <script src="{% static 'leaflet/heatmap.js' %}"></script>
         <script src="{% static 'leaflet/leaflet-heatmap.js' %}"></script>
-        <script src="{% static 'leaflet/Leaflet.Editable/src/Leaflet.Editable.js' %}"></script>
     </head>
   
     <body>
@@ -83,10 +81,10 @@
         <div class="body-content row">
             <div class="row file-title-row">
                 <form class="input-field col s6 input-file-name">
-                    <input type="text" style = "border-bottom: 0 !important;" value="Amenities-Valenzuela">
+                    <input type="text" style = "border-bottom: 0 !important;" value="LandUse-Valenzuela">
                 </form>
                 <!--div class="right col s1">&nbsp;</div-->
-                <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;" onClick="exportAmenities();">Export</a>
+                <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;" onClick="exportLandUse();">Export</a>
             </div>
             <div class = "side-nav-bg col s2" style="padding:0 !important;margin:0 !important;">
                 <div id="init-div" class="row">
@@ -104,37 +102,33 @@
                         <table class = "left-summary-table bordered col s10">
                             <thead>
                               <tr>
-                                  <th data-field="id">Total Amenities</th>
+                                  <th data-field="id">Total Land Use</th>
                                   <th data-field="name">123,456</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
-                                <td>Sustenance</td>
+                                <td>Residential</td>
                                 <td>89,103</td>
                               </tr>
                               <tr>
-                                <td>Education</td>
+                                <td>Commercial</td>
                                 <td>1,702</td>
                               </tr>
                               <tr>
-                                <td>Transport</td>
+                                <td>Parks</td>
                                 <td>999</td>
                               </tr>
                               <tr>
-                                <td>Healthcare</td>
+                                <td>Industrial</td>
                                 <td>20,123</td>
                               </tr>
                                 <tr>
-                                <td>Finance</td>
+                                <td>Agriculture</td>
                                 <td>1,702</td>
                               </tr>
                               <tr>
-                                <td>Commerce</td>
-                                <td>999</td>
-                              </tr>
-                              <tr>
-                                <td>Entertainment</td>
+                                <td>Utilities</td>
                                 <td>999</td>
                               </tr>
                               <tr>
@@ -160,37 +154,33 @@
                         <table class = "left-summary-table bordered col s10">
                             <thead>
                               <tr>
-                                  <th data-field="id">Total Amenities</th>
+                                  <th data-field="id">Total Land Use</th>
                                   <th data-field="name">123,456</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
-                                <td>Sustenance</td>
+                                <td>Residential</td>
                                 <td>89,103</td>
                               </tr>
                               <tr>
-                                <td>Education</td>
+                                <td>Commercial</td>
                                 <td>1,702</td>
                               </tr>
                               <tr>
-                                <td>Transport</td>
+                                <td>Parks</td>
                                 <td>999</td>
                               </tr>
                               <tr>
-                                <td>Healthcare</td>
+                                <td>Industrial</td>
                                 <td>20,123</td>
                               </tr>
                                 <tr>
-                                <td>Finance</td>
+                                <td>Agriculture</td>
                                 <td>1,702</td>
                               </tr>
                               <tr>
-                                <td>Commerce</td>
-                                <td>999</td>
-                              </tr>
-                              <tr>
-                                <td>Entertainment</td>
+                                <td>Utilities</td>
                                 <td>999</td>
                               </tr>
                               <tr>
@@ -224,13 +214,12 @@
                                     &nbsp;
                                 </div>
                                 <select id = "a-type" class="browser-default select-side col s10">
-                                    <option value="sustenance" selected>Sustenance</option>
-                                    <option value="education">Education</option>
-                                    <option value="transport">Transport</option>
-                                    <option value="healthcare">Healthcare</option>
-                                    <option value="finance">Finance</option>
-                                    <option value="commerce">Commerce</option>
-                                    <option value="entertainment">Entertainment</option>
+                                    <option value="residential" selected>Residential</option>
+                                    <option value="commercial">Commercial</option>
+                                    <option value="parks">Parks</option>
+                                    <option value="industrial">Industrial</option>
+                                    <option value="agriculture">Agriculture</option>
+                                    <option value="utilities">Utilities</option>
                                     <option value="other">Others</option>
                                 </select>
                             </div>
@@ -241,7 +230,7 @@
                                     &nbsp;
                                 </div>
                                 <div class="col s10 field-label">
-                                    Amenity Name
+                                    Land Use Name
                                 </div>
                             </div>
                             
@@ -260,7 +249,7 @@
                                     &nbsp;
                                 </div>
                                 <div class="col s10 field-label">
-                                    Latitude
+                                    Center Latitude
                                 </div>
                             </div>
                             
@@ -279,7 +268,7 @@
                                     &nbsp;
                                 </div>
                                 <div class="col s10 field-label">
-                                    Longitude
+                                    Center Longitude
                                 </div>
                             </div>
                             
@@ -311,16 +300,34 @@
                                 </div>
                             </div>
                         </div>
+                         <div class="row field-element">
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="col s10 field-label">
+                                    Area in sqm.
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col s1">
+                                    &nbsp;
+                                </div>
+                                <div class="input-field col s10">
+                                    <input id="a-area" type="text" class="input-textfld validate">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row" style="margin-top:20px;">
                         <a class="green btn col s12" style="font-size: 14px !important;" onclick="save();">Save</a>
                     </div>
                     <div class="row" style="margin-top:20px;">
-                        <a class="red btn col s12" style="font-size: 14px !important;" onclick="remove();">Remove</a>
+                        <a class="red btn col s12" style="font-size: 14px !important;">Remove</a>
                     </div>
                 </div>
-            </div>
-            
+            </div>            
             <div id="mapid" class="col s10 main-bg"></div>
         </div>
                 
@@ -338,11 +345,9 @@
     <script>
         
         
-       //data = {{amenities | safe}};
+        var LU = {}; //will contain the polygons of Land Use
         
-        var markers = {}; //will contain the amenities
-
-        $( document ).ready(function() {
+         $( document ).ready(function() {
             $.ajaxSetup({
                 cache: false,
                  beforeSend: function(xhr, settings) {
@@ -361,6 +366,7 @@
                          }
                          return cookieValue;
                      }
+                     console.log("wassup");
                      if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                          // Only send the token to relative URLs i.e. locally.
                          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
@@ -369,7 +375,7 @@
             });
 
         });
-
+        
         function copyToClipboard(text) {
           window.prompt("Copy Lat/Long values to clipboard: Ctrl+C, Enter", text);
         }
@@ -378,22 +384,22 @@
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;
           }
         
-        function exportAmenities()
+        function exportLandUse()
         {
-            console.log(markers[0].toGeoJSON());
-            markers_json = []
-            console.log("markers length: "+markers.length);
-            for(x in markers){
-                markers_json.push(markers[x].toGeoJSON());
+            console.log(LU[0].toGeoJSON());
+            LU_json = []
+            console.log("LU length: "+LU.length);
+            for(x in LU){
+                LU_json.push(LU[x].toGeoJSON());
             }
 
-            markers_to_export = JSON.stringify(markers_json);
-            console.log("JSONIFIED: "+markers_to_export);
+            LU_to_export = JSON.stringify(LU_json);
+            console.log("JSONIFIED: "+LU_to_export);
             $.ajax({
-                    url: "{% url 'amenities_manager:manageSave' %}",
+                    url: "{% url 'landuse_manager:manageSave' %}",
                     method: "POST",
                     data: {
-                        "amenities" : markers_to_export,
+                        "landuse" : LU_to_export,
                     },// This is the default though, you don't actually need to always mention it
                     success: function(data){alert("sent to back")},
                     failure: function(data){alert('Error occurred.')}
@@ -401,30 +407,25 @@
         }
         
         function save() {
-            //save shit here            
-            switch(document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value)
-            {
-                case "sustenance": markers[document.getElementById('a-id').value].setIcon(new SustenanceMarker); break;
-                case "education": markers[document.getElementById('a-id').value].setIcon(new EducationMarker); break;
-                case "transport": markers[document.getElementById('a-id').value].setIcon(new TransportMarker); break;
-                case "healthcare": markers[document.getElementById('a-id').value].setIcon(new HealthcareMarker); break;
-                case "finance": markers[document.getElementById('a-id').value].setIcon(new FinanceMarker); break;
-                case "commerce": markers[document.getElementById('a-id').value].setIcon(new CommerceMarker); break;
-                case "entertainment": markers[document.getElementById('a-id').value].setIcon(new EntertainmentMarker); break;
-                case "other": markers[document.getElementById('a-id').value].setIcon(new OtherMarker); break;
-            }
-                    
-            markers[document.getElementById('a-id').value].feature.properties.latitude = document.getElementById("a-lat").value;
-            markers[document.getElementById('a-id').value].feature.properties.longitude = document.getElementById("a-long").value;
-            markers[document.getElementById('a-id').value].feature.properties.amenity_type = document.getElementById("a-type").value;
-            markers[document.getElementById('a-id').value].feature.properties.capacity = document.getElementById("a-capacity").value;
-            markers[document.getElementById('a-id').value].feature.properties.name = document.getElementById("a-name").value;
-            document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
-        }
-        
-         function remove() {
             //save shit here
-            editableLayers.removeLayer(markers[document.getElementById('a-id').value]);
+             switch(document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value)
+            {
+                case "residential": LU[document.getElementById('a-id').value].setStyle({fillColor :'red'}); break;
+                case "commercial":  LU[document.getElementById('a-id').value].setStyle({fillColor :'yellow'}); break;
+                case "parks":  LU[document.getElementById('a-id').value].setStyle({fillColor :'green'}); break;
+                case "industrial":  LU[document.getElementById('a-id').value].setStyle({fillColor :'black'}); break;
+                case "agriculture":  LU[document.getElementById('a-id').value].setStyle({fillColor :'blue'}); break;
+                case "utilities": LU[document.getElementById('a-id').value].setStyle({fillColor :'pink'}); break;
+                default:  LU[document.getElementById('a-id').value].setStyle({fillColor :'orange'}); break;
+            }
+            
+            LU[document.getElementById('a-id').value].feature.properties.latitude = document.getElementById("a-lat").value;
+            LU[document.getElementById('a-id').value].feature.properties.longitude = document.getElementById("a-long").value;
+            LU[document.getElementById('a-id').value].feature.properties.name = document.getElementById('a-name').value;
+            LU[document.getElementById('a-id').value].feature.properties.capacity = document.getElementById('a-capacity').value;
+            LU[document.getElementById('a-id').value].feature.properties.landuse_type = document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value;
+            LU[document.getElementById('a-id').value].feature.properties.area = document.getElementById('a-area').value;
+            
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
         }
         
@@ -432,9 +433,9 @@
         
         var map = L.map('mapid', {editable: true}).setView([14.5995, 120.9842], 15);
 
-        map.on('click', function(e) {
+        /*mymap.on('click', function(e) {
             copyToClipboard(e.latlng.lat + ", " + e.latlng.lng);
-        });
+        });*/
         
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -447,89 +448,26 @@
         
     var editableLayers = new L.FeatureGroup();
     map.addLayer(editableLayers);
-
-    var OtherMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/marker-icon.png' %}"
-        }
-    });
-
-    var SustenanceMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_sustenance.png' %}"
-        }
-    });
-
-    var EducationMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_education.png' %}"
-        }
-    });
-
-    var TransportMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_transportation.png' %}"
-        }
-    });
-
-    var HealthcareMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_healthcare.png' %}"
-        }
-    });
-
-    var FinanceMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_finance.png' %}"
-        }
-    });
-
-    var CommerceMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_commerce.png' %}"
-        }
-    });
         
-    var EntertainmentMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_entertainment.png' %}"
-        }
-    });
-    
+    //PUT POLYGON DRAWING OPTIONS HERE
         
     var options = {
+        //position: 'topright',
         draw: {
             polyline: false,
-            polygon: false,
+            polygon: {
+                allowIntersection: false, // false estricts shapes to simple polygons
+                drawError: {
+                    fillcolor: '#e1e100', // Color the shape will turn when intersects
+                    //message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+                },
+                shapeOptions: {
+                    fillcolor: '#bada55'
+                }
+            },
             circle: false, 
             rectangle: false,
-            marker: {
-                icon: new SustenanceMarker()
-            }
+            marker: false,
         },
         edit: {
             featureGroup: editableLayers, //REQUIRED!!
@@ -539,146 +477,162 @@
 
     var drawControl = new L.Control.Draw(options);
     map.addControl(drawControl);
-    
+
     map.on('draw:created', function (e) {
         var type = e.layerType,
             layer = e.layer,
             feature = layer.feature = layer.feature || {},
             props = feature.properties = feature.properties || {};
-
         
         document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
         
         feature.type = "Feature";
-        layer.feature.properties.id = Object.keys(markers).length;
-        layer.feature.properties.latitude = layer.getLatLng().lat;
-        layer.feature.properties.longitude = layer.getLatLng().lng;
+        layer.feature.properties.id = Object.keys(LU).length;
+        alert(layer.feature.properties.id);
+        layer.feature.properties.centerlatitude = layer.getBounds().getCenter().lat;
+        layer.feature.properties.centerlongitude = layer.getBounds().getCenter().lng;
         layer.feature.properties.capacity = 0;
-        layer.feature.properties.name = "New Amenity";
-        layer.feature.properties.amenity_type = "sustenance";
-        markers[layer.feature.properties.id] = e.layer;
+        layer.feature.properties.name = "New Land Use";
+        layer.feature.properties.landuse_type = "residential";
+        layer.feature.properties.coordinates = layer.getLatLngs();
+        LU[layer.feature.properties.id] = e.layer;
         
-
         document.getElementById('a-id').value = layer.feature.properties.id;
-        document.getElementById('a-lat').value = layer.feature.properties.latitude;
-        document.getElementById('a-long').value = layer.feature.properties.longitude;       
+        document.getElementById('a-lat').value = layer.getBounds().getCenter().lat;
+        document.getElementById('a-long').value = layer.getBounds().getCenter().lng;
         document.getElementById('a-capacity').value = 0;
         document.getElementById('a-name').value = "No name";
+        document.getElementById('a-area').value = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);  
         
-        if (type === 'marker') {
+        if (type === 'polygon') {
             layer.on('click', function () {
-                document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
+                document.getElementById('init-div').innerHTML = document.getElementById('edit-div').innerHTML;
                 document.getElementById('a-id').value = layer.feature.properties.id;
-                document.getElementById('a-lat').value = layer.getLatLng().lat;
-                document.getElementById('a-long').value = layer.getLatLng().lng;
-                document.getElementById('a-capacity').value =layer.feature.properties.capacity;
+                document.getElementById('a-lat').value = layer.getBounds().getCenter().lat;
+                document.getElementById('a-long').value = layer.getBounds().getCenter().lng;
+                document.getElementById('a-capacity').value = layer.feature.properties.capacity;
                 document.getElementById('a-name').value = layer.feature.properties.name;
+                document.getElementById('a-area').value = layer.feature.properties.area;
                 index = 0;
-                switch(layer.feature.properties.amenity_type)
+                switch(layer.feature.properties.landuse_type)
                 {
-                    case "sustenance": index = 0; break;
-                    case "education":  index = 1; break;
-                    case "transport":  index = 2; break;
-                    case "healthcare":  index = 3; break;
-                    case "finance":  index = 4; break;
-                    case "commerce": index = 5; break;
-                    case "entertainment": index = 6; break;
-                    default:  index = 7; break;
+                    case "residential": index = 0; break;
+                    case "commercial":  index = 1; break;
+                    case "parks":  index = 2; break;
+                    case "industrial":  index = 3; break;
+                    case "agriculture":  index = 4; break;
+                    case "utilities": index = 5; break;
+                    default:  index = 6; break;
                 }
                 document.getElementById('a-type').selectedIndex=index;
             });
         }
-
         editableLayers.addLayer(layer);
     });
+    
+        //LatLng(14.60257, 120.98597),LatLng(14.60257, 120.98597),LatLng(14.60252, 120.98297),LatLng(14.60252, 120.98297),LatLng(14.59987, 120.98301),LatLng(14.59987, 120.98301),LatLng(14.59966, 120.98507),LatLng(14.59966, 120.98507)
         
+        //center LatLng(14.60111, 120.98447)
         
     var gdata = [{
         "type": "Feature",
-        "properties": {
-            "id": "0",
-            "name": "Jollibee",
-            "latitude": "14.59758276455358",
-            "longitude": "120.97287699580195",
-            "capacity": 100,
-            "amenity_type": "sustenance"
-        },
+        "properties": { "id":"0",
+                        "name":"Bahay Ko",
+                        "landuse_type":"residential",
+                        "centerlatitude":"14.60111",
+                        "centerlongitude":"120.98447",
+                        "capacity":"100",
+                        "area":"2502"},
         "geometry": {
-            "type": "Point",
-            "coordinates": [120.97287699580195, 14.59758276455358]
+            "type": "Polygon",
+            "coordinates": [[
+                [120.98597, 14.60257],
+                [120.98597,  14.60257],
+                [120.98297,  14.60252],
+                [120.98301, 14.59987],
+                [120.98301, 14.59987],
+                [120.98507,14.59966],
+                [120.98507, 14.59966]
+            ]]
         }
-    }, {
+        }, {
         "type": "Feature",
-        "properties": {
-            "id": "1",
-            "name": "Ospital ng Maynila",
-            "latitude": "14.600697494641814",
-            "longitude": "120.97090288996696",
-            "capacity": 555,
-            "amenity_type": "healthcare"
-        },
+        "properties": { "id":"1",
+                        "name":"Swimming Pool",
+                        "landuse_type":"commercial",
+                        "centerlatitude": "14.59331",
+                        "centerlongitude":"120.98404",
+                        "capacity":"520",
+                        "area":"7107"
+                      },
         "geometry": {
-            "type": "Point",
-            "coordinates": [120.97090288996696, 14.600697494641814]
+            "type": "Polygon",
+            "coordinates": [[
+                [120.9811, 14.59484],
+                [120.9811, 14.5948],
+                [120.98187, 14.59202],
+                [120.98187, 14.59202],
+                [120.98248, 14.59069],
+                [120.98248, 14.59069],
+                [120.98578, 14.59061],
+                [120.98578, 14.59065],
+                [120.98698, 14.59243],
+                [120.98698, 14.59243],
+                [120.98316, 14.596],
+                [120.98316, 14.596]
+            ]]
         }
     }];
         
-    //makeonload
     initMap();
-        
         
     function initMap(){
                 var selectedFeature = null;
                 var eLayer = L.geoJson(gdata,{
                     onEachFeature: function(feature,layer){
-                        switch(feature.properties.amenity_type)
+                        switch(feature.properties.landuse_type)
                         {
-                            case "sustenance": layer.setIcon(new SustenanceMarker()); break;
-                            case "education":  layer.setIcon(new EducationMarker()); break;
-                            case "transport":  layer.setIcon(new TransportMarker()); break;
-                            case "healthcare": layer.setIcon(new HealthcareMarker()); break;
-                            case "finance": layer.setIcon(new FinanceMarker()); break;
-                            case "commerce": layer.setIcon(new CommerceMarker()); break;
-                            case "entertainment": layer.setIcon(new EntertainmentMarker()); break;
-                            default: layer.setIcon(new OtherMarker()); break;
+                            //instead of index, put change options for colors
+                            case "residential": layer.setStyle({fillColor :'red'}); break;
+                            case "commercial":  layer.setStyle({fillColor :'yellow'}); break;
+                            case "parks":  layer.setStyle({fillColor :'green'}); break;
+                            case "industrial":  layer.setStyle({fillColor :'black'}); break;
+                            case "agriculture":  layer.setStyle({fillColor :'blue'}); break;
+                            case "utilities": layer.setStyle({fillColor :'pink'}); break;
+                            default:  layer.setStyle({fillColor :'orange'}); break;
                         }
                         console.log("INIT names " + feature.properties.name);
-                        markers[feature.properties.id] = layer;
+                        console.log("INIT id " + feature.properties.id);
+                        LU[feature.properties.id] = layer;
 
                         layer.on('click',function(e){
+                            
                             document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
-                            alert("lat " + layer.feature.properties.latitude);
+                            //alert("lat " + layer.feature.properties.latitude);
                             document.getElementById('a-id').value = layer.feature.properties.id;
-                            document.getElementById('a-lat').value = layer.feature.properties.latitude;
-                            document.getElementById('a-long').value = layer.feature.properties.longitude;
+                            document.getElementById('a-lat').value = layer.feature.properties.centerlatitude;
+                            document.getElementById('a-long').value = layer.feature.properties.centerlongitude;
                             document.getElementById('a-capacity').value = layer.feature.properties.capacity;
                             document.getElementById('a-name').value = layer.feature.properties.name;
+                            document.getElementById('a-area').value = layer.feature.properties.area;
                             index = 0;
-                            switch(layer.feature.properties.amenity_type)
+                            switch(layer.feature.properties.landuse_type)
                             {
-                                case "sustenance": index = 0; break;
-                                case "education":  index = 1; break;
-                                case "transport":  index = 2; break;
-                                case "healthcare":  index = 3; break;
-                                case "finance":  index = 4; break;
-                                case "commerce": index = 5; break;
-                                case "entertainment": index = 6; break;
-                                default:  index = 7; break;
+                                case "residential": index = 0; break;
+                                case "commercial":  index = 1; break;
+                                case "parks":  index = 2; break;
+                                case "industrial":  index = 3; break;
+                                case "agriculture":  index = 4; break;
+                                case "utilities": index = 5; break;
+                                default:  index = 6; break;
                             }
                             document.getElementById('a-type').selectedIndex=index;
-                            });
-                        
-                            layer.on('edit',function(e){
-                                
-                                alert("bantut");
-                                
                             });
                         
                             editableLayers.addLayer(layer);
                         }
                     }
                 );
-                //editableLayers.addLayer(eLayer);
             }
         
     </script>
