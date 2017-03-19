@@ -405,6 +405,7 @@
         var household_summaries = [];
         var trafficzone_files = [];
         var trafficzone_summaries = [];
+        var zonal_od = [];
 
         var zone_landuse_settings = ['commercial','parks','industrial','agriculture','residential',
                                      'commercial','parks','industrial','agriculture','residential',
@@ -448,6 +449,7 @@
                     },// This is the default though, you don't actually need to always mention it
                     success: function(data) {
                         $("#loader-modal").closeModal();
+                        zonal_od = data.zonal_od;
                         max_attracted = data.max_trip_attracted;
                         max_produced = data.max_trip_produced;
                         json_response = JSON.parse(data.taz_json);
@@ -456,7 +458,6 @@
                             taz_analyzed.push(data);
                             //console.log(key+":"+data.zone_polygon.__geom__);
                         });
-                        var test1, test2;
                         for(x in traffic_analysis_zones_layers){
                             console.log("key:"+x+" zonelayer");
                             //traffic_analysis_zones_layers[x].setStyle(mystyle(taz_analyzed[x]));
@@ -466,8 +467,6 @@
                             console.log("key:"+x+" sample:"+taz_analyzed[x].trips_produced);
                             test2=x;
                         }
-                        var bool = (test1==test2);
-                        console.log("moment of truth: "+bool);
 
                         refresh_zone_details();
                     },
@@ -774,7 +773,7 @@
                 }
          });
          
-        function getColor_production(d) {
+        function getColor_attraction(d) {
             console.log("currval:"+d+" maxscore:"+max_score_basis);
             console.log((max_score_basis *0.9)+","+(max_score_basis *0.65)+","+(max_score_basis *0.3)+","+(max_score_basis *0.3));
             return d > (max_score_basis *0.9) ? '#FF0AE7' :
@@ -783,7 +782,7 @@
                               '#13347C';
         }
 
-        function getColor_attraction(d) {
+        function getColor_production(d) {
             console.log("currval:"+d+" maxscore:"+max_score_basis);
             console.log((max_score_basis *0.9)+","+(max_score_basis *0.65)+","+(max_score_basis *0.3)+","+(max_score_basis *0.3));
             return d > (max_score_basis *0.9) ? '#FF210F' :

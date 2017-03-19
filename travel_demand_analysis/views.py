@@ -7,7 +7,7 @@ import geojson
 import pygeoj
 import os.path, time
 from .custom_models.constants import *
-from .custom_models.FourStepModel import TripGeneration
+from .custom_models.FourStepModel import TripGeneration, TripDistribution
 from .custom_models.TravelAnalyzing import TripAnalyzer
 import pandas as pd
 
@@ -63,6 +63,14 @@ def run_analysis(request):
                                                 attraction_attribute_coeffiients)
 
         df, overall_trip_production, overall_trip_attraction = trip_generation.printAllZonalTripsProductionAttraction()
+
+        td = TripDistribution(overall_trip_production, overall_trip_attraction)
+        #distribution = td.getTripDistribution()
+        distribution = td.getDummyOD(len(overall_trip_production), len(overall_trip_production))
+        pandas_distrib = pd.DataFrame(distribution, columns=range(0, len(overall_trip_production)))
+        #zonal_od_matrix = json.dumps(distribution, indent=4)
+        #print(" od_matrix: "+str(zonal_od_matrix))
+
         for index, zone_info in enumerate(taz_info_preanalysis):
             zone_info.trips_produced = overall_trip_production[index]
             zone_info.trips_attracted = overall_trip_attraction[index]
@@ -74,7 +82,7 @@ def run_analysis(request):
         data['max_trip_produced'] = max(overall_trip_production)
         data['max_trip_attracted'] = max(overall_trip_attraction)
         data['taz_json'] = zone_info_json
-
+        data['zonal_od'] = distribution
         return HttpResponse(json.dumps(data), content_type='application/json')
     return HttpResponse("Non ajax post request")
 
