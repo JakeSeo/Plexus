@@ -5,5 +5,6 @@ app_name = 'landuse_manager'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^manage/$', views.manage, name='manage'),
+    url(r'^manage/save/$', views.manageSave, name="manageSave"),
     url(r'^choose/$', views.choose, name='choose'),
 ]

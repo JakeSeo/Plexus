@@ -92,7 +92,7 @@ def cleanAmenities(source):
     f = io.open("media/amenities/" + source + "_cleaned.json", 'w', encoding="utf-8")
     f.write("[\n")
     ctr = 0
-    index = 0
+    index = -1
     with io.open("media/amenities/" + source + ".json", encoding="utf-8") as z:
         m = json.load(z)
         for data in m:
