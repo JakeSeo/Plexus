@@ -341,6 +341,10 @@
        //data = {{amenities | safe}};
         
         var markers = {}; //will contain the amenities
+        
+          var currentlyEditing;
+          var currentlyDeleting = false;
+          var disableEditing = false; 
 
         $( document ).ready(function() {
             $.ajaxSetup({
@@ -376,6 +380,7 @@
 
         function cancel() {
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;
+            stopEditing();
           }
         
         function exportAmenities()
@@ -414,8 +419,8 @@
                 case "other": markers[document.getElementById('a-id').value].setIcon(new OtherMarker); break;
             }
                     
-            markers[document.getElementById('a-id').value].feature.properties.latitude = document.getElementById("a-lat").value;
-            markers[document.getElementById('a-id').value].feature.properties.longitude = document.getElementById("a-long").value;
+            markers[document.getElementById('a-id').value].feature.properties.latitude = markers[document.getElementById('a-id').value].getLatLng().lat;
+            markers[document.getElementById('a-id').value].feature.properties.longitude = markers[document.getElementById('a-id').value].getLatLng().lng;
             markers[document.getElementById('a-id').value].feature.properties.amenity_type = document.getElementById("a-type").value;
             markers[document.getElementById('a-id').value].feature.properties.capacity = document.getElementById("a-capacity").value;
             markers[document.getElementById('a-id').value].feature.properties.name = document.getElementById("a-name").value;
@@ -432,9 +437,9 @@
         
         var map = L.map('mapid', {editable: true}).setView([14.5995, 120.9842], 15);
 
-        map.on('click', function(e) {
+        /*map.on('click', function(e) {
             copyToClipboard(e.latlng.lat + ", " + e.latlng.lng);
-        });
+        });*/
         
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -531,10 +536,10 @@
                 icon: new SustenanceMarker()
             }
         },
-        edit: {
+        edit: false /*{
             featureGroup: editableLayers, //REQUIRED!!
             remove: false
-        }
+        }*/
     };
 
     var drawControl = new L.Control.Draw(options);
@@ -623,6 +628,25 @@
         }
     }];
         
+      function stopEditing() {
+    // if a layer is being edited, finish up and disable editing on it afterward.
+    if (currentlyEditing) {
+      //handleEdit(currentlyEditing);
+      currentlyEditing.editing.disable();
+    }
+    currentlyEditing = undefined;
+  }    
+
+  function startEditing(layer)
+    {
+        if (!disableEditing) {
+          layer.editing.enable();
+          currentlyEditing = layer;
+        }
+
+
+    }    
+        
     //makeonload
     initMap();
         
@@ -666,12 +690,8 @@
                                 default:  index = 7; break;
                             }
                             document.getElementById('a-type').selectedIndex=index;
-                            });
-                        
-                            layer.on('edit',function(e){
-                                
-                                alert("bantut");
-                                
+                            
+                            startEditing(layer);
                             });
                         
                             editableLayers.addLayer(layer);

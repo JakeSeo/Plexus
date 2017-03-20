@@ -324,7 +324,7 @@
                         <a class="green btn col s12" style="font-size: 14px !important;" onclick="save();">Save</a>
                     </div>
                     <div class="row" style="margin-top:20px;">
-                        <a class="red btn col s12" style="font-size: 14px !important;">Remove</a>
+                        <a class="red btn col s12" style="font-size: 14px !important;" onClick="remove();">Remove</a>
                     </div>
                 </div>
             </div>            
@@ -346,6 +346,11 @@
         
         
         var LU = {}; //will contain the polygons of Land Use
+        
+        // variable to track the layer being edited
+          var currentlyEditing;
+          var currentlyDeleting = false;
+          var disableEditing = false; 
         
          $( document ).ready(function() {
             $.ajaxSetup({
@@ -382,7 +387,8 @@
 
         function cancel() {
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;
-          }
+            stopEditing();  
+        }
         
         function exportLandUse()
         {
@@ -410,22 +416,31 @@
             //save shit here
              switch(document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value)
             {
-                case "residential": LU[document.getElementById('a-id').value].setStyle({fillColor :'red', opacity:'1'}); break;
-                case "commercial":  LU[document.getElementById('a-id').value].setStyle({fillColor :'yellow', opacity:'1'}); break;
-                case "parks":  LU[document.getElementById('a-id').value].setStyle({fillColor :'green', opacity:'1'}); break;
-                case "industrial":  LU[document.getElementById('a-id').value].setStyle({fillColor :'black', opacity:'1'}); break;
-                case "agriculture":  LU[document.getElementById('a-id').value].setStyle({fillColor :'blue', opacity:'1'}); break;
-                case "utilities": LU[document.getElementById('a-id').value].setStyle({fillColor :'pink', opacity:'1'}); break;
-                default:  LU[document.getElementById('a-id').value].setStyle({fillColor :'orange', opacity:'1'}); break;
+                case "residential": LU[document.getElementById('a-id').value].setStyle({fillColor :'red', fillOpacity:'0.7'}); break;
+                case "commercial":  LU[document.getElementById('a-id').value].setStyle({fillColor :'yellow', fillOpacity:'0.7'}); break;
+                case "parks":  LU[document.getElementById('a-id').value].setStyle({fillColor :'green', fillOpacity:'0.7'}); break;
+                case "industrial":  LU[document.getElementById('a-id').value].setStyle({fillColor :'black', fillOpacity:'0.7'}); break;
+                case "agriculture":  LU[document.getElementById('a-id').value].setStyle({fillColor :'blue', fillOpacity:'0.7'}); break;
+                case "utilities": LU[document.getElementById('a-id').value].setStyle({fillColor :'pink', fillOpacity:'0.7'}); break;
+                default:  LU[document.getElementById('a-id').value].setStyle({fillColor :'orange', fillOpacity:'0.7'}); break;
             }
             
-            LU[document.getElementById('a-id').value].feature.properties.latitude = document.getElementById("a-lat").value;
-            LU[document.getElementById('a-id').value].feature.properties.longitude = document.getElementById("a-long").value;
+            LU[document.getElementById('a-id').value].feature.properties.centerlatitude = LU[document.getElementById('a-id').value].getBounds().getCenter().lat;
+            LU[document.getElementById('a-id').value].feature.properties.centerlongitude = LU[document.getElementById('a-id').value].getBounds().getCenter().lng;
             LU[document.getElementById('a-id').value].feature.properties.name = document.getElementById('a-name').value;
             LU[document.getElementById('a-id').value].feature.properties.capacity = document.getElementById('a-capacity').value;
             LU[document.getElementById('a-id').value].feature.properties.landuse_type = document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value;
-            LU[document.getElementById('a-id').value].feature.properties.area = document.getElementById('a-area').value;
+            if(document.getElementById('a-area').value != "0")
+                LU[document.getElementById('a-id').value].feature.properties.area = document.getElementById('a-area').value;
+            else 
+                LU[document.getElementById('a-id').value].feature.properties.area = L.GeometryUtil.geodesicArea(LU[document.getElementById('a-id').value].getLatLngs()[0]);
             
+            document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
+        }
+        
+        function remove() {
+            //save shit here
+            editableLayers.removeLayer(LU[document.getElementById('a-id').value]);
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
         }
         
@@ -471,10 +486,10 @@
             rectangle: false,
             marker: false,
         },
-        edit: {
+        edit: false /*{
             featureGroup: editableLayers, //REQUIRED!!
             remove: false
-        }
+        }*/
     };
 
     var drawControl = new L.Control.Draw(options);
@@ -586,22 +601,47 @@
         }
     }];
         
+    /*map.on('click', function(e) {
+        stopEditing();
+      });*/    
+        
+      function stopEditing() {
+        // if a layer is being edited, finish up and disable editing on it afterward.
+        if (currentlyEditing) {
+          //handleEdit(currentlyEditing);
+          currentlyEditing.editing.disable();
+        }
+        currentlyEditing = undefined;
+      }    
+        
+      function startEditing(layer)
+        {
+            if (!disableEditing) {
+              layer.editing.enable();
+              currentlyEditing = layer;
+            }
+
+            
+        }
+        
     initMap();
         
     function initMap(){
                 var selectedFeature = null;
                 var eLayer = L.geoJson(gdata,{
                     onEachFeature: function(feature,layer){
+                        
+                        //L.Util.setOptions(layer,{draggable:true});
                         switch(feature.properties.landuse_type)
                         {
                             //instead of index, put change options for colors
-                            case "residential": layer.setStyle({fillColor :'red', opacity:'1'}); break;
-                            case "commercial":  layer.setStyle({fillColor :'yellow', opacity:'1'}); break;
-                            case "parks":  layer.setStyle({fillColor :'green', opacity:'1'}); break;
-                            case "industrial":  layer.setStyle({fillColor :'black', opacity:'1'}); break;
-                            case "agriculture":  layer.setStyle({fillColor :'blue', opacity:'1'}); break;
-                            case "utilities": layer.setStyle({fillColor :'pink', opacity:'1'}); break;
-                            default:  layer.setStyle({fillColor :'orange', opacity:'1'}); break;
+                            case "residential": layer.setStyle({fillColor :'red', fillOpacity:'0.7'}); break;
+                            case "commercial":  layer.setStyle({fillColor :'yellow', fillOpacity:'0.7'}); break;
+                            case "parks":  layer.setStyle({fillColor :'green', fillOpacity:'0.7'}); break;
+                            case "industrial":  layer.setStyle({fillColor :'black', fillOpacity:'0.7'}); break;
+                            case "agriculture":  layer.setStyle({fillColor :'blue', fillOpacity:'0.7'}); break;
+                            case "utilities": layer.setStyle({fillColor :'pink', fillOpacity:'0.7'}); break;
+                            default:  layer.setStyle({fillColor :'orange', fillOpacity:'0.7'}); break;
                         }
                         console.log("INIT names " + feature.properties.name);
                         console.log("INIT id " + feature.properties.id);
@@ -629,8 +669,10 @@
                                 default:  index = 6; break;
                             }
                             document.getElementById('a-type').selectedIndex=index;
-                            });
-                        
+                            
+                            //stopEditing(); 
+                            startEditing(layer);
+                        });
                             editableLayers.addLayer(layer);
                         }
                     }
