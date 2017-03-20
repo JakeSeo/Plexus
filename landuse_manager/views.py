@@ -6,6 +6,12 @@ from landuse_manager.forms import DocumentForm
 from landuse_manager.models import Document, FileManagerDocument
 import os
 import os.path, time
+from matplotlib import pyplot as plt
+import shapely
+from shapely.geometry.polygon import LinearRing, Polygon
+from shapely.geometry.multipolygon import MultiPolygon
+import geojson
+import io
 
 
 def index(request):
@@ -93,136 +99,67 @@ def cleanLandUse(source):
     index = -1
     with io.open("media/landuse/" + source + ".json", encoding="utf-8") as z:
         m = json.load(z)
-        for data in m:
+        for data in m['features']:
             if ctr != 0:
                 f.write(",\n")
             else:
                 ctr = ctr + 1
             index = index + 1
-            if (data['amenity_type'] == "bar" or
-                        data['amenity_type'] == "restaurant" or
-                        data['amenity_type'] == "bbq" or
-                        data['amenity_type'] == "cafe" or
-                        data['amenity_type'] == "pub" or
-                        data['amenity_type'] == "restaurant" or
-                        data['amenity_type'] == "fast_food" or
-                        data['amenity_type'] == "food_court" or
-                        data['amenity_type'] == "ice_cream" or
-                        data['amenity_type'] == "biergarten" or
-                        data['amenity_type'] == "drinking_water" or
-                        data['amenity_type'] == "water_point" or
-                        data['amenity_type'] == "vending_machine" or
-                        data['amenity_type'] == "baking_oven"):
-                data['amenity_type'] = "sustenance"
-            elif (data['amenity_type'] == "college" or
-                          data['amenity_type'] == "kindergarten" or
-                          data['amenity_type'] == "library" or
-                          data['amenity_type'] == "public_bookcase" or
-                          data['amenity_type'] == "school" or
-                          data['amenity_type'] == "music_school" or
-                          data['amenity_type'] == "driving_school" or
-                          data['amenity_type'] == "language_school" or
-                          data['amenity_type'] == "university"):
-                data['amenity_type'] = "education"
-            elif (data['amenity_type'] == "clinic" or
-                          data['amenity_type'] == "dentist" or
-                          data['amenity_type'] == "doctors" or
-                          data['amenity_type'] == "hospital" or
-                          data['amenity_type'] == "nursing_home" or
-                          data['amenity_type'] == "pharmacy" or
-                          data['amenity_type'] == "veterenary" or
-                          data['amenity_type'] == "blood_donation"):
-                data['amenity_type'] = "healthcare"
-            elif (data['amenity_type'] == "bicycle_parking" or
-                          data['amenity_type'] == "bicycle_repair_station" or
-                          data['amenity_type'] == "bicycle_rental" or
-                          data['amenity_type'] == "boat_sharing" or
-                          data['amenity_type'] == "bus_station" or
-                          data['amenity_type'] == "car_rental" or
-                          data['amenity_type'] == "car_sharing" or
-                          data['amenity_type'] == "car_wash" or
-                          data['amenity_type'] == "motorcycle_parking" or
-                          data['amenity_type'] == "parking" or
-                          data['amenity_type'] == "parking_entrance" or
-                          data['amenity_type'] == "parking_space" or
-                          data['amenity_type'] == "charging_station" or
-                          data['amenity_type'] == "ferry_terminal" or
-                          data['amenity_type'] == "fuel" or
-                          data['amenity_type'] == "taxi"):
-                data['amenity_type'] = "transport"
-            elif (data['amenity_type'] == "atm" or
-                          data['amenity_type'] == "bank" or
-                          data['amenity_type'] == "bureau_de_change"):
-                data['amenity_type'] = "finance"
-            elif (data['amenity_type'] == "internet_cafe" or
-                          data['amenity_type'] == "kneipp_water_cure" or
-                          data['amenity_type'] == "marketplace" or
-                          data['amenity_type'] == "photo_booth" or
-                          data['amenity_type'] == "dojo" or
-                          data['amenity_type'] == "animal_shelter" or
-                          data['amenity_type'] == "gym" or
-                          data['amenity_type'] == "animal_boarding" or
-                          data['amenity_type'] == "ranger_station" or
-                          data['amenity_type'] == "hunting_stand" or
-                          data['amenity_type'] == "sauna"):
-                data['amenity_type'] = "commerce"
-            elif (data['amenity_type'] == "social_facility" or
-                          data['amenity_type'] == "arts_centre" or
-                          data['amenity_type'] == "casino" or
-                          data['amenity_type'] == "gambling" or
-                          data['amenity_type'] == "theatre" or
-                          data['amenity_type'] == "planetarium" or
-                          data['amenity_type'] == "cinema" or
-                          data['amenity_type'] == "dive_centre" or
-                          data['amenity_type'] == "game_feeding" or
-                          data['amenity_type'] == "stripclub" or
-                          data['amenity_type'] == "nightclub" or
-                          data['amenity_type'] == "swingerclub" or
-                          data['amenity_type'] == "brothel" or
-                          data['amenity_type'] == "studio"):
-                data['amenity_type'] = "entertainment"
-            elif (data['amenity_type'] == "baby_hatch" or
-                          data['amenity_type'] == "community_centre" or
-                          data['amenity_type'] == "fountain" or
-                          data['amenity_type'] == "social_centre" or
-                          data['amenity_type'] == "firepit" or
-                          data['amenity_type'] == "bench" or
-                          data['amenity_type'] == "clock" or
-                          data['amenity_type'] == "courthouse" or
-                          data['amenity_type'] == "crematorium" or
-                          data['amenity_type'] == "crypt" or
-                          data['amenity_type'] == "townhall" or
-                          data['amenity_type'] == "grave_yard" or
-                          data['amenity_type'] == "telephone" or
-                          data['amenity_type'] == "toilets" or
-                          data['amenity_type'] == "shower" or
-                          data['amenity_type'] == "place_of_worship" or
-                          data['amenity_type'] == "police" or
-                          data['amenity_type'] == "table" or
-                          data['amenity_type'] == "shelter" or
-                          data['amenity_type'] == "embassy" or
-                          data['amenity_type'] == "fire_station" or
-                          data['amenity_type'] == "rescue_station" or
-                          data['amenity_type'] == "public_building" or
-                          data['amenity_type'] == "post_box" or
-                          data['amenity_type'] == "post_office" or
-                          data['amenity_type'] == "prison" or
-                          data['amenity_type'] == "recycling" or
-                          data['amenity_type'] == "waste_basket" or
-                          data['amenity_type'] == "waste_disposal" or
-                          data['amenity_type'] == "waste_transfer_station" or
-                          data['amenity_type'] == "grit_bin" or
-                          data['amenity_type'] == "watering_place"):
-                data['amenity_type'] = "other"
+            if (data['properties']['landuse'] == "residential"):
+                data['properties']['landuse'] = "residential"
+            elif(data['properties']['landuse'] == "cemetery" or
+            data['properties']['landuse'] == "commercial" or
+            data['properties']['landuse'] == "depot" or
+            data['properties']['landuse'] == "garages" or
+            data['properties']['landuse'] == "port" or
+            data['properties']['landuse'] == "quarry" or
+            data['properties']['landuse'] == "railway" or
+            data['properties']['landuse'] == "retail"):
+                data['properties']['landuse'] = "commercial"
+            elif(data['properties']['landuse'] == "grass" or
+            data['properties']['landuse'] == "forest" or
+            data['properties']['landuse'] == "meadow" or
+            data['properties']['landuse'] == "salt_pond" or
+            data['properties']['landuse'] == "village_green"):
+                data['properties']['landuse'] = "parks"
+            elif( data['properties']['landuse'] == "construction" or
+            data['properties']['landuse'] == "greenfield" or
+            data['properties']['landuse'] == "industrial"):
+                data['properties']['landuse'] = "industrial"
+            elif(data['properties']['landuse'] == "allotment" or
+            data['properties']['landuse'] == "basin" or
+            data['properties']['landuse'] == "brownfield" or
+            data['properties']['landuse'] == "farmland" or
+            data['properties']['landuse'] == "farmyard" or
+            data['properties']['landuse'] == "greenhouse_horticulture" or
+            data['properties']['landuse'] == "orchard" or
+            data['properties']['landuse'] == "pasture" or
+            data['properties']['landuse'] == "peat_cutting" or
+            data['properties']['landuse'] == "plant_nursery" or
+            data['properties']['landuse'] == "reservoir" or
+            data['properties']['landuse'] == "vineyard"):
+                data['properties']['landuse'] = "agriculture"
+            elif(data['properties']['landuse'] == "landfill"):
+                data['properties']['landuse'] = "utilities"
+            elif(data['properties']['landuse'] == "military" or
+            data['properties']['landuse'] == "recreation_ground" or
+            data['properties']['landuse'] == "user defined"
+            data['properties']['landuse'] == "conservation"):
+                data['properties']['landuse'] = "others"
+                
             f.write("{\"type\": \"Feature\", \"properties\": {")
             f.write("\"id\": \"" + str(index) + "\", ")
-            f.write("\"name\": \"" + data['name'] + "\", ")
-            f.write("\"latitude\": \"" + str(data['latitude']) + "\", ")
-            f.write("\"longitude\": \"" + str(data['long']) + "\", ")
+            if "name" not in data['properties']:
+                data['properties']['name'] = "no name available"
+            f.write("\"name\": \"" + data['properties']['name'] + "\", ")
+            polygon = shapely.geometry.geo.shape(data['geometry'])
+            f.write("\"centerlatitude\": \"" + str(polygon.centroid.x) + "\", ")
+            f.write("\"centerlongitude\": \"" + str(polygon.centroid.y) + "\", ")
             f.write("\"capacity\": \"200\", ")
-            f.write("\"amenity_type\": \"" + data['amenity_type'] + "\"},")
-            f.write("\"geometry\": {\"type\": \"Point\",")
-            f.write("\"coordinates\": [" + str(data['long']) + ", " + str(data['latitude']) + "]}")
+            f.write("\"landuse_type\": \"" + data['properties']['landuse'] + "\"},")
+            #area here
+            f.write("\"geometry\": {\"type\": \"Polygon\",")
+            f.write("\"coordinates\": [" + str(data['geometry']['coordinates'])+ "]}")
             f.write("}")
     f.write("\n]")
     f.close()
