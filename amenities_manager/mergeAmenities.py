@@ -173,12 +173,8 @@ with io.open("../media/amenities/Shops.geojson", encoding="utf-8") as shopsFile:
         data['properties']['shop'] == "travel_agency" or
         data['properties']['shop'] == "vacant" or
         data['properties']['shop'] == "weapons" or
-        data['properties']['shop'] == "user defined"):
-            data['properties']['shop'] = "commerce"
-        elif(data['properties']['shop'] == "money_lender" or
-        data['properties']['shop'] == "pawnbroker"):
-            data['properties']['shop'] = "finance"
-        elif (data['properties']['shop'] == "bicycle" or
+        data['properties']['shop'] == "user defined" or
+        data['properties']['shop'] == "bicycle" or
         data['properties']['shop'] == "car" or
         data['properties']['shop'] == "car_repair" or
         data['properties']['shop'] == "car_parts" or
@@ -188,7 +184,10 @@ with io.open("../media/amenities/Shops.geojson", encoding="utf-8") as shopsFile:
         data['properties']['shop'] == "hunting" or
         data['properties']['shop'] == "motorcycle" or
         data['properties']['shop'] == "tyres"):
-            data['properties']['shop'] = "transport"
+            data['properties']['shop'] = "commerce"
+        elif(data['properties']['shop'] == "money_lender" or
+        data['properties']['shop'] == "pawnbroker"):
+            data['properties']['shop'] = "finance"
         elif (data['properties']['shop'] == "drugstore" or
         data['properties']['shop'] == "hearing_aids" or
         data['properties']['shop'] == "herbalist" or
