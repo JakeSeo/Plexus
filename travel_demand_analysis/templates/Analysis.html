@@ -432,6 +432,7 @@
         var household_summaries = [];
         var trafficzone_files = [];
         var trafficzone_summaries = [];
+        var taz_name_lbl = [];
         var zonal_od = [];
 
         var zone_landuse_settings = ['commercial','parks','industrial','agriculture','residential',
@@ -443,11 +444,34 @@
         var traffic_analysis_zones_layers = [];
         var to_delete;
 
-
-
-
-
         $( document ).ready(function() {
+            L.Mask = L.Polygon.extend({
+                options: {
+                    stroke: false,
+                    color: '#333',
+                    fillOpacity: 0.5,
+                    clickable: true,
+
+                    outerBounds: new L.LatLngBounds([-90, -360], [90, 360])
+                },
+
+                initialize: function (latLngs, options) {
+
+                     var outerBoundsLatLngs = [
+                        this.options.outerBounds.getSouthWest(),
+                        this.options.outerBounds.getNorthWest(),
+                        this.options.outerBounds.getNorthEast(),
+                        this.options.outerBounds.getSouthEast()
+                    ];
+                    L.Polygon.prototype.initialize.call(this, [outerBoundsLatLngs, latLngs], options);
+                },
+
+            });
+            L.mask = function (latLngs, options) {
+                return new L.Mask(latLngs, options);
+            };
+
+
             $("#overlay").css("display","none");
             $.ajaxSetup({
                  beforeSend: function(xhr, settings) {
@@ -457,7 +481,6 @@
                              var cookies = document.cookie.split(';');
                              for (var i = 0; i < cookies.length; i++) {
                                  var cookie = jQuery.trim(cookies[i]);
-                                 // Does this cookie string begin with the name we want?
                                  if (cookie.substring(0, name.length + 1) == (name + '=')) {
                                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                                      break;
@@ -467,12 +490,45 @@
                          return cookieValue;
                      }
                      if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                         // Only send the token to relative URLs i.e. locally.
                          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
                      }
                  }
             });
         });
+
+        L.LabelOverlay = (L.Layer || L.Class).extend({
+            initialize: function(/*LatLng*/ latLng, /*String*/ label, options) {
+                this._latlng = latLng;
+                this._label = label;
+                L.Util.setOptions(this, options);
+            },
+            options: {
+                offset: new L.Point(0, 2)
+            },
+            onAdd: function(map) {
+                this._map = map;
+                if (!this._container) {
+                    this._initLayout();
+                }
+                map.getPanes().overlayPane.appendChild(this._container);
+                this._container.innerHTML = this._label;
+                map.on('viewreset', this._reset, this);
+                this._reset();
+            },
+            onRemove: function(map) {
+                map.getPanes().overlayPane.removeChild(this._container);
+                map.off('viewreset', this._reset, this);
+            },
+            _reset: function() {
+                var pos = this._map.latLngToLayerPoint(this._latlng);
+                var op = new L.Point(pos.x + this.options.offset.x, pos.y - this.options.offset.y);
+                L.DomUtil.setPosition(this._container, op);
+            },
+            _initLayout: function() {
+                this._container = L.DomUtil.create('div', 'leaflet-label-overlay');
+            }
+        });
+
 
         $('#trip-produced-radio').click(function() {
            if(taz_analyzed.length>0){
@@ -524,15 +580,9 @@
                         console.log(json_response.length+" LENK");
                         $(json_response).each(function(key, data) {
                             taz_analyzed.push(data);
+                            traffic_analysis_zones_layers[key].bindTooltip(getAnalyzedTooltip(key+1, data));
                             //console.log(key+":"+data.zone_polygon.__geom__);
                         });
-                        for(x in traffic_analysis_zones_layers){
-                            console.log("key:"+x+" zonelayer");
-                            //traffic_analysis_zones_layers[x].setStyle(mystyle(taz_analyzed[x]));
-                        }
-                        for(x in taz_analyzed){
-                            console.log("key:"+x+" sample:"+taz_analyzed[x].trips_produced);
-                        }
                         refresh_zone_details();
                     },
                     failure: function(data) { 
@@ -543,6 +593,10 @@
                 alert("amenity or household files are empty!");
             }
         });
+
+        function getAnalyzedTooltip(index, feature){
+            return '<b>Zone #'+index+'</b>:<br>Total trips produced:'+feature.trips_produced+'<br>Total trips attracted:'+feature.trips_attracted;
+        }
 
         function refresh_zone_details(){
             var zone_details = $("#table-zone-details").empty();
@@ -757,56 +811,57 @@
                         }
                     }
                 }
-         });
-         
-         $("#trafficzone-modal-ok-btn").click(function() {
+        });
+
+        $("#trafficzone-modal-ok-btn").click(function() {
             var file_rows = $("#trafficzone-modal").find("[name='file-checkbox']");
-                for(var i=0; i<file_rows.length; i++){
-                    var filename = $(file_rows[i]).val();
-                    if($(file_rows[i]).is(':checked')){
-                        if(trafficzone_files.indexOf(filename) == -1){
-                            count = 0;
-                            $.ajax({
-                                url: "{% url 'travel_demand_analysis:analysis_add_trafficzone' %}",
-                                method: "POST",
-                                data: {
-                                    "trafficzone_filename" : filename
-                                },
-                                success: function(data) {
-                                    filename = data.trafficzone_filename;
-                                    count = data.no_trafficzones;
-                                    trafficzone_files.push(filename);
-                                    //zone_landuse_settings = new Array(count);
-                                    json_response = JSON.parse(data.zone_geojson);
-                                    console.log(json_response.features.length+" LENK");
-                                    $(json_response.features).each(function(key, data) {
-                                        data.properties.trips = 0;
-                                        traffic_analysis_zones_layers.push(L.geoJSON(data, {style: {
-                                            fillColor: '#FED976',
-                                            weight: 2,
-                                            opacity: 1,
-                                            color: 'white',
-                                            dashArray: '3',
-                                            fillOpacity: 0.7
-                                        }}).addTo(mymap));
-                                    });
-                                    refresh_trafficzone_list();
-                                    initializeLanduseModal();
-                                },
-                                failure: function(data) { 
-                                    alert('Error occurred.');
-                                }
-                            }); 
-                        }
-                    }else{
-                        if(trafficzone_files.indexOf(filename) != -1){
-                            removeFromArray(trafficzone_files, filename);
-                            trafficzone_summaries.splice(index, 1);
-                            refresh_trafficzone_list();
-                        }
+            for(var i=0; i<file_rows.length; i++){
+                var filename = $(file_rows[i]).val();
+                if($(file_rows[i]).is(':checked')){
+                    if(trafficzone_files.indexOf(filename) == -1){
+                        count = 0;
+                        $.ajax({
+                            url: "{% url 'travel_demand_analysis:analysis_add_trafficzone' %}",
+                            method: "POST",
+                            data: {
+                                "trafficzone_filename" : filename
+                            },
+                            success: function(data) {
+                                filename = data.trafficzone_filename;
+                                count = data.no_trafficzones;
+                                trafficzone_files.push(filename);
+                                json_response = JSON.parse(data.zone_geojson);
+                                console.log(json_response.features.length+" LENK");
+                                $(json_response.features).each(function(key, data) {
+                                    data.properties.trips = 0;
+                                    alert(data.type);
+                                    traffic_analysis_zones_layers.push(L.geoJson(data, {style: {
+                                        fillColor: '#FED976',
+                                        weight: 2,
+                                        opacity: 1,
+                                        color: 'white',
+                                        dashArray: '3',
+                                        fillOpacity: 0.7
+                                    }}).bindTooltip('<b>Zone #'+(traffic_analysis_zones_layers.length+1)+'</b>').addTo(mymap));
+
+                                });
+                                refresh_trafficzone_list();
+                                initializeLanduseModal();
+                            },
+                            failure: function(data) {
+                                alert('Error occurred.');
+                            }
+                        });
+                    }
+                }else{
+                    if(trafficzone_files.indexOf(filename) != -1){
+                        removeFromArray(trafficzone_files, filename);
+                        trafficzone_summaries.splice(index, 1);
+                        refresh_trafficzone_list();
                     }
                 }
-         });
+            }
+        });
          
         function getColor_attraction(d) {
             console.log("currval:"+d+" maxscore:"+max_score_basis);
@@ -825,7 +880,6 @@
                    d > (max_score_basis *0.3)  ? '#FAB857' :
                               '#F8F977';
         }
-        //console.log("print");
 
 
         function mystyle(feature) {
@@ -974,14 +1028,6 @@
             to_delete = new File(filename, type);
             $("#delete-modal").find("[name='delete-modal-message']").html(filename+" will be removed. Are you sure?");
             $("#delete-modal").openModal();
-
-            /*if(type=="amenity"){
-                removeFromArray(amenity_files, item);
-                $("#amenity-included-files").find("[name='"+item+"']").remove();
-            }else if(type=="household"){
-                removeFromArray(household_files, item);
-                $("#household-included-files").remove( "#"+item );
-            }*/
         }
 
 
@@ -1077,76 +1123,76 @@
             accessToken: 'pk.eyJ1IjoieGdiNyIsImEiOiJjaXR6dGgxaHEwZnJjMm9vODRjbXk2NTczIn0.JGHOHRx1UpItrRAG1B0Fyw'
         }).addTo(mymap);
 
-    /************** HEAT MAP ************************/
-    
-    
-            // don't forget to include leaflet-heatmap.js
-        var quakePoints = [{lat: 14.600943832220155, lng:120.97576087340713, count: 3},{lat: 14.600435096555684, lng:120.975734051317, count: 1},{lat: 14.600243022580464, lng:120.97485428676009, count: 3} ]
-        ;
+        /************** HEAT MAP ************************/
+
+
+                // don't forget to include leaflet-heatmap.js
+            var quakePoints = [{lat: 14.600943832220155, lng:120.97576087340713, count: 3},{lat: 14.600435096555684, lng:120.975734051317, count: 1},{lat: 14.600243022580464, lng:120.97485428676009, count: 3} ]
+            ;
 
     
-    /************************ EDIT SUTFF ****************/
+        /************************ EDIT SUTFF ****************/
+
+
+        var amenities = new L.LayerGroup();
+        var drawnItems = new L.FeatureGroup();
+        drawnItems.addLayer(amenities);
+        mymap.addLayer(drawnItems);
+        /*mymap.on('click', function(e) {
+               L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+            });*/
+
+
+
     
-        
-    var amenities = new L.LayerGroup();
-    var drawnItems = new L.FeatureGroup();
-    drawnItems.addLayer(amenities);
-    mymap.addLayer(drawnItems);
-    mymap.on('click', function(e) {
-           L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+        /******************* TOOLBAR STUFF **********************/
+
+        var heat = L.heatLayer(quakePoints, {radius: 20,
+                                        blur: 20,
+                                        maxZoom: 17,
+                                        gradient: {
+                                          0.2: '#ffffb2',
+                                          0.4: '#fd8d3c',
+                                          0.6: '#fd8d3c',
+                                          0.8: '#f03b20',
+                                          1: '#bd0026'
+                                          },
+                                        }).addTo(mymap);
+
+        var MyCustomMarker = L.Icon.extend({
+            options: {
+                shadowUrl: null,
+                iconAnchor: new L.Point(12, 12),
+                iconSize: new L.Point(24, 24),
+                iconUrl: "{% static 'leaflet/images/marker-icon.png' %}"
+            }
         });
-    
 
+        var options = {
+            draw: {
+                polyline: false,
+                polygon: false,
+                circle: false,
+                rectangle: false,
+                marker: false
+            },
+            edit: false
+        };
 
-    
-    /******************* TOOLBAR STUFF **********************/
-    
-    var heat = L.heatLayer(quakePoints, {radius: 20,
-                                    blur: 20, 
-                                    maxZoom: 17,
-                                    gradient: {
-                                      0.2: '#ffffb2',
-                                      0.4: '#fd8d3c',
-                                      0.6: '#fd8d3c',
-                                      0.8: '#f03b20',
-                                      1: '#bd0026'
-                                      },
-                                    }).addTo(mymap);
-    
-    var MyCustomMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/marker-icon.png' %}"
-        }
-    });
+        var drawControl = new L.Control.Draw(options);
+        mymap.addControl(drawControl);
 
-    var options = {
-        draw: {
-            polyline: false, 
-            polygon: false, 
-            circle: false, 
-            rectangle: false,
-            marker: false
-        },
-        edit: false
-    };
+           mymap.on(L.Draw.Event.Created, function (e) {
+                var type = e.layerType,
+                    layer = e.layer;
 
-    var drawControl = new L.Control.Draw(options);
-    mymap.addControl(drawControl);
+                if (type === 'marker') {
+                    layer.bindPopup('A popup!');
 
-   mymap.on(L.Draw.Event.Created, function (e) {
-        var type = e.layerType,
-            layer = e.layer;
+                }
 
-        if (type === 'marker') {
-            layer.bindPopup('A popup!');
-            
-        }
-
-        drawnItems.addLayer(layer);
-    });
+                drawnItems.addLayer(layer);
+           });
 
     
 
