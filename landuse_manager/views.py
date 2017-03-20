@@ -105,43 +105,48 @@ def cleanLandUse(source):
             else:
                 ctr = ctr + 1
             index = index + 1
-            if (data['properties']['landuse'] == "allotment" or
-              data['properties']['landuse'] == "basin" or
-              data['properties']['landuse'] == "brownfield" or
-              data['properties']['landuse'] == "cemetery" or
-              data['properties']['landuse'] == "commercial" or
-              data['properties']['landuse'] == "conservation" or
-              data['properties']['landuse'] == "construction" or
-              data['properties']['landuse'] == "depot" or
-              data['properties']['landuse'] == "farmland" or
-              data['properties']['landuse'] == "farmyard" or
-              data['properties']['landuse'] == "forest" or
-              data['properties']['landuse'] == "garages" or
-              data['properties']['landuse'] == "grass" or
-              data['properties']['landuse'] == "greenfield" or
-              data['properties']['landuse'] == "greenhouse_horticulture" or
-              data['properties']['landuse'] == "industrial" or
-              data['properties']['landuse'] == "landfill" or
-              data['properties']['landuse'] == "meadow" or
-              data['properties']['landuse'] == "military" or
-              data['properties']['landuse'] == "orchard" or
-              data['properties']['landuse'] == "pasture" or
-              data['properties']['landuse'] == "peat_cutting" or
-              data['properties']['landuse'] == "plant_nursery" or
-              data['properties']['landuse'] == "port" or
-              data['properties']['landuse'] == "quarry" or
-              data['properties']['landuse'] == "railway" or
-              data['properties']['landuse'] == "recreation_ground" or
-              data['properties']['landuse'] == "reservoir" or
-              data['properties']['landuse'] == "residential" or
-              data['properties']['landuse'] == "retail" or
-              data['properties']['landuse'] == "salt_pond" or
-              data['properties']['landuse'] == "village_green" or
-              data['properties']['landuse'] == "vineyard" or
-              data['properties']['landuse'] == "user defined"):
+            if (data['properties']['landuse'] == "residential"):
                 data['properties']['landuse'] = "residential"
-            else:
-                data['properties']['landuse'] = "other"
+            elif(data['properties']['landuse'] == "cemetery" or
+            data['properties']['landuse'] == "commercial" or
+            data['properties']['landuse'] == "depot" or
+            data['properties']['landuse'] == "garages" or
+            data['properties']['landuse'] == "port" or
+            data['properties']['landuse'] == "quarry" or
+            data['properties']['landuse'] == "railway" or
+            data['properties']['landuse'] == "retail"):
+                data['properties']['landuse'] = "commercial"
+            elif(data['properties']['landuse'] == "grass" or
+            data['properties']['landuse'] == "forest" or
+            data['properties']['landuse'] == "meadow" or
+            data['properties']['landuse'] == "salt_pond" or
+            data['properties']['landuse'] == "village_green"):
+                data['properties']['landuse'] = "parks"
+            elif( data['properties']['landuse'] == "construction" or
+            data['properties']['landuse'] == "greenfield" or
+            data['properties']['landuse'] == "industrial"):
+                data['properties']['landuse'] = "industrial"
+            elif(data['properties']['landuse'] == "allotment" or
+            data['properties']['landuse'] == "basin" or
+            data['properties']['landuse'] == "brownfield" or
+            data['properties']['landuse'] == "farmland" or
+            data['properties']['landuse'] == "farmyard" or
+            data['properties']['landuse'] == "greenhouse_horticulture" or
+            data['properties']['landuse'] == "orchard" or
+            data['properties']['landuse'] == "pasture" or
+            data['properties']['landuse'] == "peat_cutting" or
+            data['properties']['landuse'] == "plant_nursery" or
+            data['properties']['landuse'] == "reservoir" or
+            data['properties']['landuse'] == "vineyard"):
+                data['properties']['landuse'] = "agriculture"
+            elif(data['properties']['landuse'] == "landfill"):
+                data['properties']['landuse'] = "utilities"
+            elif(data['properties']['landuse'] == "military" or
+            data['properties']['landuse'] == "recreation_ground" or
+            data['properties']['landuse'] == "user defined"
+            data['properties']['landuse'] == "conservation"):
+                data['properties']['landuse'] = "others"
+                
             f.write("{\"type\": \"Feature\", \"properties\": {")
             f.write("\"id\": \"" + str(index) + "\", ")
             if "name" not in data['properties']:
