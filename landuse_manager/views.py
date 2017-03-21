@@ -151,7 +151,7 @@ def cleanLandUse(source):
             f.write("\"id\": \"" + str(index) + "\", ")
             if "name" not in data['properties']:
                 data['properties']['name'] = "no name available"
-            f.write("\"name\": \"" + data['properties']['name'] + "\", ")
+            f.write("\"name\": \"" + str.replace(data['properties']['name'], '\\', '\\\\')+ "\", ")
             polygon = shapely.geometry.geo.shape(data['geometry'])
             f.write("\"centerlatitude\": \"" + str(polygon.centroid.x) + "\", ")
             f.write("\"centerlongitude\": \"" + str(polygon.centroid.y) + "\", ")
