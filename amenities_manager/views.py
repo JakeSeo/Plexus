@@ -19,7 +19,7 @@ def index(request):
 
 
 def manage(request):
-    with open('media/amenities/amenitiesgeojson.json', encoding="utf-8") as f:
+    with open('media/amenities/Amenities.geojson', encoding="utf-8") as f:
         json_data = json.load(f)
     context = {
         'amenities': json.dumps(json_data)
