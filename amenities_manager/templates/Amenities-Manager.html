@@ -338,7 +338,7 @@
     <script>
         
         
-       data = {{amenities | safe}};
+       //data = {{amenities | safe}};
         
         var markers = {}; //will contain the amenities
         var summary = {};
@@ -735,7 +735,7 @@
         
     function initMap(){
                 var selectedFeature = null;
-                var eLayer = L.geoJson(data,{
+                var eLayer = L.geoJson(gdata,{
                     onEachFeature: function(feature,layer){
                         switch(feature.properties.amenity_type)
                         {
