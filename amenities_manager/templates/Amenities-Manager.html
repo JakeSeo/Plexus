@@ -105,41 +105,41 @@
                             <thead>
                               <tr>
                                   <th data-field="id">Total Amenities</th>
-                                  <th data-field="name">123,456</th>
+                                  <th data-field="name" id="summary-total1">0</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
                                 <td>Sustenance</td>
-                                <td>89,103</td>
+                                <td id="summary-sustenance1">0</td>
                               </tr>
                               <tr>
                                 <td>Education</td>
-                                <td>1,702</td>
+                                <td id="summary-education1">0</td>
                               </tr>
                               <tr>
                                 <td>Transport</td>
-                                <td>999</td>
+                                <td id="summary-transport1">0</td>
                               </tr>
                               <tr>
                                 <td>Healthcare</td>
-                                <td>20,123</td>
+                                <td id="summary-healthcare1">0</td>
                               </tr>
                                 <tr>
                                 <td>Finance</td>
-                                <td>1,702</td>
+                                <td id="summary-finance1">0</td>
                               </tr>
                               <tr>
                                 <td>Commerce</td>
-                                <td>999</td>
+                                <td id="summary-commerce1">0</td>
                               </tr>
                               <tr>
                                 <td>Entertainment</td>
-                                <td>999</td>
+                                <td id="summary-entertainment1">0</td>
                               </tr>
                               <tr>
                                 <td>Others</td>
-                                <td>20,123</td>
+                                <td id="summary-others1">0</td>
                               </tr>
                             </tbody>
                         </table>
@@ -161,41 +161,41 @@
                             <thead>
                               <tr>
                                   <th data-field="id">Total Amenities</th>
-                                  <th data-field="name" id = "summary-total"></th>
+                                  <th data-field="name" id="summary-total">0</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
                                 <td>Sustenance</td>
-                                <td>89,103</td>
+                                <td id="summary-sustenance">0</td>
                               </tr>
                               <tr>
                                 <td>Education</td>
-                                <td>1,702</td>
+                                <td id="summary-education">0</td>
                               </tr>
                               <tr>
                                 <td>Transport</td>
-                                <td>999</td>
+                                <td id="summary-transport">0</td>
                               </tr>
                               <tr>
                                 <td>Healthcare</td>
-                                <td>20,123</td>
+                                <td id="summary-healthcare">0</td>
                               </tr>
                                 <tr>
                                 <td>Finance</td>
-                                <td>1,702</td>
+                                <td id="summary-finance">0</td>
                               </tr>
                               <tr>
                                 <td>Commerce</td>
-                                <td>999</td>
+                                <td id="summary-commerce">0</td>
                               </tr>
                               <tr>
                                 <td>Entertainment</td>
-                                <td>999</td>
+                                <td id="summary-entertainment">0</td>
                               </tr>
                               <tr>
                                 <td>Others</td>
-                                <td>20,123</td>
+                                <td id="summary-others">0</td>
                               </tr>
                             </tbody>
                         </table>
@@ -342,10 +342,18 @@
         
         var markers = {}; //will contain the amenities
         var summary = {};
-        
-          var currentlyEditing;
-          var currentlyDeleting = false;
-          var disableEditing = false; 
+        summary['sustenance'] = 0;
+        summary['education'] = 0;
+        summary['transport'] = 0;
+        summary['healthcare'] = 0;
+        summary['finance'] = 0;
+        summary['commerce'] = 0;
+        summary['entertainment'] = 0;
+        summary['other'] = 0;
+
+        var currentlyEditing;
+        var currentlyDeleting = false;
+        var disableEditing = false; 
 
         $( document ).ready(function() {
             $.ajaxSetup({
@@ -380,6 +388,27 @@
         }
 
         function cancel() {
+            $(function(){
+                    $("#summary-total1").text(Object.keys(markers).length);
+                    $("#summary-sustenance1").text(summary['sustenance']);
+                    $("#summary-education1").text(summary['education']);
+                    $("#summary-transport1").text(summary['transport']);
+                    $("#summary-healthcare1").text(summary['healthcare']);
+                    $("#summary-finance1").text(summary['finance']);
+                    $("#summary-commerce1").text(summary['commerce']);
+                    $("#summary-entertainment1").text(summary['entertainment']);
+                    $("#summary-others1").text(summary['other']);
+                    
+                    $("#summary-total").text(Object.keys(markers).length);
+                    $("#summary-sustenance").text(summary['sustenance']);
+                    $("#summary-education").text(summary['education']);
+                    $("#summary-transport").text(summary['transport']);
+                    $("#summary-healthcare").text(summary['healthcare']);
+                    $("#summary-finance").text(summary['finance']);
+                    $("#summary-commerce").text(summary['commerce']);
+                    $("#summary-entertainment").text(summary['entertainment']);
+                    $("#summary-others").text(summary['other']);
+            });
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;
             stopEditing();
           }
@@ -420,7 +449,9 @@
                 case "other": markers[document.getElementById('a-id').value].setIcon(new OtherMarker); break;
             }
             
-            if(document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value != markers[document.getElementById('a-id').value].feature.properties.amenity_type)
+            if(markers[document.getElementById('a-id').value].feature.properties.amenity_type == undefined)
+                summary[document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value]+=1;       
+            else if(document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value != markers[document.getElementById('a-id').value].feature.properties.amenity_type)
             {
                 summary[markers[document.getElementById('a-id').value].feature.properties.amenity_type]-=1;
                 summary[document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value]+=1;
@@ -432,13 +463,55 @@
             markers[document.getElementById('a-id').value].feature.properties.name = document.getElementById("a-name").value;
             
             //set values to summary-div
-            
+            $(function(){
+                    $("#summary-total1").text(Object.keys(markers).length);
+                    $("#summary-sustenance1").text(summary['sustenance']);
+                    $("#summary-education1").text(summary['education']);
+                    $("#summary-transport1").text(summary['transport']);
+                    $("#summary-healthcare1").text(summary['healthcare']);
+                    $("#summary-finance1").text(summary['finance']);
+                    $("#summary-commerce1").text(summary['commerce']);
+                    $("#summary-entertainment1").text(summary['entertainment']);
+                    $("#summary-others1").text(summary['other']);
+                    
+                    $("#summary-total").text(Object.keys(markers).length);
+                    $("#summary-sustenance").text(summary['sustenance']);
+                    $("#summary-education").text(summary['education']);
+                    $("#summary-transport").text(summary['transport']);
+                    $("#summary-healthcare").text(summary['healthcare']);
+                    $("#summary-finance").text(summary['finance']);
+                    $("#summary-commerce").text(summary['commerce']);
+                    $("#summary-entertainment").text(summary['entertainment']);
+                    $("#summary-others").text(summary['other']);
+            });
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
         }
         
          function remove() {
             //save shit here
             editableLayers.removeLayer(markers[document.getElementById('a-id').value]);
+            delete markers[document.getElementById('a-id').value]; 
+            $(function(){
+                    $("#summary-total1").text(Object.keys(markers).length);
+                    $("#summary-sustenance1").text(summary['sustenance']);
+                    $("#summary-education1").text(summary['education']);
+                    $("#summary-transport1").text(summary['transport']);
+                    $("#summary-healthcare1").text(summary['healthcare']);
+                    $("#summary-finance1").text(summary['finance']);
+                    $("#summary-commerce1").text(summary['commerce']);
+                    $("#summary-entertainment1").text(summary['entertainment']);
+                    $("#summary-others1").text(summary['other']);
+                    
+                    $("#summary-total").text(Object.keys(markers).length);
+                    $("#summary-sustenance").text(summary['sustenance']);
+                    $("#summary-education").text(summary['education']);
+                    $("#summary-transport").text(summary['transport']);
+                    $("#summary-healthcare").text(summary['healthcare']);
+                    $("#summary-finance").text(summary['finance']);
+                    $("#summary-commerce").text(summary['commerce']);
+                    $("#summary-entertainment").text(summary['entertainment']);
+                    $("#summary-others").text(summary['other']);
+            });
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
         }
         
@@ -564,14 +637,13 @@
         document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
         
         feature.type = "Feature";
-        layer.feature.properties.id = Object.keys(markers).length;
+        layer.feature.properties.id = ""+(parseInt(markers[Object.keys(markers)[Object.keys(markers).length - 1]].feature.properties.id)+1);
         layer.feature.properties.latitude = layer.getLatLng().lat;
         layer.feature.properties.longitude = layer.getLatLng().lng;
         layer.feature.properties.capacity = 0;
         layer.feature.properties.name = "New Amenity";
         layer.feature.properties.amenity_type = "sustenance";
         markers[layer.feature.properties.id] = e.layer;
-        
 
         document.getElementById('a-id').value = layer.feature.properties.id;
         document.getElementById('a-lat').value = layer.feature.properties.latitude;
@@ -600,6 +672,7 @@
                     default:  index = 7; break;
                 }
                 document.getElementById('a-type').selectedIndex=index;
+                startEditing(layer);
             });
         }
 
@@ -684,7 +757,6 @@
 
                         layer.on('click',function(e){
                             document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
-                            alert("lat " + layer.feature.properties.latitude);
                             document.getElementById('a-id').value = layer.feature.properties.id;
                             document.getElementById('a-lat').value = layer.feature.properties.latitude;
                             document.getElementById('a-long').value = layer.feature.properties.longitude;
@@ -712,7 +784,32 @@
                     }
                 );
                 //editableLayers.addLayer(eLayer);
+        
+                $(function(){
+                    $("#summary-total1").text(Object.keys(markers).length);
+                    $("#summary-sustenance1").text(summary['sustenance']);
+                    $("#summary-education1").text(summary['education']);
+                    $("#summary-transport1").text(summary['transport']);
+                    $("#summary-healthcare1").text(summary['healthcare']);
+                    $("#summary-finance1").text(summary['finance']);
+                    $("#summary-commerce1").text(summary['commerce']);
+                    $("#summary-entertainment1").text(summary['entertainment']);
+                    $("#summary-others1").text(summary['other']);
+                    
+                    $("#summary-total").text(Object.keys(markers).length);
+                    $("#summary-sustenance").text(summary['sustenance']);
+                    $("#summary-education").text(summary['education']);
+                    $("#summary-transport").text(summary['transport']);
+                    $("#summary-healthcare").text(summary['healthcare']);
+                    $("#summary-finance").text(summary['finance']);
+                    $("#summary-commerce").text(summary['commerce']);
+                    $("#summary-entertainment").text(summary['entertainment']);
+                    $("#summary-others").text(summary['other']);
+                });
             }
+        
+        
+        //document.getElementById('summary-total1').text = Object.keys(markers).length;
         
     </script>
 

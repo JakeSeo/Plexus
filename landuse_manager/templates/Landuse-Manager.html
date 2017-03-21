@@ -103,37 +103,37 @@
                             <thead>
                               <tr>
                                   <th data-field="id">Total Land Use</th>
-                                  <th data-field="name">123,456</th>
+                                  <th data-field="name" id="summary-total1">0</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
                                 <td>Residential</td>
-                                <td>89,103</td>
+                                <td id="summary-residential1">0</td>
                               </tr>
                               <tr>
                                 <td>Commercial</td>
-                                <td>1,702</td>
+                                <td id="summary-commercial1">0</td>
                               </tr>
                               <tr>
                                 <td>Parks</td>
-                                <td>999</td>
+                                <td id="summary-parks1">0</td>
                               </tr>
                               <tr>
                                 <td>Industrial</td>
-                                <td>20,123</td>
+                                <td id="summary-industrial1">0</td>
                               </tr>
                                 <tr>
                                 <td>Agriculture</td>
-                                <td>1,702</td>
+                                <td id="summary-agriculture1">0</td>
                               </tr>
                               <tr>
                                 <td>Utilities</td>
-                                <td>999</td>
+                                <td id="summary-utilities1">0</td>
                               </tr>
                               <tr>
                                 <td>Others</td>
-                                <td>20,123</td>
+                                <td id="summary-others1">0</td>
                               </tr>
                             </tbody>
                         </table>
@@ -155,37 +155,37 @@
                             <thead>
                               <tr>
                                   <th data-field="id">Total Land Use</th>
-                                  <th data-field="name">123,456</th>
+                                  <th data-field="name" id="summary-total">0</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
                                 <td>Residential</td>
-                                <td>89,103</td>
+                                <td id="summary-residential">0</td>
                               </tr>
                               <tr>
                                 <td>Commercial</td>
-                                <td>1,702</td>
+                                <td id="summary-commercial">0</td>
                               </tr>
                               <tr>
                                 <td>Parks</td>
-                                <td>999</td>
+                                <td id="summary-parks">0</td>
                               </tr>
                               <tr>
                                 <td>Industrial</td>
-                                <td>20,123</td>
+                                <td id="summary-industrial">0</td>
                               </tr>
                                 <tr>
                                 <td>Agriculture</td>
-                                <td>1,702</td>
+                                <td id="summary-agriculture">0</td>
                               </tr>
                               <tr>
                                 <td>Utilities</td>
-                                <td>999</td>
+                                <td id="summary-utilities">0</td>
                               </tr>
                               <tr>
                                 <td>Others</td>
-                                <td>20,123</td>
+                                <td id="summary-others">0</td>
                               </tr>
                             </tbody>
                         </table>
@@ -346,6 +346,14 @@
         
         
         var LU = {}; //will contain the polygons of Land Use
+        var summary = {};
+        summary['residential'] = 0;
+        summary['commercial'] = 0;
+        summary['parks'] = 0;
+        summary['industrial'] = 0;
+        summary['agriculture'] = 0;
+        summary['utilities'] = 0;
+        summary['other'] = 0;
         
         // variable to track the layer being edited
           var currentlyEditing;
@@ -386,6 +394,26 @@
         }
 
         function cancel() {
+            $(function(){
+                    $("#summary-total1").text(Object.keys(LU).length);
+                    $("#summary-residential1").text(summary['residential']);
+                    $("#summary-commercial1").text(summary['commercial']);
+                    $("#summary-parks1").text(summary['parks']);
+                    $("#summary-industrial1").text(summary['industrial']);
+                    $("#summary-agriculture1").text(summary['agriculture']);
+                    $("#summary-utilities1").text(summary['utilities']);
+                    $("#summary-others1").text(summary['other']);
+                    
+                    $("#summary-total").text(Object.keys(LU).length);
+                    $("#summary-residential").text(summary['residential']);
+                    $("#summary-commercial").text(summary['commercial']);
+                    $("#summary-parks").text(summary['parks']);
+                    $("#summary-industrial").text(summary['industrial']);
+                    $("#summary-agriculture").text(summary['agriculture']);
+                    $("#summary-utilities").text(summary['utilities']);
+                    $("#summary-others").text(summary['other']);
+
+            });
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;
             stopEditing();  
         }
@@ -424,6 +452,13 @@
                 case "utilities": LU[document.getElementById('a-id').value].setStyle({fillColor :'pink', fillOpacity:'0.7'}); break;
                 default:  LU[document.getElementById('a-id').value].setStyle({fillColor :'orange', fillOpacity:'0.7'}); break;
             }
+            if(LU[document.getElementById('a-id').value].feature.properties.landuse_type == undefined)
+                summary[document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value]+=1;       
+            else if(document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value != LU[document.getElementById('a-id').value].feature.properties.landuse_type)
+            {
+                summary[LU[document.getElementById('a-id').value].feature.properties.landuse_type]-=1;
+                summary[document.getElementById('a-type').options[document.getElementById('a-type').selectedIndex].value]+=1;
+            }
             
             LU[document.getElementById('a-id').value].feature.properties.centerlatitude = LU[document.getElementById('a-id').value].getBounds().getCenter().lat;
             LU[document.getElementById('a-id').value].feature.properties.centerlongitude = LU[document.getElementById('a-id').value].getBounds().getCenter().lng;
@@ -435,12 +470,55 @@
             else 
                 LU[document.getElementById('a-id').value].feature.properties.area = L.GeometryUtil.geodesicArea(LU[document.getElementById('a-id').value].getLatLngs()[0]);
             
+             $(function(){
+                    $("#summary-total1").text(Object.keys(LU).length);
+                    $("#summary-residential1").text(summary['residential']);
+                    $("#summary-commercial1").text(summary['commercial']);
+                    $("#summary-parks1").text(summary['parks']);
+                    $("#summary-industrial1").text(summary['industrial']);
+                    $("#summary-agriculture1").text(summary['agriculture']);
+                    $("#summary-utilities1").text(summary['utilities']);
+                    $("#summary-others1").text(summary['other']);
+                    
+                    $("#summary-total").text(Object.keys(LU).length);
+                    $("#summary-residential").text(summary['residential']);
+                    $("#summary-commercial").text(summary['commercial']);
+                    $("#summary-parks").text(summary['parks']);
+                    $("#summary-industrial").text(summary['industrial']);
+                    $("#summary-agriculture").text(summary['agriculture']);
+                    $("#summary-utilities").text(summary['utilities']);
+                    $("#summary-others").text(summary['other']);
+
+            });
+            
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
         }
         
         function remove() {
             //save shit here
             editableLayers.removeLayer(LU[document.getElementById('a-id').value]);
+            delete LU[document.getElementById('a-id').value];
+             $(function(){
+                    $("#summary-total1").text(Object.keys(LU).length);
+                    $("#summary-residential1").text(summary['residential']);
+                    $("#summary-commercial1").text(summary['commercial']);
+                    $("#summary-parks1").text(summary['parks']);
+                    $("#summary-industrial1").text(summary['industrial']);
+                    $("#summary-agriculture1").text(summary['agriculture']);
+                    $("#summary-utilities1").text(summary['utilities']);
+                    $("#summary-others1").text(summary['other']);
+                    
+                    $("#summary-total").text(Object.keys(LU).length);
+                    $("#summary-residential").text(summary['residential']);
+                    $("#summary-commercial").text(summary['commercial']);
+                    $("#summary-parks").text(summary['parks']);
+                    $("#summary-industrial").text(summary['industrial']);
+                    $("#summary-agriculture").text(summary['agriculture']);
+                    $("#summary-utilities").text(summary['utilities']);
+                    $("#summary-others").text(summary['other']);
+
+            });
+            
             document.getElementById('init-div').innerHTML = document.getElementById('summary-div').innerHTML;            
         }
         
@@ -504,13 +582,13 @@
         document.getElementById('init-div').innerHTML =  document.getElementById('edit-div').innerHTML;
         
         feature.type = "Feature";
-        layer.feature.properties.id = Object.keys(LU).length;
+        layer.feature.properties.id = ""+(parseInt(LU[Object.keys(LU)[Object.keys(LU).length - 1]].feature.properties.id)+1);
         alert(layer.feature.properties.id);
         layer.feature.properties.centerlatitude = layer.getBounds().getCenter().lat;
         layer.feature.properties.centerlongitude = layer.getBounds().getCenter().lng;
         layer.feature.properties.capacity = 0;
         layer.feature.properties.name = "New Land Use";
-        layer.feature.properties.landuse_type = "residential";
+        //layer.feature.properties.landuse_type = "residential";
         layer.feature.properties.coordinates = layer.getLatLngs();
         LU[layer.feature.properties.id] = e.layer;
         
@@ -542,6 +620,7 @@
                     default:  index = 6; break;
                 }
                 document.getElementById('a-type').selectedIndex=index;
+                startEditing(layer);
             });
         }
         editableLayers.addLayer(layer);
@@ -643,6 +722,10 @@
                             case "utilities": layer.setStyle({fillColor :'pink', fillOpacity:'0.7'}); break;
                             default:  layer.setStyle({fillColor :'orange', fillOpacity:'0.7'}); break;
                         }
+                        if(summary[feature.properties.landuse_type] == undefined)
+                            summary[feature.properties.landuse_type] = 1;
+                        else summary[feature.properties.landuse_type] +=1;
+
                         console.log("INIT names " + feature.properties.name);
                         console.log("INIT id " + feature.properties.id);
                         LU[feature.properties.id] = layer;
@@ -677,6 +760,28 @@
                         }
                     }
                 );
+                
+                 $(function(){
+                    $("#summary-total1").text(Object.keys(LU).length);
+                    $("#summary-residential1").text(summary['residential']);
+                    $("#summary-commercial1").text(summary['commercial']);
+                    $("#summary-parks1").text(summary['parks']);
+                    $("#summary-industrial1").text(summary['industrial']);
+                    $("#summary-agriculture1").text(summary['agriculture']);
+                    $("#summary-utilities1").text(summary['utilities']);
+                    $("#summary-others1").text(summary['other']);
+                    
+                    $("#summary-total").text(Object.keys(LU).length);
+                    $("#summary-residential").text(summary['residential']);
+                    $("#summary-commercial").text(summary['commercial']);
+                    $("#summary-parks").text(summary['parks']);
+                    $("#summary-industrial").text(summary['industrial']);
+                    $("#summary-agriculture").text(summary['agriculture']);
+                    $("#summary-utilities").text(summary['utilities']);
+                    $("#summary-others").text(summary['other']);
+
+                });
+        
             }
         
     </script>
