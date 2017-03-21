@@ -143,7 +143,7 @@ def cleanLandUse(source):
                 data['properties']['landuse'] = "utilities"
             elif(data['properties']['landuse'] == "military" or
             data['properties']['landuse'] == "recreation_ground" or
-            data['properties']['landuse'] == "user defined"
+            data['properties']['landuse'] == "user defined" or
             data['properties']['landuse'] == "conservation"):
                 data['properties']['landuse'] = "others"
                 
