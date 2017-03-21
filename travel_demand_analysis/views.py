@@ -27,7 +27,7 @@ def travel_analysis(request):
         os.makedirs(trafficzone_directory)
 
 
-    amenity_filenames = [file for file in os.listdir(amenity_directory) if file.endswith('_cleaned.json')]
+    amenity_filenames = [file for file in os.listdir(amenity_directory) if file.endswith('_cleaned.geojson')]
     household_filenames = os.listdir(household_directory)
     trafficzone_filenames = os.listdir(trafficzone_directory)
 
