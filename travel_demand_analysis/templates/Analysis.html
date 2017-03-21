@@ -420,18 +420,33 @@
 <!----------------------------------------------------- SCRIPTS ------------------------------------------->
 
 <script type="text/javascript">
-        var max_attracted=0, max_produced=0;
-        var max_score_basis = 0
+        var max_attracted=0, max_produced=0, max_score_basis = 0;
         var taz_analyzed = [];
-        var amenities_marker = []
+
+        var visualize_analyzed_layers = [];
+
+        var visualize_amenities = [];
+        var visualize_households = [];
+        var visualize_trafficzones = [];
+        var visualize_landuses = [];
+
+        var visualize_amenity_layers = [];
+        var visualize_household_layers = [];
+        var visualize_trafficzone_layers = [];
+        var visualize_landuse_layers = [];
+
         //zone_landuse_settings[2].setStyle({fillColor: '#800026'});
         //mymap.removeLayer(zone_landuse_settings[2]);
+
         var amenity_files = [];
         var amenity_summaries = [];
         var household_files = [];
         var household_summaries = [];
         var trafficzone_files = [];
         var trafficzone_summaries = [];
+        var landuse_files = [];
+        var landuse_summaries = [];
+
         var taz_name_lbl = [];
         var zonal_od = [];
 
@@ -534,8 +549,8 @@
            if(taz_analyzed.length>0){
                if($('#trip-produced-radio').is(':checked')){
                    max_score_basis = max_produced;
-                   for(x=0; x<traffic_analysis_zones_layers.length; x++){
-                       traffic_analysis_zones_layers[x].setStyle(mystyle(taz_analyzed[x]));
+                   for(x=0; x<visualize_analyzed_layers.length; x++){
+                       visualize_analyzed_layers[x].setStyle(mystyle(taz_analyzed[x]));
                    }
                }
            }else{
@@ -548,8 +563,8 @@
            if(taz_analyzed.length>0){
                if($('#trip-attracted-radio').is(':checked')){
                    max_score_basis = max_attracted;
-                   for(x=0; x<traffic_analysis_zones_layers.length; x++){
-                       traffic_analysis_zones_layers[x].setStyle(mystyle(taz_analyzed[x]));
+                   for(x=0; x<visualize_analyzed_layers.length; x++){
+                       visualize_analyzed_layers[x].setStyle(mystyle(taz_analyzed[x]));
                    }
                }
            }else{
@@ -558,18 +573,35 @@
            }
         });
 
+        function custom_index_length(arr){
+            var count = 0;
+            for(x in arr){
+                count+=1;
+            }
+            return count;
+        }
+
+        function comrpressArray(arr){
+            var compressedArray = [];
+            for(x in arr){
+                compressedArray.push(arr[x]);
+            }
+            return compressedArray;
+        }
+
         $("#run-analysis-btn").click(function(){
-            if(amenity_files.length>0 && household_files.length>0){
+            if(custom_index_length(amenity_files)>0 && custom_index_length(household_files)>0 && custom_index_length(trafficzone_files)){
+
                 $("#overlay").css("display","inline");
                 //$("#loader-modal").openModal({dismissible:false});
                 $.ajax({
                     url: "{% url 'travel_demand_analysis:run_analysis' %}",
                     method: "POST",
                     data: {
-                        "amenity_files[]" : amenity_files,
-                        "household_files[]" : household_files,
-                        "trafficzone_files[]": trafficzone_files,
-                        "zone_landuse_settings[]": zone_landuse_settings
+                        "amenity_files[]" : comrpressArray(amenity_files),
+                        "household_files[]" : comrpressArray(household_files),
+                        "trafficzone_files[]": comrpressArray(trafficzone_files),
+                        "zone_landuse_settings[]": comrpressArray(zone_landuse_settings)
                     },
                     success: function(data) {
                         $("#overlay").css("display","none");
@@ -580,9 +612,18 @@
                         console.log(json_response.length+" LENK");
                         $(json_response).each(function(key, data) {
                             taz_analyzed.push(data);
-                            traffic_analysis_zones_layers[key].bindTooltip(getAnalyzedTooltip(key+1, data));
+                            var zone_feature = JSON.parse(data.zone_feature);
+                            visualize_analyzed_layers.push(L.geoJson(zone_feature, {style: {
+                                fillColor: '#0000FF',
+                                weight: 2,
+                                opacity: 1,
+                                color: 'white',
+                                dashArray: '3',
+                                fillOpacity: 0.7
+                            }}).bindTooltip(getAnalyzedTooltip(zone_feature.properties.NAME_2, data)).addTo(mymap));
                             //console.log(key+":"+data.zone_polygon.__geom__);
                         });
+
                         refresh_zone_details();
                     },
                     failure: function(data) { 
@@ -595,7 +636,7 @@
         });
 
         function getAnalyzedTooltip(index, feature){
-            return '<b>Zone #'+index+'</b>:<br>Total trips produced:'+feature.trips_produced+'<br>Total trips attracted:'+feature.trips_attracted;
+            return '<b>'+index+'</b>:<br>Total trips produced:'+feature.trips_produced+'<br>Total trips attracted:'+feature.trips_attracted;
         }
 
         function refresh_zone_details(){
@@ -665,7 +706,7 @@
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
                                .attr("type","checkbox");
-                if(amenity_files.indexOf('{{file}}') != -1){
+                if(!(typeof amenity_files['{{file}}'] === 'undefined')){
                     $(inputDiv).attr("disabled","disabled").attr("checked","checked");
                 }
                 var labelDiv = $("<label></label>").addClass("black-text").attr("for","{{file}}")
@@ -691,7 +732,7 @@
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
                                .attr("type","checkbox");
-                if(household_files.indexOf('{{file}}') != -1){
+                if(!(typeof household_files['{{file}}'] === 'undefined')){
                     $(inputDiv).attr("disabled","disabled").attr("checked","checked");
                 }
                 var labelDiv = $("<label></label>").addClass("black-text").attr("for","{{file}}")
@@ -717,7 +758,7 @@
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
                                .attr("type","checkbox");
-                if(trafficzone_files.indexOf('{{file}}') != -1){
+                if(!(typeof trafficzone_files['{{file}}'] === 'undefined')){
                     $(inputDiv).attr("disabled","disabled").attr("checked","checked");
                 }
                 var labelDiv = $("<label></label>").addClass("black-text").attr("for","{{file}}")
@@ -783,7 +824,7 @@
                 for(var i=0; i<file_rows.length; i++){
                     var filename = $(file_rows[i]).val();
                     if($(file_rows[i]).is(':checked')){
-                        if(household_files.indexOf(filename) == -1){
+                        if(typeof household_files[filename] === 'undefined'){
                             count = 0;
                             $.ajax({
                                 url: "{% url 'travel_demand_analysis:analysis_add_household' %}",
@@ -792,11 +833,28 @@
                                     "household_filename" : filename
                                 },
                                 success: function(data) {
-                                    filename = data.household_filename;
+                                    alert("WENT HOUSEHOLD");
+                                    /*filename = data.household_filename;
                                     count = data.no_households;
                                     household_files.push(filename);
                                     household_summaries.push(count);
+                                    refresh_household_list();*/
+
+                                    filename = data.household_filename;
+                                    count = data.no_households;
+                                    alert("count: "+count);
+                                    household_files[filename] = filename;
+                                    household_summaries[filename] = count;
+                                    //households_json = JSON.parse(data.households_json);
+
+                                    //var households_marker = [];
+                                    //$(households_json).each(function(key, data) {
+                                    //    households_marker.push(data);
+                                    //});
+                                    //visualize_household_layers[filename] = 0;
+                                    //visualize_households[filename] = households_marker;
                                     refresh_household_list();
+                                    alert("ENDED HOUSEHOLD");
                                 },
                                 failure: function(data) { 
                                     alert('Error occurred.');
@@ -818,7 +876,7 @@
             for(var i=0; i<file_rows.length; i++){
                 var filename = $(file_rows[i]).val();
                 if($(file_rows[i]).is(':checked')){
-                    if(trafficzone_files.indexOf(filename) == -1){
+                    if(typeof trafficzone_files[filename] === 'undefined'){
                         count = 0;
                         $.ajax({
                             url: "{% url 'travel_demand_analysis:analysis_add_trafficzone' %}",
@@ -827,7 +885,8 @@
                                 "trafficzone_filename" : filename
                             },
                             success: function(data) {
-                                filename = data.trafficzone_filename;
+                                alert("TRAFFICZONE WENT");
+                                /*filename = data.trafficzone_filename;
                                 count = data.no_trafficzones;
                                 trafficzone_files.push(filename);
                                 json_response = JSON.parse(data.zone_geojson);
@@ -843,10 +902,23 @@
                                         dashArray: '3',
                                         fillOpacity: 0.7
                                     }}).bindTooltip('<b>Zone #'+(traffic_analysis_zones_layers.length+1)+'</b>').addTo(mymap));
+                                });*/
 
+                                filename = data.trafficzone_filename;
+                                count = data.no_trafficzones;
+                                trafficzone_files[filename] = filename;
+                                trafficzone_summaries[filename] = count;
+                                trafficzones_json = JSON.parse(data.zone_geojson);
+
+                                var trafficzones_marker = [];
+                                $(trafficzones_json.features).each(function(key, data) {
+                                    trafficzones_marker.push(data);
                                 });
+                                visualize_trafficzone_layers[filename] = 0;
+                                visualize_trafficzones[filename] = trafficzones_marker;
                                 refresh_trafficzone_list();
                                 initializeLanduseModal();
+                                alert("DONE WENT");
                             },
                             failure: function(data) {
                                 alert('Error occurred.');
@@ -906,11 +978,10 @@
             }
         }
 
-        
         function computeTotal(arr){
             total = 0;
-            for(var i=0; i<arr.length; i++){
-                total += arr[i];
+            for(x in arr){
+                total += arr[x];
             }
             return total;
         }
@@ -920,7 +991,7 @@
                 for(var i=0; i<file_rows.length; i++){
                     var filename = $(file_rows[i]).val();
                     if($(file_rows[i]).is(':checked')){
-                        if(amenity_files.indexOf(filename) == -1){
+                        if(typeof amenity_files[filename] === 'undefined'){
                             count = 0;
                             $.ajax({
                                 url: "{% url 'travel_demand_analysis:analysis_add_amenity' %}",
@@ -931,14 +1002,16 @@
                                 success: function(data) {
                                     filename = data.amenity_filename;
                                     count = data.no_amenities;
-                                    amenity_files.push(filename);
-                                    amenity_summaries.push(count);
+                                    amenity_files[filename] = filename;
+                                    amenity_summaries[filename] = count;
                                     amenities_json = JSON.parse(data.amenities_json);
 
+                                    var amenities_marker = [];
                                     $(amenities_json).each(function(key, data) {
                                         amenities_marker.push(data);
                                     });
-
+                                    visualize_amenity_layers[filename] = 0;
+                                    visualize_amenities[filename] = amenities_marker;
                                     refresh_amenity_list();
                                 },
                                 failure: function(data) { 
@@ -957,43 +1030,104 @@
                 }
          });
 
+        function visualize_amenity(inputElem){
+            var filename = $(inputElem).val();
+            if($(inputElem).is(':checked')){
+                var amenity_json = visualize_amenities[filename];
+                var amenity_layer_list = [];
+                for(x in amenity_json){
+                    amenity_layer_list.push(L.geoJSON(amenity_json[x]).addTo(mymap));
+                }
+                visualize_amenity_layers[filename] = amenity_layer_list;
+            }else{
+                var amenity_layer_list = visualize_amenity_layers[filename];
+                for(x in amenity_layer_list){
+                    mymap.removeLayer(amenity_layer_list[x]);
+                }
+            }
+        }
+
+        function visualize_trafficzone(inputElem){
+            alert("pressed input elem");
+            var filename = $(inputElem).val();
+            if($(inputElem).is(':checked')){
+                var trafficzone_json = visualize_trafficzones[filename];
+                var trafficzone_layer_list = [];
+                for(x in trafficzone_json){
+                    trafficzone_layer_list.push(L.geoJSON(trafficzone_json[x], {style: {
+                                        fillColor: '#FED976',
+                                        weight: 2,
+                                        opacity: 1,
+                                        color: 'white',
+                                        dashArray: '3',
+                                        fillOpacity: 0.7
+                                    }}).bindTooltip('<b>Zone #'+(trafficzone_json[x].properties.NAME_2)+'</b>').addTo(mymap));
+                }
+                visualize_trafficzone_layers[filename] = trafficzone_layer_list;
+            }else{
+                var trafficzone_layer_list = visualize_trafficzone_layers[filename];
+                for(x in trafficzone_layer_list){
+                    mymap.removeLayer(trafficzone_layer_list[x]);
+                }
+            }
+        }
+
         function refresh_amenity_list(){
             $("#amenity-summary").html(computeTotal(amenity_summaries));
             var mainDiv = $('#amenity-included-files');
             $(mainDiv).empty();
             {% for file in amenity_filenames %}
-            if(amenity_files.indexOf('{{file}}') != -1){
-                var listDiv = $("<li></li>").addClass("collection-item row").attr("name", "{{file}}");
-                var pDiv = $("<span></span>").addClass("col s9 truncate-file").html('{{file}}')
-                var aDiv = $("<a></a>").addClass("secondary-content col s3").attr("onclick","deletefile('amenity','{{file}}')");
+            if(!(typeof amenity_files['{{file}}'] === 'undefined')){
+                var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                var inputDiv = $("<input />").addClass("with-gap visualize-amenities").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
+                               .attr("id","{{file}}")
+                               .attr("value","{{file}}")
+                               .attr("type","checkbox");
+                $(inputDiv).on("click", function(event){
+                    visualize_amenity($(this));
+                });
+
+                var pDiv = $("<label></label>").addClass("col s10 truncate-file").attr("style","top:0rem !important;padding-left:30px !important;").attr("for","{{file}}").html('{{file}}')
+                var aDiv = $("<a></a>").addClass("secondary-content col s2").attr("onclick","deletefile('amenity','{{file}}')");
                 var iDiv = $("<i></i>").addClass("black-text material-icons").html('delete');
                 //var deleteBtn = $("<button></button>").addClass("col s4 btn waves-effect").html("delete").attr("onclick","deletefile('amenity','{{file}}')");
                 aDiv.append(iDiv);
+                listDiv.append(inputDiv);
                 listDiv.append(pDiv);
                 listDiv.append(aDiv);
                 mainDiv.append(listDiv);
             }
             {% endfor %}
 
-            for(x in amenities_json){
+            /*for(x in amenities_json){
                 L.geoJSON(amenities_json[x]).addTo(mymap);
-            }
+            }*/
 
             $('#amenity-modal').closeModal();
         }
+
         
         function refresh_trafficzone_list(){
             $("#trafficzone-summary").html(zone_landuse_settings.length);
             var mainDiv = $('#trafficzone-included-files');
             $(mainDiv).empty();
             {% for file in trafficzone_filenames %}
-            if(trafficzone_files.indexOf('{{file}}') != -1){
-                var listDiv = $("<li></li>").addClass("collection-item row").attr("name", "{{file}}");
-                var pDiv = $("<span></span>").addClass("col s9 truncate-file").html('{{file}}')
-                var aDiv = $("<a></a>").addClass("secondary-content col s3").attr("onclick","deletefile('trafficzone','{{file}}')");
+            if(!(typeof trafficzone_files['{{file}}'] === 'undefined')){
+                var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                var inputDiv = $("<input />").addClass("with-gap").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
+                               .attr("id","{{file}}")
+                               .attr("value","{{file}}")
+                               .attr("type","checkbox");
+                $(inputDiv).on("click", function(event){
+                    visualize_trafficzone($(this));
+                });
+
+                var pDiv = $("<label></label>").addClass("col s10 truncate-file").attr("style","top:0rem !important;padding-left:30px !important;").attr("for","{{file}}").html('{{file}}')
+                var aDiv = $("<a></a>").addClass("secondary-content col s2").attr("onclick","deletefile('trafficzone','{{file}}')");
                 var iDiv = $("<i></i>").addClass("black-text material-icons").html('delete');
                 //var deleteBtn = $("<button></button>").addClass("col s4 btn waves-effect").html("delete").attr("onclick","deletefile('amenity','{{file}}')");
                 aDiv.append(iDiv);
+                listDiv.append(inputDiv);
                 listDiv.append(pDiv);
                 listDiv.append(aDiv);
                 mainDiv.append(listDiv);
@@ -1007,14 +1141,18 @@
             var mainDiv = $('#household-included-files');
             $(mainDiv).empty();
             {% for file in household_filenames %}
-            if(household_files.indexOf('{{file}}') != -1){
-                //alert("WENT IN THE FORLOOP ififififif");
-                var listDiv = $("<li></li>").addClass("collection-item row").attr("name", "{{file}}");
-                var pDiv = $("<span></span>").addClass("col s9 truncate-file").html('{{file}}')
-                var aDiv = $("<a></a>").addClass("secondary-content col s3").attr("onclick","deletefile('household','{{file}}')");
+            if(!(typeof household_files['{{file}}'] === 'undefined')){
+                var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                var inputDiv = $("<input />").addClass("with-gap").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
+                               .attr("id","{{file}}")
+                               .attr("value","{{file}}")
+                               .attr("type","checkbox");
+                var pDiv = $("<label></label>").addClass("col s10 truncate-file").attr("style","top:0rem !important;padding-left:30px !important;").attr("for","{{file}}").html('{{file}}')
+                var aDiv = $("<a></a>").addClass("secondary-content col s2").attr("onclick","deletefile('household','{{file}}')");
                 var iDiv = $("<i></i>").addClass("black-text material-icons").html('delete');
-                //var deleteBtn = $("<button></button>").addClass("col s4 btn waves-effect").html("delete").attr("onclick","deletefile('household','{{file}}')");
+                //var deleteBtn = $("<button></button>").addClass("col s4 btn waves-effect").html("delete").attr("onclick","deletefile('amenity','{{file}}')");
                 aDiv.append(iDiv);
+                listDiv.append(inputDiv);
                 listDiv.append(pDiv);
                 listDiv.append(aDiv);
                 mainDiv.append(listDiv);
@@ -1045,20 +1183,33 @@
         //function TrafficAnalysisZone(zone_no, )
 
         $("#delete-file").click(function(){
-
             type = to_delete.type;
             filename = to_delete.name;
-            //alert(type+":"+filename);
+            alert(type+":"+filename);
             if(type=="amenity"){
-                index = removeFromArray(amenity_files, filename);
-                amenity_summaries.splice(index, 1);
+                delete amenity_summaries[ filename ];
+                delete amenity_files[ filename ];
+                delete visualize_amenity_layers[ filename ];
+                delete visualize_amenities[ filename ];
+
                 $("#amenity-summary").html(computeTotal(amenity_summaries));
                 $("#amenity-included-files").find("[name='"+filename+"']").remove();
             }else if(type=="household"){
-                index = removeFromArray(household_files, filename);
-                household_summaries.splice(index, 1);
+                delete household_summaries[ filename ];
+                delete household_files[ filename ];
+                delete visualize_household_layers[ filename ];
+                delete visualize_households[ filename ];
+
                 $("#household-summary").html(computeTotal(household_summaries));
                 $("#household-included-files").find("[name='"+filename+"']").remove();
+            }else if(type=="trafficzone"){
+                delete trafficzone_summaries[ filename ];
+                delete trafficzone_files[ filename ];
+                delete visualize_trafficzone_layers[ filename ];
+                delete visualize_trafficzones[ filename ];
+
+                $("#trafficzone-summary").html(computeTotal(trafficzone_summaries));
+                $("#trafficzone-included-files").find("[name='"+filename+"']").remove();
             }
             $("#delete-modal").closeModal();
         });

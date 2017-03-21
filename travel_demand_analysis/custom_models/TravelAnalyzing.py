@@ -14,6 +14,7 @@ class landuseObj:
 
 class TAZ:
     def __init__(self):
+        self.zone_feature = None
         self.zone_polygon = None
         self.trips = 0
         self.trips_produced = 0
@@ -96,6 +97,7 @@ class TripAnalyzer:
             for feature in geofile:
                 polygon = shape(feature.geometry)
                 raw_taz = TAZ()
+                raw_taz.zone_feature = geojson.dumps(feature)
                 raw_taz.zone_polygon = polygon
                 self.traffic_analysis_zones.append(raw_taz)
                 
