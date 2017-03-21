@@ -125,11 +125,13 @@ class TripAnalyzer:
                  
         #Populate Amenity attributes
         for file in self.amenity_files:
-            with open("media/amenities/"+str(file), encoding="utf-8") as json_data:
-                json_elems = json.load(json_data)
-
-            for json_obj in json_elems:
-                am_lat, am_long = json_obj['geometry']['coordinates'][0], json_obj['geometry']['coordinates'][1]
+            geofile = pygeoj.load("media/amenities/" + str(file))
+            #with open("media/amenities/"+str(file), encoding="utf-8") as json_data:
+            #    json_elems = json.load(json_data)
+            for feature in geofile:
+            #for json_obj in json_elems:
+                #am_lat, am_long = json_obj['geometry']['coordinates'][0], json_obj['geometry']['coordinates'][1]
+                am_lat, am_long = feature.geometry.coordinates[0], feature.geometry.coordinates[0]
                 if am_lat == "0" and am_long == "0":
                     print(line)
                 else:
@@ -137,7 +139,8 @@ class TripAnalyzer:
                     for index, zone in enumerate(self.traffic_analysis_zones):
                         if zone.zone_polygon.contains(point):
                             zone.total_amenities = zone.total_amenities + 1
-                            amenity_type = json_obj['properties']['amenity_type']
+                            #amenity_type = json_obj['properties']['amenity_type']
+                            amenity_type = feature.properties.amenity_type
                             if amenity_type == "sustenance":
                                 zone.no_amty_sustenance = zone.no_amty_sustenance + 1
                             elif amenity_type == "education":

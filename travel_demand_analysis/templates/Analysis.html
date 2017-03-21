@@ -851,7 +851,6 @@
                                     //$(households_json).each(function(key, data) {
                                     //    households_marker.push(data);
                                     //});
-                                    //visualize_household_layers[filename] = 0;
                                     //visualize_households[filename] = households_marker;
                                     refresh_household_list();
                                     alert("ENDED HOUSEHOLD");
@@ -914,7 +913,6 @@
                                 $(trafficzones_json.features).each(function(key, data) {
                                     trafficzones_marker.push(data);
                                 });
-                                visualize_trafficzone_layers[filename] = 0;
                                 visualize_trafficzones[filename] = trafficzones_marker;
                                 refresh_trafficzone_list();
                                 initializeLanduseModal();
@@ -1006,12 +1004,32 @@
                                     amenity_summaries[filename] = count;
                                     amenities_json = JSON.parse(data.amenities_json);
 
-                                    var amenities_marker = [];
+                                    /*var amenities_marker = [];
                                     $(amenities_json).each(function(key, data) {
                                         amenities_marker.push(data);
                                     });
-                                    visualize_amenity_layers[filename] = 0;
-                                    visualize_amenities[filename] = amenities_marker;
+                                    */
+
+                                    var amenity_layers = []
+
+                                    var eLayer = L.geoJson(amenities_json,{
+                                        onEachFeature: function(feature,layer){
+                                            switch(feature.properties.amenity_type)
+                                            {
+                                                case "sustenance": layer.setIcon(new SustenanceMarker()); break;
+                                                case "education":  layer.setIcon(new EducationMarker()); break;
+                                                case "transport":  layer.setIcon(new TransportMarker()); break;
+                                                case "healthcare": layer.setIcon(new HealthcareMarker()); break;
+                                                case "finance": layer.setIcon(new FinanceMarker()); break;
+                                                case "commerce": layer.setIcon(new CommerceMarker()); break;
+                                                case "entertainment": layer.setIcon(new EntertainmentMarker()); break;
+                                                default: layer.setIcon(new OtherMarker()); break;
+                                            }
+                                        }
+                                    });
+
+                                    //visualize_amenities[filename] = eLayer;
+                                    visualize_amenity_layers[filename] = eLayer;
                                     refresh_amenity_list();
                                 },
                                 failure: function(data) { 
@@ -1033,17 +1051,18 @@
         function visualize_amenity(inputElem){
             var filename = $(inputElem).val();
             if($(inputElem).is(':checked')){
-                var amenity_json = visualize_amenities[filename];
+                /*var amenity_json = visualize_amenities[filename];
                 var amenity_layer_list = [];
                 for(x in amenity_json){
                     amenity_layer_list.push(L.geoJSON(amenity_json[x]).addTo(mymap));
-                }
-                visualize_amenity_layers[filename] = amenity_layer_list;
+                }*/
+                visualize_amenity_layers[filename].addTo(mymap);// = amenity_layer_list;
             }else{
                 var amenity_layer_list = visualize_amenity_layers[filename];
                 for(x in amenity_layer_list){
                     mymap.removeLayer(amenity_layer_list[x]);
                 }
+                delete visualize_amenity_layers[ filename ];
             }
         }
 
@@ -1069,6 +1088,7 @@
                 for(x in trafficzone_layer_list){
                     mymap.removeLayer(trafficzone_layer_list[x]);
                 }
+                delete visualize_trafficzone_layers[ filename ];
             }
         }
 
@@ -1086,6 +1106,9 @@
                 $(inputDiv).on("click", function(event){
                     visualize_amenity($(this));
                 });
+                if(!(typeof visualize_amenity_layers['{{file}}'] === 'undefined')){
+                    $(inputDiv).prop("checked",true);
+                }
 
                 var pDiv = $("<label></label>").addClass("col s10 truncate-file").attr("style","top:0rem !important;padding-left:30px !important;").attr("for","{{file}}").html('{{file}}')
                 var aDiv = $("<a></a>").addClass("secondary-content col s2").attr("onclick","deletefile('amenity','{{file}}')");
@@ -1121,6 +1144,9 @@
                 $(inputDiv).on("click", function(event){
                     visualize_trafficzone($(this));
                 });
+                if(!(typeof visualize_trafficzone_layers['{{file}}'] === 'undefined')){
+                    $(inputDiv).prop("checked",true);
+                }
 
                 var pDiv = $("<label></label>").addClass("col s10 truncate-file").attr("style","top:0rem !important;padding-left:30px !important;").attr("for","{{file}}").html('{{file}}')
                 var aDiv = $("<a></a>").addClass("secondary-content col s2").attr("onclick","deletefile('trafficzone','{{file}}')");
@@ -1187,11 +1213,16 @@
             filename = to_delete.name;
             alert(type+":"+filename);
             if(type=="amenity"){
+                if(!(typeof visualize_amenity_layers[filename] === 'undefined')){
+                    var amenity_layer_list = visualize_amenity_layers[filename];
+                    for(x in amenity_layer_list){
+                        mymap.removeLayer(amenity_layer_list[x]);
+                    }
+                }
                 delete amenity_summaries[ filename ];
                 delete amenity_files[ filename ];
                 delete visualize_amenity_layers[ filename ];
                 delete visualize_amenities[ filename ];
-
                 $("#amenity-summary").html(computeTotal(amenity_summaries));
                 $("#amenity-included-files").find("[name='"+filename+"']").remove();
             }else if(type=="household"){
@@ -1199,15 +1230,19 @@
                 delete household_files[ filename ];
                 delete visualize_household_layers[ filename ];
                 delete visualize_households[ filename ];
-
                 $("#household-summary").html(computeTotal(household_summaries));
                 $("#household-included-files").find("[name='"+filename+"']").remove();
             }else if(type=="trafficzone"){
+                if(!(typeof visualize_trafficzone_layers[filename] === 'undefined')){
+                    var trafficzone_layer_list = visualize_trafficzone_layers[filename];
+                    for(x in trafficzone_layer_list){
+                        mymap.removeLayer(trafficzone_layer_list[x]);
+                    }
+                }
                 delete trafficzone_summaries[ filename ];
                 delete trafficzone_files[ filename ];
                 delete visualize_trafficzone_layers[ filename ];
                 delete visualize_trafficzones[ filename ];
-
                 $("#trafficzone-summary").html(computeTotal(trafficzone_summaries));
                 $("#trafficzone-included-files").find("[name='"+filename+"']").remove();
             }
@@ -1344,6 +1379,78 @@
 
                 drawnItems.addLayer(layer);
            });
+
+        var OtherMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/marker-icon.png' %}"
+        }
+    });
+
+    var SustenanceMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_sustenance.png' %}"
+        }
+    });
+
+    var EducationMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_education.png' %}"
+        }
+    });
+
+    var TransportMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_transportation.png' %}"
+        }
+    });
+
+    var HealthcareMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_healthcare.png' %}"
+        }
+    });
+
+    var FinanceMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_finance.png' %}"
+        }
+    });
+
+    var CommerceMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_commerce.png' %}"
+        }
+    });
+
+    var EntertainmentMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_entertainment.png' %}"
+        }
+    });
 
     
 
