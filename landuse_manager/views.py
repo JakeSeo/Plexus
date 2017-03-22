@@ -20,7 +20,7 @@ def index(request):
 
 
 def manage(request):
-    with open('media/landuse/landusegeojson.json', encoding="utf-8") as f:
+    with open('media/landuse/landusegeojson.geojson', encoding="utf-8") as f:
         json_data = json.load(f)
     context = {
         'amenities': json.dumps(json_data)
@@ -44,7 +44,7 @@ def manageSave(request):
     # f.close()
 
         geom_in_geojson = geojson.loads(data)
-        with open("media/landuse/landuse--edited.json", 'w', encoding="utf-8") as outfile:
+        with open("media/landuse/landuse--edited.geojson", 'w', encoding="utf-8") as outfile:
             geojson.dump(geom_in_geojson, outfile, indent=4, sort_keys=True)
     #return tmp_file[1]
         return HttpResponse("got the json")
@@ -79,7 +79,7 @@ def choose(request):
             newfile.document.name = "landuses/" + original_name + extension
             newfile.doc_name = original_name
             newfile.save()
-            #cleanLandUse(original_name)
+            cleanLandUse(original_name, extension)
             return redirect('landuse_manager:choose')
     else:
         form = DocumentForm()
@@ -91,13 +91,13 @@ def choose(request):
     }
     return render(request, 'landuse_manager/File-Manager.html', context)
 
-def cleanLandUse(source):
+def cleanLandUse(source, srcExtension):
     # ctr = 0
-    f = io.open("media/landuse/" + source + "_cleaned.json", 'w', encoding="utf-8")
+    f = io.open("media/landuse/" + source + "_cleaned.geojson", 'w', encoding="utf-8")
     f.write("[\n")
     ctr = 0
     index = -1
-    with io.open("media/landuse/" + source + ".json", encoding="utf-8") as z:
+    with io.open("media/landuse/" + source + srcExtension, encoding="utf-8") as z:
         m = json.load(z)
         for data in m['features']:
             if ctr != 0:
