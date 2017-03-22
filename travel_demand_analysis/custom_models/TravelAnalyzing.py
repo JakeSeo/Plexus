@@ -122,16 +122,19 @@ class TripAnalyzer:
                         if(falinany == 0):
                             abandoned_ctr = abandoned_ctr+1
         print("DID NOT FALL IN ANY XXXXX: "+str(abandoned_ctr))
-                 
+
+
+
+
         #Populate Amenity attributes
         for file in self.amenity_files:
-            geofile = pygeoj.load("media/amenities/" + str(file))
-            #with open("media/amenities/"+str(file), encoding="utf-8") as json_data:
-            #    json_elems = json.load(json_data)
-            for feature in geofile:
-            #for json_obj in json_elems:
-                #am_lat, am_long = json_obj['geometry']['coordinates'][0], json_obj['geometry']['coordinates'][1]
-                am_lat, am_long = feature.geometry.coordinates[0], feature.geometry.coordinates[0]
+            #geofile = pygeoj.load("media/amenities/" + str(file), encoding="utf8")
+            with open("media/amenities/"+str(file), encoding="utf-8") as json_data:
+                json_elems = json.load(json_data)
+            #for feature in geofile:
+            for json_obj in json_elems['features']:
+                am_lat, am_long = json_obj['geometry']['coordinates'][0], json_obj['geometry']['coordinates'][1]
+                #am_lat, am_long = feature.geometry.coordinates[0], feature.geometry.coordinates[0]
                 if am_lat == "0" and am_long == "0":
                     print(line)
                 else:
@@ -157,47 +160,6 @@ class TripAnalyzer:
                                 zone.no_amty_entertainment = zone.no_amty_entertainment + 1
                             elif amenity_type == "other":
                                 zone.no_amty_other = zone.no_amty_other + 1
-
-
-        # for file in landuse_files:
-        #     geofile = pygeoj.load(file)
-        #     for feature in geofile:
-        #         for zone in self.traffic_analysis_zones:
-        #             if(feature.properties.landuse_type == "commercial"):
-        #                 zone.lu_commercial_obj.area = zone.lu_commercial_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "parks"):
-        #                 zone.lu_parks_obj.area = zone.lu_parks_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "industrial"):
-        #                 zone.lu_industrial_obj.area = zone.lu_industrial_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "agriculture"):
-        #                 zone.lu_agriculture_obj.area = zone.lu_agriculture_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "residential"):
-        #                 zone.lu_residential_obj.area = zone.lu_residential_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "utilities"):
-        #                 zone.lu_utilities_obj.area = zone.lu_utilities_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "other"):
-        #                 zone.lu_other_obj.area = zone.lu_other_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #
-        # for zone in self.traffic_analysis_zones:
-        #     zone.compute_landuse()
-        #     if (zone.main_landuse == "commercial"):
-        #         print("went1")
-        #         zone.lu_ind_commercial = 1
-        #     elif (zone.main_landuse == "parks"):
-        #         print("went2")
-        #         zone.lu_ind_parks = 1
-        #     elif (zone.main_landuse == "industrial"):
-        #         print("went3")
-        #         zone.lu_ind_industrial = 1
-        #     elif (zone.main_landuse == "agriculture"):
-        #         print("went4")
-        #         zone.lu_ind_agriculture = 1
-        #     elif (zone.main_landuse == "residential"):
-        #         print("went5")
-        #         zone.lu_ind_residential = 1
-        #     elif (zone.main_landuse == "utilities"):
-        #         print("went6")
-        #         zone.lu_ind_utilities = 1
 
         for index, landuse in enumerate(self.zone_landuse_setting):
             if(landuse == "commercial"):

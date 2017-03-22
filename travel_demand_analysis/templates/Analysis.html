@@ -10,11 +10,13 @@
 
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="{% static 'css/personalized.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/LeafletStyleSheet.css' %}"/>
     <link type="text/css" rel="stylesheet" href="{% static 'css/materialize/css/materialize.min.css' %}"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-
+    <!--<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>-->
+    <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>-->
 
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"/>
@@ -32,6 +34,7 @@
     <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
     <script src="{% static 'leaflet/heatmap.js' %}"></script>
     <script src="{% static 'leaflet/leaflet-heatmap.js' %}"></script>
+    <script src="{% static 'js/PruneCluster.js' %}"></script>
 </head>
 
 <body>
@@ -420,6 +423,8 @@
 <!----------------------------------------------------- SCRIPTS ------------------------------------------->
 
 <script type="text/javascript">
+        var colors = ['#ff4b00', '#bac900', '#EC1813', '#55BCBE', '#D2204C', '#FF0000', '#ada59a', '#3e647e'],
+        pi2 = Math.PI * 2;
         var max_attracted=0, max_produced=0, max_score_basis = 0;
         var taz_analyzed = [];
 
@@ -450,6 +455,78 @@
         var taz_name_lbl = [];
         var zonal_od = [];
 
+        var OtherMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/marker-icon.png' %}"
+        }
+    });
+
+    var SustenanceMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_sustenance.png' %}"
+        }
+    });
+
+    var EducationMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_education.png' %}"
+        }
+    });
+
+    var TransportMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_transportation.png' %}"
+        }
+    });
+
+    var HealthcareMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_healthcare.png' %}"
+        }
+    });
+
+    var FinanceMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_finance.png' %}"
+        }
+    });
+
+    var CommerceMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_commerce.png' %}"
+        }
+    });
+
+    var EntertainmentMarker = L.Icon.extend({
+        options: {
+            shadowUrl: null,
+            iconAnchor: new L.Point(12, 12),
+            iconSize: new L.Point(24, 24),
+            iconUrl: "{% static 'leaflet/images/amenity_entertainment.png' %}"
+        }
+    });
+
         var zone_landuse_settings = ['commercial','parks','industrial','agriculture','residential',
                                      'commercial','parks','industrial','agriculture','residential',
                                      'commercial','parks','industrial','agriculture','residential',
@@ -459,7 +536,111 @@
         var traffic_analysis_zones_layers = [];
         var to_delete;
 
+        L.Icon.MarkerCluster = L.Icon.extend({
+                options: {
+                    iconSize: new L.Point(44, 44),
+                    className: 'prunecluster leaflet-markercluster-icon'
+                },
+
+                createIcon: function () {
+                // based on L.Icon.Canvas from shramov/leaflet-plugins (BSD licence)
+                var e = document.createElement('canvas');
+                this._setIconStyles(e, 'icon');
+                var s = this.options.iconSize;
+
+                if (L.Browser.retina) {
+                    e.width = s.x + s.x;
+                    e.height = s.y + s.y;
+                } else {
+                    e.width = s.x;
+                    e.height = s.y;
+                }
+
+                // this.draw(e.getContext('2d'), s.x, s.y);
+                this.draw(e.getContext('2d'), e.width, e.height);
+                return e;
+            },
+
+            createShadow: function () {
+                return null;
+            },
+
+            draw: function(canvas, width, height) {
+
+                var xa = 2, xb = 50, ya = 18, yb = 21;
+
+                var r = ya + (this.population - xa) * ((yb - ya) / (xb - xa));
+
+                var radiusMarker = Math.min(r, 21),
+                radiusCenter = 11,
+                center = width / 2;
+
+                if (L.Browser.retina) {
+                    canvas.scale(2, 2);
+                    center /= 2;
+                    canvas.lineWidth = 0.5;
+                }
+
+                canvas.strokeStyle = 'rgba(0,0,0,0.25)';
+
+                var start = 0, stroke = true;
+                for (var i = 0, l = colors.length; i < l; ++i) {
+
+                    var size = this.stats[i] / this.population;
+
+                    if (size > 0) {
+
+                        stroke = size != 1;
+
+                        canvas.beginPath();
+                        canvas.moveTo(center, center);
+                        canvas.fillStyle = colors[i];
+                        var from = start + 0.14,
+                        to = start + size * pi2;
+
+                        if (to < from || size == 1) {
+                            from = start;
+                        }
+                        canvas.arc(center, center, radiusMarker, from, to);
+
+                        start = start + size * pi2;
+                        canvas.lineTo(center, center);
+                        canvas.fill();
+                        if (stroke) {
+                            canvas.stroke();
+                        }
+                        canvas.closePath();
+                    }
+
+                }
+
+                if (!stroke) {
+                    canvas.beginPath();
+                    canvas.arc(center, center, radiusMarker, 0, Math.PI * 2);
+                    canvas.stroke();
+                    canvas.closePath();
+                }
+
+                canvas.beginPath();
+                canvas.fillStyle = 'white';
+                canvas.moveTo(center, center);
+                canvas.arc(center, center, radiusCenter, 0, Math.PI * 2);
+                canvas.fill();
+                canvas.closePath();
+
+
+                canvas.fillStyle = '#454545';
+                canvas.textAlign = 'center';
+                canvas.textBaseline = 'middle';
+                canvas.font = 'bold '+(this.population < 100 ? '12' : (this.population < 1000 ? '11' : '9'))+'px sans-serif';
+
+                canvas.fillText(this.population, center, center, radiusCenter*2);
+            }
+        });
+
         $( document ).ready(function() {
+
+
             L.Mask = L.Polygon.extend({
                 options: {
                     stroke: false,
@@ -485,6 +666,8 @@
             L.mask = function (latLngs, options) {
                 return new L.Mask(latLngs, options);
             };
+
+
 
 
             $("#overlay").css("display","none");
@@ -1002,6 +1185,7 @@
                                     count = data.no_amenities;
                                     amenity_files[filename] = filename;
                                     amenity_summaries[filename] = count;
+                                    //alert("PREPRO:"+data.amenities_json);
                                     amenities_json = JSON.parse(data.amenities_json);
 
                                     /*var amenities_marker = [];
@@ -1012,24 +1196,36 @@
 
                                     var amenity_layers = []
 
-                                    var eLayer = L.geoJson(amenities_json,{
-                                        onEachFeature: function(feature,layer){
-                                            switch(feature.properties.amenity_type)
-                                            {
-                                                case "sustenance": layer.setIcon(new SustenanceMarker()); break;
-                                                case "education":  layer.setIcon(new EducationMarker()); break;
-                                                case "transport":  layer.setIcon(new TransportMarker()); break;
-                                                case "healthcare": layer.setIcon(new HealthcareMarker()); break;
-                                                case "finance": layer.setIcon(new FinanceMarker()); break;
-                                                case "commerce": layer.setIcon(new CommerceMarker()); break;
-                                                case "entertainment": layer.setIcon(new EntertainmentMarker()); break;
-                                                default: layer.setIcon(new OtherMarker()); break;
-                                            }
-                                        }
-                                    });
+                                    var pruneCluster = new PruneClusterForLeaflet();
 
-                                    //visualize_amenities[filename] = eLayer;
-                                    visualize_amenity_layers[filename] = eLayer;
+                                    pruneCluster.BuildLeafletClusterIcon = function(cluster) {
+                                        var e = new L.Icon.MarkerCluster;
+
+                                        e.stats = cluster.stats;
+                                        e.population = cluster.population;
+                                        return e;
+                                    };
+                                    $(amenities_json.features).each(function(key, data) {
+                                        console.log("DATA:"+data.properties);
+                                        var marker = new PruneCluster.Marker(data.properties.latitude, data.properties.longitude);
+                                        marker.data.name = data.properties.name;
+                                        marker.data.category_name = data.properties.amenity_type;
+                                        marker.data.popup  = "<div style=\"font-size:1em\"><b>Name:</b></div>"+data.properties.name+"<div style=\"font-size:1em\"><b>Amenity type:</b></div>"+data.properties.amenity_type;
+                                        switch(data.properties.amenity_type)
+                                        {
+                                            case "sustenance": marker.data.icon = new SustenanceMarker; marker.category = 0; break;
+                                            case "education":  marker.data.icon = new EducationMarker; marker.category = 1; break;
+                                            case "transport":  marker.data.icon = new TransportMarker; marker.category = 2; break;
+                                            case "healthcare": marker.data.icon = new HealthcareMarker; marker.category = 3; break;
+                                            case "finance": marker.data.icon = new FinanceMarker; marker.category = 4; break;
+                                            case "commerce": marker.data.icon = new CommerceMarker; marker.category = 5; break;
+                                            case "entertainment": marker.data.icon = new EntertainmentMarker; marker.category = 6; break;
+                                            default: marker.category = 7;break;
+                                        }
+                                        pruneCluster.RegisterMarker(marker);
+                                    });
+                                    pruneCluster.ProcessView();
+                                    visualize_amenity_layers[filename] = pruneCluster;
                                     refresh_amenity_list();
                                 },
                                 failure: function(data) { 
@@ -1047,7 +1243,6 @@
                     }
                 }
          });
-
         function visualize_amenity(inputElem){
             var filename = $(inputElem).val();
             if($(inputElem).is(':checked')){
@@ -1056,13 +1251,13 @@
                 for(x in amenity_json){
                     amenity_layer_list.push(L.geoJSON(amenity_json[x]).addTo(mymap));
                 }*/
-                visualize_amenity_layers[filename].addTo(mymap);// = amenity_layer_list;
+
+                visualize_amenities[filename] = true;
+                //visualize_amenity_layers[filename].addTo(mymap);// = amenity_layer_list;
+                mymap.addLayer(visualize_amenity_layers[filename]);
             }else{
-                var amenity_layer_list = visualize_amenity_layers[filename];
-                for(x in amenity_layer_list){
-                    mymap.removeLayer(amenity_layer_list[x]);
-                }
-                delete visualize_amenity_layers[ filename ];
+                mymap.removeLayer(visualize_amenity_layers[filename]);
+                delete visualize_amenities[ filename ];
             }
         }
 
@@ -1106,9 +1301,10 @@
                 $(inputDiv).on("click", function(event){
                     visualize_amenity($(this));
                 });
-                if(!(typeof visualize_amenity_layers['{{file}}'] === 'undefined')){
+                if(!(typeof visualize_amenities['{{file}}'] === 'undefined')){
                     $(inputDiv).prop("checked",true);
                 }
+
 
                 var pDiv = $("<label></label>").addClass("col s10 truncate-file").attr("style","top:0rem !important;padding-left:30px !important;").attr("for","{{file}}").html('{{file}}')
                 var aDiv = $("<a></a>").addClass("secondary-content col s2").attr("onclick","deletefile('amenity','{{file}}')");
@@ -1213,11 +1409,8 @@
             filename = to_delete.name;
             alert(type+":"+filename);
             if(type=="amenity"){
-                if(!(typeof visualize_amenity_layers[filename] === 'undefined')){
-                    var amenity_layer_list = visualize_amenity_layers[filename];
-                    for(x in amenity_layer_list){
-                        mymap.removeLayer(amenity_layer_list[x]);
-                    }
+                if(!(typeof visualize_amenities[filename] === 'undefined')){
+                    mymap.removeLayer(visualize_amenity_layers[filename]);
                 }
                 delete amenity_summaries[ filename ];
                 delete amenity_files[ filename ];
@@ -1304,155 +1497,13 @@
         
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            maxZoom: 18,
+            maxZoom: 17,
             id: 'xgb7.1jd5j7o2',
             accessToken: 'pk.eyJ1IjoieGdiNyIsImEiOiJjaXR6dGgxaHEwZnJjMm9vODRjbXk2NTczIn0.JGHOHRx1UpItrRAG1B0Fyw'
         }).addTo(mymap);
 
-        /************** HEAT MAP ************************/
 
 
-                // don't forget to include leaflet-heatmap.js
-            var quakePoints = [{lat: 14.600943832220155, lng:120.97576087340713, count: 3},{lat: 14.600435096555684, lng:120.975734051317, count: 1},{lat: 14.600243022580464, lng:120.97485428676009, count: 3} ]
-            ;
-
-    
-        /************************ EDIT SUTFF ****************/
-
-
-        var amenities = new L.LayerGroup();
-        var drawnItems = new L.FeatureGroup();
-        drawnItems.addLayer(amenities);
-        mymap.addLayer(drawnItems);
-        /*mymap.on('click', function(e) {
-               L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
-            });*/
-
-
-
-    
-        /******************* TOOLBAR STUFF **********************/
-
-        var heat = L.heatLayer(quakePoints, {radius: 20,
-                                        blur: 20,
-                                        maxZoom: 17,
-                                        gradient: {
-                                          0.2: '#ffffb2',
-                                          0.4: '#fd8d3c',
-                                          0.6: '#fd8d3c',
-                                          0.8: '#f03b20',
-                                          1: '#bd0026'
-                                          },
-                                        }).addTo(mymap);
-
-        var MyCustomMarker = L.Icon.extend({
-            options: {
-                shadowUrl: null,
-                iconAnchor: new L.Point(12, 12),
-                iconSize: new L.Point(24, 24),
-                iconUrl: "{% static 'leaflet/images/marker-icon.png' %}"
-            }
-        });
-
-        var options = {
-            draw: {
-                polyline: false,
-                polygon: false,
-                circle: false,
-                rectangle: false,
-                marker: false
-            },
-            edit: false
-        };
-
-        var drawControl = new L.Control.Draw(options);
-        mymap.addControl(drawControl);
-
-           mymap.on(L.Draw.Event.Created, function (e) {
-                var type = e.layerType,
-                    layer = e.layer;
-
-                if (type === 'marker') {
-                    layer.bindPopup('A popup!');
-
-                }
-
-                drawnItems.addLayer(layer);
-           });
-
-        var OtherMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/marker-icon.png' %}"
-        }
-    });
-
-    var SustenanceMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_sustenance.png' %}"
-        }
-    });
-
-    var EducationMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_education.png' %}"
-        }
-    });
-
-    var TransportMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_transportation.png' %}"
-        }
-    });
-
-    var HealthcareMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_healthcare.png' %}"
-        }
-    });
-
-    var FinanceMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_finance.png' %}"
-        }
-    });
-
-    var CommerceMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_commerce.png' %}"
-        }
-    });
-
-    var EntertainmentMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24),
-            iconUrl: "{% static 'leaflet/images/amenity_entertainment.png' %}"
-        }
-    });
-
-    
 
 
 </script>
