@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 {% load staticfiles %}
 <html>
@@ -230,7 +229,8 @@
 
     <div class="side-nav-bg col s2">
         <div id="runanalysis" class="row" style="margin-top:20px; margin-bottom:20px !important;">
-            <a id="run-analysis-btn" class="light-green btn col s10" style="font-size: 14px !important; margin-left:18px !important;">Run
+            <a id="run-analysis-btn" class="light-green btn col s10"
+               style="font-size: 14px !important; margin-left:18px !important;">Run
                 Analysis</a>
         </div>
         <div class="row">
@@ -277,12 +277,12 @@
                 <div class="trips-checkboxes">
                     <form action="#">
                         <p>
-                          <input class="with-gap" name="group1" type="radio" id="trip-produced-radio"  />
-                          <label for="trip-produced-radio">Trips Produced</label>
+                            <input class="with-gap" name="group1" type="radio" id="trip-produced-radio"/>
+                            <label for="trip-produced-radio">Trips Produced</label>
                         </p>
                         <p>
-                          <input class="with-gap" name="group1" type="radio" id="trip-attracted-radio"  />
-                          <label for="trip-attracted-radio">Trips Attracted</label>
+                            <input class="with-gap" name="group1" type="radio" id="trip-attracted-radio"/>
+                            <label for="trip-attracted-radio">Trips Attracted</label>
                         </p>
                     </form>
                 </div>
@@ -326,7 +326,8 @@
         </ul>
     </div>
     <div class="modal-footer">
-        <button id="household-modal-ok-btn" class="modal-action modal-close waves-effect waves-green btn-flat active-btn">
+        <button id="household-modal-ok-btn"
+                class="modal-action modal-close waves-effect waves-green btn-flat active-btn">
             Ok
         </button>
     </div>
@@ -339,23 +340,25 @@
         </ul>
     </div>
     <div class="modal-footer">
-        <button id="trafficzone-modal-ok-btn" class="modal-action modal-close waves-effect waves-green btn-flat active-btn">
+        <button id="trafficzone-modal-ok-btn"
+                class="modal-action modal-close waves-effect waves-green btn-flat active-btn">
             Ok
         </button>
     </div>
 </div>
 
 <div id="delete-modal" class="modal medium-modal">
-    <div class="modal-content row" >
+    <div class="modal-content row">
         <div class="col s12 m12 l12">
             <form action="">
                 <h5 name="delete-modal-message">This file will be removed. Are you sure?</h5>
             </form>
         </div>
     </div>
-     <div class="modal-footer">
+    <div class="modal-footer">
         <a id="delete-file" class="modal-action waves-effect waves-green btn-flat active-btn">Remove</a>
-        <a id="cancel-delete-file" class="modal-action modal-close waves-effect waves-green btn-flat green-text text-accent-4">Cancel</a>
+        <a id="cancel-delete-file"
+           class="modal-action modal-close waves-effect waves-green btn-flat green-text text-accent-4">Cancel</a>
     </div>
 </div>
 
@@ -373,45 +376,53 @@
 
 <div id="overlay">
     <div class="preloader-wrapper big active preloader-positioning">
-      <div class="spinner-layer spinner-blue">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-          <div class="circle"></div>
-        </div><div class="circle-clipper right">
-          <div class="circle"></div>
+        <div class="spinner-layer spinner-blue">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+                <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
         </div>
-      </div>
 
-      <div class="spinner-layer spinner-red">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-          <div class="circle"></div>
-        </div><div class="circle-clipper right">
-          <div class="circle"></div>
+        <div class="spinner-layer spinner-red">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+                <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
         </div>
-      </div>
 
-      <div class="spinner-layer spinner-yellow">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-          <div class="circle"></div>
-        </div><div class="circle-clipper right">
-          <div class="circle"></div>
+        <div class="spinner-layer spinner-yellow">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+                <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
         </div>
-      </div>
 
-      <div class="spinner-layer spinner-green">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-          <div class="circle"></div>
-        </div><div class="circle-clipper right">
-          <div class="circle"></div>
+        <div class="spinner-layer spinner-green">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+                <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
         </div>
-      </div>
     </div>
 </div>
 
@@ -774,7 +785,6 @@
 
         $("#run-analysis-btn").click(function(){
             if(custom_index_length(amenity_files)>0 && custom_index_length(household_files)>0 && custom_index_length(trafficzone_files)){
-
                 $("#overlay").css("display","inline");
                 //$("#loader-modal").openModal({dismissible:false});
                 $.ajax({
@@ -787,15 +797,15 @@
                         "zone_landuse_settings[]": comrpressArray(zone_landuse_settings)
                     },
                     success: function(data) {
-                        $("#overlay").css("display","none");
                         zonal_od = data.zonal_od;
                         max_attracted = data.max_trip_attracted;
                         max_produced = data.max_trip_produced;
                         json_response = JSON.parse(data.taz_json);
                         console.log(json_response.length+" LENK");
                         $(json_response).each(function(key, data) {
-                            taz_analyzed.push(data);
                             var zone_feature = JSON.parse(data.zone_feature);
+                            data.NAME_2 = zone_feature.properties.NAME_2;
+                            taz_analyzed.push(data);
                             visualize_analyzed_layers.push(L.geoJson(zone_feature, {style: {
                                 fillColor: '#0000FF',
                                 weight: 2,
@@ -806,8 +816,8 @@
                             }}).bindTooltip(getAnalyzedTooltip(zone_feature.properties.NAME_2, data)).addTo(mymap));
                             //console.log(key+":"+data.zone_polygon.__geom__);
                         });
-
                         refresh_zone_details();
+                        $("#overlay").css("display","none");
                     },
                     failure: function(data) { 
                         alert('Error occurred.');
@@ -829,7 +839,7 @@
                 var tableDiv = $("<table></table>").addClass("left-summary-table bordered col s12").attr("style","height:350px;");
                 var theadDiv = $("<thead></thead>");
                 var trheadDiv = $("<tr></tr>");
-                var th = $("<th></th>").html("Zone "+(parseInt(x)+1));
+                var th = $("<th></th>").html("Zone "+(parseInt(x)+1)+"("+taz_analyzed[x].NAME_2+")");
 
                 th.appendTo(trheadDiv);
                 trheadDiv.appendTo(theadDiv);
@@ -1003,57 +1013,51 @@
         });
 
         $("#household-modal-ok-btn").click(function() {
+            $("#overlay").css("display","inline");
             var file_rows = $("#household-modal").find("[name='file-checkbox']");
-                for(var i=0; i<file_rows.length; i++){
-                    var filename = $(file_rows[i]).val();
-                    if($(file_rows[i]).is(':checked')){
-                        if(typeof household_files[filename] === 'undefined'){
-                            count = 0;
-                            $.ajax({
-                                url: "{% url 'travel_demand_analysis:analysis_add_household' %}",
-                                method: "POST",
-                                data: {
-                                    "household_filename" : filename
-                                },
-                                success: function(data) {
-                                    alert("WENT HOUSEHOLD");
-                                    /*filename = data.household_filename;
-                                    count = data.no_households;
-                                    household_files.push(filename);
-                                    household_summaries.push(count);
-                                    refresh_household_list();*/
+            for(var i=0; i<file_rows.length; i++){
+                var filename = $(file_rows[i]).val();
+                if($(file_rows[i]).is(':checked')){
+                    if(typeof household_files[filename] === 'undefined'){
+                        count = 0;
+                        $.ajax({
+                            url: "{% url 'travel_demand_analysis:analysis_add_household' %}",
+                            method: "POST",
+                            data: {
+                                "household_filename" : filename
+                            },
+                            success: function(data) {
+                                /*filename = data.household_filename;
+                                count = data.no_households;
+                                household_files.push(filename);
+                                household_summaries.push(count);
+                                refresh_household_list();*/
 
-                                    filename = data.household_filename;
-                                    count = data.no_households;
-                                    alert("count: "+count);
-                                    household_files[filename] = filename;
-                                    household_summaries[filename] = count;
-                                    //households_json = JSON.parse(data.households_json);
+                                filename = data.household_filename;
+                                count = data.no_households;
+                                household_files[filename] = filename;
+                                household_summaries[filename] = count;
+                                //households_json = JSON.parse(data.households_json);
 
-                                    //var households_marker = [];
-                                    //$(households_json).each(function(key, data) {
-                                    //    households_marker.push(data);
-                                    //});
-                                    //visualize_households[filename] = households_marker;
-                                    refresh_household_list();
-                                    alert("ENDED HOUSEHOLD");
-                                },
-                                failure: function(data) { 
-                                    alert('Error occurred.');
-                                }
-                            }); 
-                        }
-                    }else{
-                        if(household_files.indexOf(filename) != -1){
-                            removeFromArray(household_files, filename);
-                            household_summaries.splice(index, 1);
-                            refresh_household_list();
-                        }
+                                //var households_marker = [];
+                                //$(households_json).each(function(key, data) {
+                                //    households_marker.push(data);
+                                //});
+                                //visualize_households[filename] = households_marker;
+                                refresh_household_list();
+                            },
+                            failure: function(data) {
+                                alert('Error occurred.');
+                            }
+                        });
                     }
                 }
+            }
+            $("#overlay").css("display","none");
         });
 
         $("#trafficzone-modal-ok-btn").click(function() {
+            $("#overlay").css("display","inline");
             var file_rows = $("#trafficzone-modal").find("[name='file-checkbox']");
             for(var i=0; i<file_rows.length; i++){
                 var filename = $(file_rows[i]).val();
@@ -1106,14 +1110,9 @@
                             }
                         });
                     }
-                }else{
-                    if(trafficzone_files.indexOf(filename) != -1){
-                        removeFromArray(trafficzone_files, filename);
-                        trafficzone_summaries.splice(index, 1);
-                        refresh_trafficzone_list();
-                    }
                 }
             }
+            $("#overlay").css("display","none");
         });
          
         function getColor_attraction(d) {
@@ -1168,80 +1167,64 @@
         }
         
         $("#amenity-modal-ok-btn").click(function() {
+            $("#overlay").css("display","inline");
             var file_rows = $("#amenity-modal").find("[name='file-checkbox']");
-                for(var i=0; i<file_rows.length; i++){
-                    var filename = $(file_rows[i]).val();
-                    if($(file_rows[i]).is(':checked')){
-                        if(typeof amenity_files[filename] === 'undefined'){
-                            count = 0;
-                            $.ajax({
-                                url: "{% url 'travel_demand_analysis:analysis_add_amenity' %}",
-                                method: "POST",
-                                data: {
-                                    "amenity_filename" : filename
-                                },
-                                success: function(data) {
-                                    filename = data.amenity_filename;
-                                    count = data.no_amenities;
-                                    amenity_files[filename] = filename;
-                                    amenity_summaries[filename] = count;
-                                    //alert("PREPRO:"+data.amenities_json);
-                                    amenities_json = JSON.parse(data.amenities_json);
+            for(var i=0; i<file_rows.length; i++){
+                var filename = $(file_rows[i]).val();
+                if($(file_rows[i]).is(':checked')){
+                    if(typeof amenity_files[filename] === 'undefined'){
+                        count = 0;
+                        $.ajax({
+                            url: "{% url 'travel_demand_analysis:analysis_add_amenity' %}",
+                            method: "POST",
+                            data: {
+                                "amenity_filename" : filename
+                            },
+                            success: function(data) {
+                                filename = data.amenity_filename;
+                                count = data.no_amenities;
+                                amenity_files[filename] = filename;
+                                amenity_summaries[filename] = count;
+                                amenities_json = JSON.parse(data.amenities_json);
 
-                                    /*var amenities_marker = [];
-                                    $(amenities_json).each(function(key, data) {
-                                        amenities_marker.push(data);
-                                    });
-                                    */
-
-                                    var amenity_layers = []
-
-                                    var pruneCluster = new PruneClusterForLeaflet();
-
-                                    pruneCluster.BuildLeafletClusterIcon = function(cluster) {
-                                        var e = new L.Icon.MarkerCluster;
-
-                                        e.stats = cluster.stats;
-                                        e.population = cluster.population;
-                                        return e;
-                                    };
-                                    $(amenities_json.features).each(function(key, data) {
-                                        console.log("DATA:"+data.properties);
-                                        var marker = new PruneCluster.Marker(data.properties.latitude, data.properties.longitude);
-                                        marker.data.name = data.properties.name;
-                                        marker.data.category_name = data.properties.amenity_type;
-                                        marker.data.popup  = "<div style=\"font-size:1em\"><b>Name:</b></div>"+data.properties.name+"<div style=\"font-size:1em\"><b>Amenity type:</b></div>"+data.properties.amenity_type;
-                                        switch(data.properties.amenity_type)
-                                        {
-                                            case "sustenance": marker.data.icon = new SustenanceMarker; marker.category = 0; break;
-                                            case "education":  marker.data.icon = new EducationMarker; marker.category = 1; break;
-                                            case "transport":  marker.data.icon = new TransportMarker; marker.category = 2; break;
-                                            case "healthcare": marker.data.icon = new HealthcareMarker; marker.category = 3; break;
-                                            case "finance": marker.data.icon = new FinanceMarker; marker.category = 4; break;
-                                            case "commerce": marker.data.icon = new CommerceMarker; marker.category = 5; break;
-                                            case "entertainment": marker.data.icon = new EntertainmentMarker; marker.category = 6; break;
-                                            default: marker.category = 7;break;
-                                        }
-                                        pruneCluster.RegisterMarker(marker);
-                                    });
-                                    pruneCluster.ProcessView();
-                                    visualize_amenity_layers[filename] = pruneCluster;
-                                    refresh_amenity_list();
-                                },
-                                failure: function(data) { 
-                                    alert('Error occurred.');
-                                }
-                            }); 
-                        }
-                    }else{
-                        if(amenity_files.indexOf(filename) != -1){
-                            index = removeFromArray(amenity_files, filename);
-                            amenity_summaries.splice(index, 1);
-                            refresh_amenity_list();
-                            //alert("Amenities total: "+computeTotal(amenity_summaries));
-                        }
+                                var pruneCluster = new PruneClusterForLeaflet();
+                                pruneCluster.BuildLeafletClusterIcon = function(cluster) {
+                                    var e = new L.Icon.MarkerCluster;
+                                    e.stats = cluster.stats;
+                                    e.population = cluster.population;
+                                    return e;
+                                };
+                                $(amenities_json.features).each(function(key, data) {
+                                    console.log("DATA:"+data.properties);
+                                    var marker = new PruneCluster.Marker(data.properties.latitude, data.properties.longitude);
+                                    marker.data.name = data.properties.name;
+                                    marker.data.category_name = data.properties.amenity_type;
+                                    marker.data.popup  = "<div style=\"font-size:1em\"><b>Name:</b></div>"+data.properties.name+"<div style=\"font-size:1em\"><b>Amenity type:</b></div>"+data.properties.amenity_type;
+                                    switch(data.properties.amenity_type)
+                                    {
+                                        case "sustenance": marker.data.icon = new SustenanceMarker; marker.category = 0; break;
+                                        case "education":  marker.data.icon = new EducationMarker; marker.category = 1; break;
+                                        case "transport":  marker.data.icon = new TransportMarker; marker.category = 2; break;
+                                        case "healthcare": marker.data.icon = new HealthcareMarker; marker.category = 3; break;
+                                        case "finance": marker.data.icon = new FinanceMarker; marker.category = 4; break;
+                                        case "commerce": marker.data.icon = new CommerceMarker; marker.category = 5; break;
+                                        case "entertainment": marker.data.icon = new EntertainmentMarker; marker.category = 6; break;
+                                        default: marker.category = 7;break;
+                                    }
+                                    pruneCluster.RegisterMarker(marker);
+                                });
+                                pruneCluster.ProcessView();
+                                visualize_amenity_layers[filename] = pruneCluster;
+                                refresh_amenity_list();
+                            },
+                            failure: function(data) {
+                                alert('Error occurred.');
+                            }
+                        });
                     }
                 }
+            }
+            $("#overlay").css("display","none");
          });
         function visualize_amenity(inputElem){
             var filename = $(inputElem).val();
@@ -1501,6 +1484,7 @@
             id: 'xgb7.1jd5j7o2',
             accessToken: 'pk.eyJ1IjoieGdiNyIsImEiOiJjaXR6dGgxaHEwZnJjMm9vODRjbXk2NTczIn0.JGHOHRx1UpItrRAG1B0Fyw'
         }).addTo(mymap);
+
 
 
 

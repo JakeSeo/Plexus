@@ -344,7 +344,8 @@
 
     <script>
         
-        
+        var data = {{landuse | safe}};
+
         var LU = {}; //will contain the polygons of Land Use
         var summary = {};
         summary['residential'] = 0;
@@ -707,7 +708,7 @@
         
     function initMap(){
                 var selectedFeature = null;
-                var eLayer = L.geoJson(gdata,{
+                var eLayer = L.geoJson(data,{
                     onEachFeature: function(feature,layer){
                         
                         //L.Util.setOptions(layer,{draggable:true});
