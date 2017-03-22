@@ -133,21 +133,76 @@
 
             <tbody id="file-list">
             {% for filename in filemanager_filenames%}
-            <tr>
+            <tr value ="{{filename.doc_name}}">
                 <td>{{filename.doc_name}}</td>
                 <td>{{filename.date_modified}}</td>
             </tr>
             {% endfor %}
             </tbody>
+            
         </table>
     </div>
 </div>
 <script type="text/javascript">
+    
+    $( document ).ready(function() {
+        $.ajaxSetup({
+            cache: false,
+             beforeSend: function(xhr, settings) {
+                 function getCookie(name) {
+                     var cookieValue = null;
+                     if (document.cookie && document.cookie != '') {
+                         var cookies = document.cookie.split(';');
+                         for (var i = 0; i < cookies.length; i++) {
+                             var cookie = jQuery.trim(cookies[i]);
+                             // Does this cookie string begin with the name we want?
+                             if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                 break;
+                             }
+                         }
+                     }
+                     return cookieValue;
+                 }
+                 if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                     // Only send the token to relative URLs i.e. locally.
+                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                 }
+             }
+        });
+
+    });
+    
     $('#filefield_id').on('change', function() {
         alert("AUTO SUBMIT");
        $('#upload-form').submit();
     });
 
+    
+    $("#file-list tr").click(function() {
+        var selected = $(this).hasClass("selected");
+        $("#file-list tr").removeClass("selected");
+        if(!selected)
+                $(this).addClass("selected");
+        else //should go straight to the file's class
+        {
+            var val = $(this).attr('value');
+            alert("file " + val);
+             $.ajax({
+                    url: "{% url 'amenities_manager:manage' %}",
+                    method: "POST",
+                    data: {
+                        "filename" : val,
+                    },// This is the default though, you don't actually need to always mention it
+                    success: function(data){alert("sent to back")
+                                            if(data=="success")
+                                                window.location("{% url 'amenities_manager:manageLoad' %}");
+                                           },
+                    failure: function(data){alert('Error occurred.')}
+                });
+            
+        }
+    });
 </script>
 </body>
 </html>

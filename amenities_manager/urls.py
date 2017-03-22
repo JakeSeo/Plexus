@@ -6,5 +6,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^manage/$', views.manage, name='manage'),
     url(r'^manage/save/$', views.manageSave, name="manageSave"),
+    #url(r'^manage/load/$', views.manageLoad, name="manageLoad"),
     url(r'^choose/$', views.choose, name='choose'),
+    url(r'^manage/load/$', views.manageLoad, name='manageLoad'),
 ]

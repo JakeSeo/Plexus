@@ -325,6 +325,12 @@ table.highlight tbody tr:hover
     color: white !important;
 }
 
+.selected
+{
+    background-color: dimgray !important;
+    color: white !important;
+}
+
 .file-manager-table
 {
     margin-top: 20px !important;
