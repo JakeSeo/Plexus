@@ -97,7 +97,7 @@ def analysis_add_amenity(request):
         amenity_dump = json.dumps(json_data)
 
         data = {}
-        data['no_amenities'] = len(json_data)
+        data['no_amenities'] = len(json_data['features'])
         data['amenity_filename'] = amenity_filename
         data['amenities_json'] = amenity_dump
 
@@ -110,12 +110,11 @@ def analysis_add_household(request):
         household_filename = request.POST.get('household_filename')
         file_path = "media/households/" + str(household_filename)
 
-        num_lines = 0
-
-        for line in open(file_path, encoding="utf-8").readlines(): num_lines += 1
+        with open(file_path, encoding="utf-8") as f:
+            json_data = json.load(f)
 
         data = {}
-        data['no_households'] = num_lines
+        data['no_households'] = len(json_data)
         data['household_filename'] = household_filename
         return HttpResponse(json.dumps(data), content_type='application/json')
     return HttpResponse("Non ajax post request")

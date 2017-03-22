@@ -75,7 +75,7 @@ class TAZ:
     def get_attr_vals(self):
         if(self.no_hh>0):
             self.total_income = self.total_income/self.no_hh
-        return [self.trips, self.no_hh, self.no_mem, self.no_mem_educ, self.no_mem_work, self.total_income, 
+        return [self.trips, self.no_hh, self.no_mem, self.no_mem_educ, self.no_mem_work, self.total_income,
                 self.no_amty_sustenance, self.no_amty_education, self.no_amty_transport, self.no_amty_healthcare,
                 self.no_amty_finance, self.no_amty_commerce, self.no_amty_entertainment, self.no_amty_other,
                 self.lu_ind_commercial, self.lu_ind_parks, self.lu_ind_industrial, self.lu_ind_agriculture,
@@ -84,13 +84,13 @@ class TAZ:
 class TripAnalyzer:
     def __init__(self, taz_geo_files, cbms_files, amenity_files, zone_landuse_setting):
         self.traffic_analysis_zones = []
-        
+
         self.taz_geo_files = taz_geo_files
         self.cbms_files = cbms_files
         self.amenity_files = amenity_files
         self.zone_landuse_setting = zone_landuse_setting
-    
-    
+
+
     def trip_analyze(self):
         for file in self.taz_geo_files:
             geofile = pygeoj.load("media/trafficzones/"+str(file))
@@ -100,24 +100,24 @@ class TripAnalyzer:
                 raw_taz.zone_feature = geojson.dumps(feature)
                 raw_taz.zone_polygon = polygon
                 self.traffic_analysis_zones.append(raw_taz)
-                
+
         #Loop through all cbms files pa
         abandoned_ctr = 0
         for file in self.cbms_files:
-            with io.open("media/households/"+str(file), encoding="utf-8") as z:
-                for line in z:
-                    data = json.loads(line, strict=False)
-                    hh_lat, hh_long = data['latitude'], data['longitude']
+            with open("media/households/"+str(file), encoding="utf-8") as json_data:
+                json_elems = json.load(json_data)
+                for json_obj in json_elems:
+                    hh_lat, hh_long = json_obj['latitude'], json_obj['longitude']
                     if not(hh_lat == "0" and hh_long == "0"):
                         point = Point(float(hh_long),float(hh_lat))
                         falinany = 0
                         for index, zone in enumerate(self.traffic_analysis_zones):
                             if zone.zone_polygon.contains(point):
                                 zone.no_hh = zone.no_hh + 1
-                                zone.no_mem = zone.no_mem + int(data['phsize'])
-                                zone.no_mem_educ = zone.no_mem_educ + int(data['toteduc'])
-                                zone.no_mem_work = zone.no_mem_work + int(data['totjob'])
-                                zone.total_income = zone.total_income + float(data['totin'])
+                                zone.no_mem = zone.no_mem + int(json_obj['phsize'])
+                                zone.no_mem_educ = zone.no_mem_educ + int(json_obj['toteduc'])
+                                zone.no_mem_work = zone.no_mem_work + int(json_obj['totjob'])
+                                zone.total_income = zone.total_income + float(json_obj['totin'])
                                 falinany = 1
                         if(falinany == 0):
                             abandoned_ctr = abandoned_ctr+1
@@ -138,12 +138,13 @@ class TripAnalyzer:
                 if am_lat == "0" and am_long == "0":
                     print(line)
                 else:
-                    point = Point(float(am_long), float(am_lat))
+                    point = Point(float(am_lat), float(am_long))
                     for index, zone in enumerate(self.traffic_analysis_zones):
+                        #print("LOOP PA MORE: "+str(zone.zone_polygon.contains(point))+" LAT,LONG:"+str(am_lat)+","+str(am_long))
                         if zone.zone_polygon.contains(point):
                             zone.total_amenities = zone.total_amenities + 1
-                            #amenity_type = json_obj['properties']['amenity_type']
-                            amenity_type = feature.properties.amenity_type
+                            amenity_type = json_obj['properties']['amenity_type']
+                            #amenity_type = feature.properties.amenity_type
                             if amenity_type == "sustenance":
                                 zone.no_amty_sustenance = zone.no_amty_sustenance + 1
                             elif amenity_type == "education":
@@ -160,6 +161,47 @@ class TripAnalyzer:
                                 zone.no_amty_entertainment = zone.no_amty_entertainment + 1
                             elif amenity_type == "other":
                                 zone.no_amty_other = zone.no_amty_other + 1
+
+
+        # for file in landuse_files:
+        #     geofile = pygeoj.load(file)
+        #     for feature in geofile:
+        #         for zone in self.traffic_analysis_zones:
+        #             if(feature.properties.landuse_type == "commercial"):
+        #                 zone.lu_commercial_obj.area = zone.lu_commercial_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
+        #             elif(feature.properties.landuse_type == "parks"):
+        #                 zone.lu_parks_obj.area = zone.lu_parks_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
+        #             elif(feature.properties.landuse_type == "industrial"):
+        #                 zone.lu_industrial_obj.area = zone.lu_industrial_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
+        #             elif(feature.properties.landuse_type == "agriculture"):
+        #                 zone.lu_agriculture_obj.area = zone.lu_agriculture_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
+        #             elif(feature.properties.landuse_type == "residential"):
+        #                 zone.lu_residential_obj.area = zone.lu_residential_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
+        #             elif(feature.properties.landuse_type == "utilities"):
+        #                 zone.lu_utilities_obj.area = zone.lu_utilities_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
+        #             elif(feature.properties.landuse_type == "other"):
+        #                 zone.lu_other_obj.area = zone.lu_other_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
+        #
+        # for zone in self.traffic_analysis_zones:
+        #     zone.compute_landuse()
+        #     if (zone.main_landuse == "commercial"):
+        #         print("went1")
+        #         zone.lu_ind_commercial = 1
+        #     elif (zone.main_landuse == "parks"):
+        #         print("went2")
+        #         zone.lu_ind_parks = 1
+        #     elif (zone.main_landuse == "industrial"):
+        #         print("went3")
+        #         zone.lu_ind_industrial = 1
+        #     elif (zone.main_landuse == "agriculture"):
+        #         print("went4")
+        #         zone.lu_ind_agriculture = 1
+        #     elif (zone.main_landuse == "residential"):
+        #         print("went5")
+        #         zone.lu_ind_residential = 1
+        #     elif (zone.main_landuse == "utilities"):
+        #         print("went6")
+        #         zone.lu_ind_utilities = 1
 
         for index, landuse in enumerate(self.zone_landuse_setting):
             if(landuse == "commercial"):
@@ -188,9 +230,9 @@ class TripAnalyzer:
                 'no_amty_commerce','no_amty_entertainment','no_amty_other','lu_ind_commercial',
                 'lu_ind_parks', 'lu_ind_industrial', 'lu_ind_agriculture','lu_ind_residential',
                 'lu_ind_utilities']
-    
-        pre_tripgen_table = pd.DataFrame(columns=cols) 
-            
+
+        pre_tripgen_table = pd.DataFrame(columns=cols)
+
         for index, zone in enumerate(self.traffic_analysis_zones):
             pre_tripgen_table.loc[index] = zone.get_attr_vals()
 

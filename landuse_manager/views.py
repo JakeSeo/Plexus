@@ -70,7 +70,7 @@ def choose(request):
             newfile.document.name = "landuses/" + original_name + extension
             newfile.doc_name = original_name
             newfile.save()
-            #cleanLandUse(original_name)
+            cleanLandUse(original_name, extension)
             return redirect('landuse_manager:choose')
     else:
         form = DocumentForm()
@@ -82,13 +82,13 @@ def choose(request):
     }
     return render(request, 'landuse_manager/File-Manager.html', context)
 
-def cleanLandUse(source):
+def cleanLandUse(source, srcExtension):
     # ctr = 0
-    f = io.open("media/landuse/" + source + "_cleaned.json", 'w', encoding="utf-8")
+    f = io.open("media/landuse/" + source + "_cleaned.geojson", 'w', encoding="utf-8")
     f.write("[\n")
     ctr = 0
     index = -1
-    with io.open("media/landuse/" + source + ".json", encoding="utf-8") as z:
+    with io.open("media/landuse/" + source + srcExtension, encoding="utf-8") as z:
         m = json.load(z)
         for data in m['features']:
             if ctr != 0:
