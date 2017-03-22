@@ -729,6 +729,7 @@
 
                         console.log("INIT names " + feature.properties.name);
                         console.log("INIT id " + feature.properties.id);
+                        layer.feature.properties.area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
                         LU[feature.properties.id] = layer;
 
                         layer.on('click',function(e){
