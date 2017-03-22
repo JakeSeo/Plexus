@@ -7,18 +7,22 @@ from household_manager.models import Document, FileManagerDocument
 import os
 import os.path, time
 import io
+from django.utils.safestring import mark_safe
+
 
 def index(request):
-    context = {}
-    return render(request, 'household_manager/index.html', context)
+    return redirect('choose')
 
 
-def manage(request):
-    with open('household_manager/coors.json', encoding='utf8') as f:
+def manage(request, filename):
+    with open('media/households/' + filename, encoding='utf8') as f:
         json_data = json.load(f)
+        print(json_data)
 
     context = {
-        'coordinates_var' : json_data["features"],
+        'filename': filename,
+        'json_data': mark_safe(json_data),
+
     }
     return render(request, 'household_manager/Household-Manager.html', context)
 

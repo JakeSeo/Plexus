@@ -133,7 +133,7 @@
             <tbody id="file-list">
             {% for filename in filemanager_filenames%}
             <tr>
-                <td>{{filename.doc_name}}</td>
+                <td><a href="{% url 'household_manager:manage' filename.doc_name %}">{{filename.doc_name}}</a></td>
                 <td>{{filename.date_modified}}</td>
             </tr>
             {% endfor %}
