@@ -1,6 +1,5 @@
-{% load staticfiles %}
-
 <!DOCTYPE html>
+{% load staticfiles %}
 <html>
     <head>
         <title>VIA - Land Use Manager</title>
@@ -81,7 +80,7 @@
         <div class="body-content row">
             <div class="row file-title-row">
                 <form class="input-field col s6 input-file-name">
-                    <input type="text" style = "border-bottom: 0 !important;" value="LandUse-Valenzuela">
+                    <input type="text" style = "border-bottom: 0 !important;" value="{{ filename }}">
                 </form>
                 <!--div class="right col s1">&nbsp;</div-->
                 <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;" onClick="exportLandUse();">Export</a>
@@ -430,7 +429,7 @@
             LU_to_export = JSON.stringify(LU_json);
             console.log("JSONIFIED: "+LU_to_export);
             $.ajax({
-                    url: "{% url 'landuse_manager:manageSave' %}",
+                    url: "{% url 'landuse_manager:manageSave' filename %}",
                     method: "POST",
                     data: {
                         "landuse" : LU_to_export,

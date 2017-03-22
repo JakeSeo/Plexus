@@ -29,7 +29,6 @@
         <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
         <script src="{% static 'leaflet/heatmap.js' %}"></script>
         <script src="{% static 'leaflet/leaflet-heatmap.js' %}"></script>
-        <script src="{% static 'leaflet/Leaflet.Editable/src/Leaflet.Editable.js' %}"></script>
     </head>
   
     <body>
@@ -83,7 +82,7 @@
         <div class="body-content row">
             <div class="row file-title-row">
                 <form class="input-field col s6 input-file-name">
-                    <input type="text" style = "border-bottom: 0 !important;" value="Amenities-Valenzuela">
+                    <input type="text" style = "border-bottom: 0 !important;" value="{{ filename }}">
                 </form>
                 <!--div class="right col s1">&nbsp;</div-->
                 <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;" onClick="exportAmenities();">Export</a>
@@ -338,7 +337,7 @@
     <script>
         
         
-       //data = {{amenities | safe}};
+       var data = {{ amenities }};
         
         var markers = {}; //will contain the amenities
         var summary = {};
@@ -425,7 +424,7 @@
             markers_to_export = JSON.stringify(markers_json);
             console.log("JSONIFIED: "+markers_to_export);
             $.ajax({
-                    url: "{% url 'amenities_manager:manageSave' %}",
+                    url: "{% url 'amenities_manager:manageSave' filename%}",
                     method: "POST",
                     data: {
                         "amenities" : markers_to_export,
@@ -735,7 +734,7 @@
         
     function initMap(){
                 var selectedFeature = null;
-                var eLayer = L.geoJson(gdata,{
+                var eLayer = L.geoJson(data,{
                     onEachFeature: function(feature,layer){
                         switch(feature.properties.amenity_type)
                         {
