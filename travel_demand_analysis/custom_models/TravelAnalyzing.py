@@ -163,67 +163,68 @@ class TripAnalyzer:
                                 zone.no_amty_other = zone.no_amty_other + 1
 
 
-        # for file in landuse_files:
-        #     geofile = pygeoj.load(file)
-        #     for feature in geofile:
-        #         for zone in self.traffic_analysis_zones:
-        #             if(feature.properties.landuse_type == "commercial"):
-        #                 zone.lu_commercial_obj.area = zone.lu_commercial_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "parks"):
-        #                 zone.lu_parks_obj.area = zone.lu_parks_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "industrial"):
-        #                 zone.lu_industrial_obj.area = zone.lu_industrial_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "agriculture"):
-        #                 zone.lu_agriculture_obj.area = zone.lu_agriculture_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "residential"):
-        #                 zone.lu_residential_obj.area = zone.lu_residential_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "utilities"):
-        #                 zone.lu_utilities_obj.area = zone.lu_utilities_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #             elif(feature.properties.landuse_type == "other"):
-        #                 zone.lu_other_obj.area = zone.lu_other_obj.area + shape(feature.geometry).intersection(zone.zone_polygon).area
-        #
-        # for zone in self.traffic_analysis_zones:
-        #     zone.compute_landuse()
-        #     if (zone.main_landuse == "commercial"):
-        #         print("went1")
-        #         zone.lu_ind_commercial = 1
-        #     elif (zone.main_landuse == "parks"):
-        #         print("went2")
-        #         zone.lu_ind_parks = 1
-        #     elif (zone.main_landuse == "industrial"):
-        #         print("went3")
-        #         zone.lu_ind_industrial = 1
-        #     elif (zone.main_landuse == "agriculture"):
-        #         print("went4")
-        #         zone.lu_ind_agriculture = 1
-        #     elif (zone.main_landuse == "residential"):
-        #         print("went5")
-        #         zone.lu_ind_residential = 1
-        #     elif (zone.main_landuse == "utilities"):
-        #         print("went6")
-        #         zone.lu_ind_utilities = 1
+        for file in landuse_files:
+            with open("media/landuses/" + str(file), encoding="utf-8") as json_data:
+                json_elems = json.load(json_data)
+            for json_obj in json_elems['features']:
+                for zone in self.traffic_analysis_zones:
+                    if(json_obj['properties']['landuse'] == "commercial"):
+                        zone.lu_commercial_obj.area = zone.lu_commercial_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
+                    elif(json_obj['properties']['landuse'] == "parks"):
+                        zone.lu_parks_obj.area = zone.lu_parks_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
+                    elif(json_obj['properties']['landuse'] == "industrial"):
+                        zone.lu_industrial_obj.area = zone.lu_industrial_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
+                    elif(json_obj['properties']['landuse'] == "agriculture"):
+                        zone.lu_agriculture_obj.area = zone.lu_agriculture_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
+                    elif(json_obj['properties']['landuse'] == "residential"):
+                        zone.lu_residential_obj.area = zone.lu_residential_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
+                    elif(json_obj['properties']['landuse'] == "utilities"):
+                        zone.lu_utilities_obj.area = zone.lu_utilities_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
+                    elif(json_obj['properties']['landuse'] == "other"):
+                        zone.lu_other_obj.area = zone.lu_other_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
 
-        for index, landuse in enumerate(self.zone_landuse_setting):
-            if(landuse == "commercial"):
-                self.traffic_analysis_zones[index].main_landuse = "commercial"
-                self.traffic_analysis_zones[index].lu_ind_commercial = 1
-            elif(landuse == "parks"):
-                self.traffic_analysis_zones[index].main_landuse = "parks"
-                self.traffic_analysis_zones[index].lu_ind_parks = 1
-            elif(landuse == "industrial"):
-                self.traffic_analysis_zones[index].main_landuse = "industrial"
-                self.traffic_analysis_zones[index].lu_ind_industrial = 1
-            elif(landuse == "agriculture"):
-                self.traffic_analysis_zones[index].main_landuse = "agriculture"
-                self.traffic_analysis_zones[index].lu_ind_agriculture = 1
-            elif(landuse == "residential"):
-                self.traffic_analysis_zones[index].main_landuse = "residential"
-                self.traffic_analysis_zones[index].lu_ind_residential = 1
-            elif(landuse == "utilities"):
-                self.traffic_analysis_zones[index].main_landuse = "utilities"
-                self.traffic_analysis_zones[index].lu_ind_utilities = 1
-            else:
-                self.traffic_analysis_zones[index].main_landuse = "other"
+        for zone in self.traffic_analysis_zones:
+            zone.compute_landuse()
+            if (zone.main_landuse == "commercial"):
+                print("went1")
+                zone.lu_ind_commercial = 1
+            elif (zone.main_landuse == "parks"):
+                print("went2")
+                zone.lu_ind_parks = 1
+            elif (zone.main_landuse == "industrial"):
+                print("went3")
+                zone.lu_ind_industrial = 1
+            elif (zone.main_landuse == "agriculture"):
+                print("went4")
+                zone.lu_ind_agriculture = 1
+            elif (zone.main_landuse == "residential"):
+                print("went5")
+                zone.lu_ind_residential = 1
+            elif (zone.main_landuse == "utilities"):
+                print("went6")
+                zone.lu_ind_utilities = 1
+
+        # for index, landuse in enumerate(self.zone_landuse_setting):
+        #     if(landuse == "commercial"):
+        #         self.traffic_analysis_zones[index].main_landuse = "commercial"
+        #         self.traffic_analysis_zones[index].lu_ind_commercial = 1
+        #     elif(landuse == "parks"):
+        #         self.traffic_analysis_zones[index].main_landuse = "parks"
+        #         self.traffic_analysis_zones[index].lu_ind_parks = 1
+        #     elif(landuse == "industrial"):
+        #         self.traffic_analysis_zones[index].main_landuse = "industrial"
+        #         self.traffic_analysis_zones[index].lu_ind_industrial = 1
+        #     elif(landuse == "agriculture"):
+        #         self.traffic_analysis_zones[index].main_landuse = "agriculture"
+        #         self.traffic_analysis_zones[index].lu_ind_agriculture = 1
+        #     elif(landuse == "residential"):
+        #         self.traffic_analysis_zones[index].main_landuse = "residential"
+        #         self.traffic_analysis_zones[index].lu_ind_residential = 1
+        #     elif(landuse == "utilities"):
+        #         self.traffic_analysis_zones[index].main_landuse = "utilities"
+        #         self.traffic_analysis_zones[index].lu_ind_utilities = 1
+        #     else:
+        #         self.traffic_analysis_zones[index].main_landuse = "other"
 
         cols = ['trips','no_hh','no_mem','no_mem_educ','no_mem_work','avg_income','no_amty_sustenance',
                 'no_amty_education','no_amty_transport','no_amty_healthcare','no_amty_finance',
