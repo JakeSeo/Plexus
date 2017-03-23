@@ -8,6 +8,7 @@ import os
 import os.path, time
 from matplotlib import pyplot as plt
 import shapely
+from shapely.geometry import shape
 from shapely.geometry.polygon import LinearRing, Polygon
 from shapely.geometry.multipolygon import MultiPolygon
 import geojson
@@ -93,75 +94,78 @@ def cleanLandUse(source, srcExtension):
     f.write("[\n")
     ctr = 0
     index = -1
-    with open("media/landuses/" + source + srcExtension, encoding="utf-8") as z:
+    with open("media/landuses/" + source + srcExtension) as z:
         m = json.load(z)
         print(json.dumps(m))
         for data in m['features']:
-            print("WEW")
-            if ctr != 0:
-                f.write(",\n")
-            else:
-                ctr = ctr + 1
-            index = index + 1
-            if 'landuse' not in  data['properties']:
-                data['properties']['landuse'] = "others"
-            else:
-                if (data['properties']['landuse'] == "residential"):
-                    data['properties']['landuse'] = "residential"
-                elif(data['properties']['landuse'] == "cemetery" or
-                data['properties']['landuse'] == "commercial" or
-                data['properties']['landuse'] == "depot" or
-                data['properties']['landuse'] == "garages" or
-                data['properties']['landuse'] == "port" or
-                data['properties']['landuse'] == "quarry" or
-                data['properties']['landuse'] == "railway" or
-                data['properties']['landuse'] == "retail"):
-                    data['properties']['landuse'] = "commercial"
-                elif(data['properties']['landuse'] == "grass" or
-                data['properties']['landuse'] == "forest" or
-                data['properties']['landuse'] == "meadow" or
-                data['properties']['landuse'] == "salt_pond" or
-                data['properties']['landuse'] == "village_green"):
-                    data['properties']['landuse'] = "parks"
-                elif( data['properties']['landuse'] == "construction" or
-                data['properties']['landuse'] == "greenfield" or
-                data['properties']['landuse'] == "industrial"):
-                    data['properties']['landuse'] = "industrial"
-                elif(data['properties']['landuse'] == "allotment" or
-                data['properties']['landuse'] == "basin" or
-                data['properties']['landuse'] == "brownfield" or
-                data['properties']['landuse'] == "farmland" or
-                data['properties']['landuse'] == "farmyard" or
-                data['properties']['landuse'] == "greenhouse_horticulture" or
-                data['properties']['landuse'] == "orchard" or
-                data['properties']['landuse'] == "pasture" or
-                data['properties']['landuse'] == "peat_cutting" or
-                data['properties']['landuse'] == "plant_nursery" or
-                data['properties']['landuse'] == "reservoir" or
-                data['properties']['landuse'] == "vineyard"):
-                    data['properties']['landuse'] = "agriculture"
-                elif(data['properties']['landuse'] == "landfill"):
-                    data['properties']['landuse'] = "utilities"
-                elif(data['properties']['landuse'] == "military" or
-                data['properties']['landuse'] == "recreation_ground" or
-                data['properties']['landuse'] == "user defined" or
-                data['properties']['landuse'] == "conservation"):
+            polygon = shape(data['geometry'])
+            if polygon.is_valid:
+                print("WEW")
+                if ctr != 0:
+                    f.write(",\n")
+                else:
+                    ctr = ctr + 1
+                index = index + 1
+                if 'landuse' not in  data['properties']:
                     data['properties']['landuse'] = "others"
+                else:
+                    if (data['properties']['landuse'] == "residential"):
+                        data['properties']['landuse'] = "residential"
+                    elif(data['properties']['landuse'] == "cemetery" or
+                    data['properties']['landuse'] == "commercial" or
+                    data['properties']['landuse'] == "depot" or
+                    data['properties']['landuse'] == "garages" or
+                    data['properties']['landuse'] == "port" or
+                    data['properties']['landuse'] == "quarry" or
+                    data['properties']['landuse'] == "railway" or
+                    data['properties']['landuse'] == "retail"):
+                        data['properties']['landuse'] = "commercial"
+                    elif(data['properties']['landuse'] == "grass" or
+                    data['properties']['landuse'] == "forest" or
+                    data['properties']['landuse'] == "meadow" or
+                    data['properties']['landuse'] == "salt_pond" or
+                    data['properties']['landuse'] == "village_green"):
+                        data['properties']['landuse'] = "parks"
+                    elif( data['properties']['landuse'] == "construction" or
+                    data['properties']['landuse'] == "greenfield" or
+                    data['properties']['landuse'] == "industrial"):
+                        data['properties']['landuse'] = "industrial"
+                    elif(data['properties']['landuse'] == "allotment" or
+                    data['properties']['landuse'] == "basin" or
+                    data['properties']['landuse'] == "brownfield" or
+                    data['properties']['landuse'] == "farmland" or
+                    data['properties']['landuse'] == "farmyard" or
+                    data['properties']['landuse'] == "greenhouse_horticulture" or
+                    data['properties']['landuse'] == "orchard" or
+                    data['properties']['landuse'] == "pasture" or
+                    data['properties']['landuse'] == "peat_cutting" or
+                    data['properties']['landuse'] == "plant_nursery" or
+                    data['properties']['landuse'] == "reservoir" or
+                    data['properties']['landuse'] == "vineyard"):
+                        data['properties']['landuse'] = "agriculture"
+                    elif(data['properties']['landuse'] == "landfill"):
+                        data['properties']['landuse'] = "utilities"
+                    elif(data['properties']['landuse'] == "military" or
+                    data['properties']['landuse'] == "recreation_ground" or
+                    data['properties']['landuse'] == "user defined" or
+                    data['properties']['landuse'] == "conservation"):
+                        data['properties']['landuse'] = "others"
 
-            f.write("{\"type\": \"Feature\", \"properties\": {")
-            f.write("\"id\": \"" + str(index) + "\", ")
-            if "name" not in data['properties']:
-                data['properties']['name'] = "no name available"
-            f.write("\"name\": \"" + str.replace(data['properties']['name'], '\\', '\\\\')+ "\", ")
-            polygon = shapely.geometry.geo.shape(data['geometry'])
-            f.write("\"centerlatitude\": \"" + str(polygon.centroid.x) + "\", ")
-            f.write("\"centerlongitude\": \"" + str(polygon.centroid.y) + "\", ")
-            f.write("\"capacity\": \"200\", ")
-            f.write("\"landuse_type\": \"" + data['properties']['landuse'] + "\"},")
-            #area here
-            f.write("\"geometry\": {\"type\": \"Polygon\",")
-            f.write("\"coordinates\": " + str(data['geometry']['coordinates'])+ "}")
-            f.write("}")
+                f.write("{\"type\": \"Feature\", \"properties\": {")
+                f.write("\"id\": \"" + str(index) + "\", ")
+                if "name" not in data['properties']:
+                    data['properties']['name'] = "no name available"
+                f.write("\"name\": \"" + str.replace(data['properties']['name'], '\\', '\\\\')+ "\", ")
+                polygon = shapely.geometry.geo.shape(data['geometry'])
+                f.write("\"centerlatitude\": \"" + str(polygon.centroid.x) + "\", ")
+                f.write("\"centerlongitude\": \"" + str(polygon.centroid.y) + "\", ")
+                f.write("\"capacity\": \"200\", ")
+                f.write("\"landuse_type\": \"" + data['properties']['landuse'] + "\"},")
+                #area here
+                f.write("\"geometry\": { \"type\":\"" + data['geometry']['type'] + "\",")
+                str_coors = str(data['geometry']['coordinates'])
+                f.write("\"coordinates\": " + str(data['geometry']['coordinates'])+ "}")
+                f.write("}")
     f.write("\n]")
     f.write("}")
     f.close()

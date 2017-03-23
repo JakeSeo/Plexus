@@ -808,7 +808,7 @@
                         "amenity_files[]" : comrpressArray(amenity_files),
                         "household_files[]" : comrpressArray(household_files),
                         "trafficzone_files[]": comrpressArray(trafficzone_files),
-                        "zone_landuse_settings[]": comrpressArray(zone_landuse_settings)
+                        "landuse_files[]": comrpressArray(landuse_files)
                     },
                     success: function(data) {
                         zonal_od = data.zonal_od;
@@ -1359,7 +1359,7 @@
                 for(x in landuse_json){
                     console.log(landuse_json[x]);
                     landuse_layer_list.push(L.geoJSON(landuse_json[x], {style: {
-                                        fillColor: '#CCCCDD',
+                                        fillColor: '#42FF0C',
                                         weight: 2,
                                         opacity: 1,
                                         color: 'white',

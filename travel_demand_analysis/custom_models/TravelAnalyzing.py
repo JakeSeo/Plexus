@@ -82,13 +82,12 @@ class TAZ:
                 self.lu_ind_residential, self.lu_ind_utilities]
 
 class TripAnalyzer:
-    def __init__(self, taz_geo_files, cbms_files, amenity_files, zone_landuse_setting):
+    def __init__(self, taz_geo_files, cbms_files, amenity_files, landuse_files):
         self.traffic_analysis_zones = []
-
         self.taz_geo_files = taz_geo_files
         self.cbms_files = cbms_files
         self.amenity_files = amenity_files
-        self.zone_landuse_setting = zone_landuse_setting
+        self.landuse_files = landuse_files
 
 
     def trip_analyze(self):
@@ -163,24 +162,24 @@ class TripAnalyzer:
                                 zone.no_amty_other = zone.no_amty_other + 1
 
 
-        for file in landuse_files:
+        for file in self.landuse_files:
             with open("media/landuses/" + str(file), encoding="utf-8") as json_data:
                 json_elems = json.load(json_data)
             for json_obj in json_elems['features']:
                 for zone in self.traffic_analysis_zones:
-                    if(json_obj['properties']['landuse'] == "commercial"):
+                    if(json_obj['properties']['landuse_type'] == "commercial"):
                         zone.lu_commercial_obj.area = zone.lu_commercial_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
-                    elif(json_obj['properties']['landuse'] == "parks"):
+                    elif(json_obj['properties']['landuse_type'] == "parks"):
                         zone.lu_parks_obj.area = zone.lu_parks_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
-                    elif(json_obj['properties']['landuse'] == "industrial"):
+                    elif(json_obj['properties']['landuse_type'] == "industrial"):
                         zone.lu_industrial_obj.area = zone.lu_industrial_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
-                    elif(json_obj['properties']['landuse'] == "agriculture"):
+                    elif(json_obj['properties']['landuse_type'] == "agriculture"):
                         zone.lu_agriculture_obj.area = zone.lu_agriculture_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
-                    elif(json_obj['properties']['landuse'] == "residential"):
+                    elif(json_obj['properties']['landuse_type'] == "residential"):
                         zone.lu_residential_obj.area = zone.lu_residential_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
-                    elif(json_obj['properties']['landuse'] == "utilities"):
+                    elif(json_obj['properties']['landuse_type'] == "utilities"):
                         zone.lu_utilities_obj.area = zone.lu_utilities_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
-                    elif(json_obj['properties']['landuse'] == "other"):
+                    elif(json_obj['properties']['landuse_type'] == "other"):
                         zone.lu_other_obj.area = zone.lu_other_obj.area + shape(json_obj['geometry']).intersection(zone.zone_polygon).area
 
         for zone in self.traffic_analysis_zones:
