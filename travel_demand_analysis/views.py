@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect
 import json
+from django.utils.safestring import mark_safe
 import os
 import pygeoj
 import geojson
@@ -16,9 +17,13 @@ def travel_analysis(request):
     amenity_directory = "media/amenities"
     household_directory = "media/households"
     trafficzone_directory = "media/trafficzones"
+    landuse_directory = "media/landuses"
     if not os.path.exists(amenity_directory):
         print("MAKE DIR1")
         os.makedirs(amenity_directory)
+    if not os.path.exists(landuse_directory):
+        print("MAKE DIR1")
+        os.makedirs(landuse_directory)
     if not os.path.exists(household_directory):
         print("MAKE DIR2")
         os.makedirs(household_directory)
@@ -30,7 +35,7 @@ def travel_analysis(request):
     amenity_filenames = [file for file in os.listdir(amenity_directory) if file.endswith('_cleaned.geojson')]
     household_filenames = os.listdir(household_directory)
     trafficzone_filenames = os.listdir(trafficzone_directory)
-
+    landuse_filenames = os.listdir(landuse_directory)
     print("FILES: "+str(household_filenames)+":"+str(amenity_filenames)+":"+str(trafficzone_filenames))
 
     with open('travel_demand_analysis/coors.json', encoding='utf8') as f:
@@ -40,7 +45,8 @@ def travel_analysis(request):
         'coordinates_var': json_data["features"],
         'amenity_filenames': amenity_filenames,
         'household_filenames': household_filenames,
-        'trafficzone_filenames': trafficzone_filenames
+        'trafficzone_filenames': trafficzone_filenames,
+        'landuse_filenames': landuse_filenames
     })
 
 
@@ -112,10 +118,11 @@ def analysis_add_household(request):
 
         with open(file_path, encoding="utf-8") as f:
             json_data = json.load(f)
-
+        household_dump = json.dumps(json_data)
         data = {}
         data['no_households'] = len(json_data)
         data['household_filename'] = household_filename
+        data['households_json'] = household_dump
         return HttpResponse(json.dumps(data), content_type='application/json')
     return HttpResponse("Non ajax post request")
 
@@ -134,5 +141,24 @@ def analysis_add_trafficzone(request):
         data['no_trafficzones'] = zone_tally
         data['trafficzone_filename'] = trafficzone_filename
         data['zone_geojson'] = geojson.dumps(geofile)
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    return HttpResponse("Non ajax post request")
+
+def analysis_add_landuse(request):
+    if request.is_ajax() and request.POST:
+        landuse_filename = request.POST.get('landuse_filename')
+        file_path = "media/landuses/" + str(landuse_filename)
+
+
+        with open(file_path, encoding="utf-8") as f:
+            json_data = json.load(f)
+        landuse_dump = json.dumps(json_data)
+
+
+
+        data = {}
+        data['no_landuses'] = len(json_data['features'])
+        data['landuse_filename'] = landuse_filename
+        data['landuses_json'] = landuse_dump
         return HttpResponse(json.dumps(data), content_type='application/json')
     return HttpResponse("Non ajax post request")

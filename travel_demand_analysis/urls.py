@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^get_amenity_file/$', views.analysis_add_amenity, name="analysis_add_amenity"),
     url(r'^get_household_file/$', views.analysis_add_household, name="analysis_add_household"),
     url(r'^get_trafficzone_file/$', views.analysis_add_trafficzone, name="analysis_add_trafficzone"),
+    url(r'^get_landuse_file/$', views.analysis_add_landuse, name="analysis_add_landuse"),
 ]

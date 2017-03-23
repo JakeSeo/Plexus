@@ -201,8 +201,8 @@
             <div class="row input-field col s12">
                 <ul class="collection with-header">
                     <li class="collection-item" style="font-size:20px !important;">
-                        <div>Land Use<a id="edit-landuse" class="secondary-content"><i
-                                class="black-text material-icons">mode_edit</i></a></div>
+                        <div>Land Use<a id="add-landuse-file" class="secondary-content"><i
+                                class="black-text material-icons">add</i></a></div>
                     </li>
                     <div id="landuse-included-files">
 
@@ -327,6 +327,20 @@
     </div>
     <div class="modal-footer">
         <button id="household-modal-ok-btn"
+                class="modal-action modal-close waves-effect waves-green btn-flat active-btn">
+            Ok
+        </button>
+    </div>
+</div>
+
+<div id="landuse-modal" class="modal medium-modal">
+    <div class="row">
+        <ul id="landuse-modal-ul" class="collection">
+
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button id="landuse-modal-ok-btn"
                 class="modal-action modal-close waves-effect waves-green btn-flat active-btn">
             Ok
         </button>
@@ -888,7 +902,35 @@
         }
         
 
-        
+        $("#add-landuse-file").click(function(){
+            var ulDiv = $("#landuse-modal").find("#landuse-modal-ul");
+            $(ulDiv).empty();
+            {% if landuse_filenames %}
+                {% for file in landuse_filenames%}
+                var liDiv = $("<li></li>").addClass("collection-item");
+                var inputDiv = $("<input />").addClass("with-gap").attr("name","file-checkbox")
+                               .attr("id","{{file}}")
+                               .attr("value","{{file}}")
+                               .attr("type","checkbox");
+                if(!(typeof landuse_files['{{file}}'] === 'undefined')){
+                    $(inputDiv).attr("disabled","disabled").attr("checked","checked");
+                }
+                var labelDiv = $("<label></label>").addClass("black-text").attr("for","{{file}}")
+                               .attr("name", "file-label").html("{{file}}");
+                liDiv.append(inputDiv).append(labelDiv);
+                ulDiv.append(liDiv);
+                {% endfor %}
+            {% else %}
+                var h5Elem = $("<h5></h5>").addClass("center").html("There are currently no uploaded landuse files.");
+                ulDiv.append(h5Elem);
+            {% endif %}
+
+            $("#landuse-modal").openModal();
+        });
+
+        $("#edit-landuse").click(function(){
+            $("#edit-landuse-modal").openModal({dismissible:false});
+        });
         $("#add-amenity-file").click(function(){
             var ulDiv = $("#amenity-modal").find("#amenity-modal-ul");
             $(ulDiv).empty();
@@ -1037,8 +1079,12 @@
                                 count = data.no_households;
                                 household_files[filename] = filename;
                                 household_summaries[filename] = count;
-                                //households_json = JSON.parse(data.households_json);
 
+                                console.log("mga bahay:"+data.households_json);
+                                households_json = JSON.parse(data.households_json);
+                                addressPoints = households_json.map(function (p) {return [p.latitude, p.longitude] });
+                                var heat = L.heatLayer(addressPoints);
+                                visualize_household_layers[filename] = heat;
                                 //var households_marker = [];
                                 //$(households_json).each(function(key, data) {
                                 //    households_marker.push(data);
@@ -1072,23 +1118,6 @@
                             },
                             success: function(data) {
                                 alert("TRAFFICZONE WENT");
-                                /*filename = data.trafficzone_filename;
-                                count = data.no_trafficzones;
-                                trafficzone_files.push(filename);
-                                json_response = JSON.parse(data.zone_geojson);
-                                console.log(json_response.features.length+" LENK");
-                                $(json_response.features).each(function(key, data) {
-                                    data.properties.trips = 0;
-                                    alert(data.type);
-                                    traffic_analysis_zones_layers.push(L.geoJson(data, {style: {
-                                        fillColor: '#FED976',
-                                        weight: 2,
-                                        opacity: 1,
-                                        color: 'white',
-                                        dashArray: '3',
-                                        fillOpacity: 0.7
-                                    }}).bindTooltip('<b>Zone #'+(traffic_analysis_zones_layers.length+1)+'</b>').addTo(mymap));
-                                });*/
 
                                 filename = data.trafficzone_filename;
                                 count = data.no_trafficzones;
@@ -1102,7 +1131,46 @@
                                 });
                                 visualize_trafficzones[filename] = trafficzones_marker;
                                 refresh_trafficzone_list();
-                                initializeLanduseModal();
+                                alert("DONE WENT");
+                            },
+                            failure: function(data) {
+                                alert('Error occurred.');
+                            }
+                        });
+                    }
+                }
+            }
+            $("#overlay").css("display","none");
+        });
+
+        $("#landuse-modal-ok-btn").click(function() {
+            $("#overlay").css("display","inline");
+            var file_rows = $("#landuse-modal").find("[name='file-checkbox']");
+            for(var i=0; i<file_rows.length; i++){
+                var filename = $(file_rows[i]).val();
+                if($(file_rows[i]).is(':checked')){
+                    if(typeof landuse_files[filename] === 'undefined'){
+                        count = 0;
+                        $.ajax({
+                            url: "{% url 'travel_demand_analysis:analysis_add_landuse' %}",
+                            method: "POST",
+                            data: {
+                                "landuse_filename" : filename
+                            },
+                            success: function(data) {
+
+                                filename = data.landuse_filename;
+                                count = data.no_landuses;
+                                landuse_files[filename] = filename;
+                                landuse_summaries[filename] = count;
+                                landuses_json = JSON.parse(data.landuses_json);
+
+                                var landuses_marker = [];
+                                $(landuses_json.features).each(function(key, data) {
+                                    landuses_marker.push(data);
+                                });
+                                visualize_landuses[filename] = landuses_marker;
+                                refresh_landuse_list();
                                 alert("DONE WENT");
                             },
                             failure: function(data) {
@@ -1244,6 +1312,18 @@
             }
         }
 
+        function visualize_household(inputElem){
+            var filename = $(inputElem).val();
+            if($(inputElem).is(':checked')){
+                visualize_households[filename] = true;
+                //visualize_amenity_layers[filename].addTo(mymap);// = amenity_layer_list;
+                mymap.addLayer(visualize_household_layers[filename]);
+            }else{
+                mymap.removeLayer(visualize_household_layers[filename]);
+                delete visualize_households[ filename ];
+            }
+        }
+
         function visualize_trafficzone(inputElem){
             alert("pressed input elem");
             var filename = $(inputElem).val();
@@ -1267,6 +1347,33 @@
                     mymap.removeLayer(trafficzone_layer_list[x]);
                 }
                 delete visualize_trafficzone_layers[ filename ];
+            }
+        }
+
+        function visualize_landuse(inputElem){
+            alert("pressed input elem");
+            var filename = $(inputElem).val();
+            if($(inputElem).is(':checked')){
+                var landuse_json = visualize_landuses[filename];
+                var landuse_layer_list = [];
+                for(x in landuse_json){
+                    console.log(landuse_json[x]);
+                    landuse_layer_list.push(L.geoJSON(landuse_json[x], {style: {
+                                        fillColor: '#CCCCDD',
+                                        weight: 2,
+                                        opacity: 1,
+                                        color: 'white',
+                                        dashArray: '3',
+                                        fillOpacity: 0.7
+                                    }}).bindTooltip('<b>Zone #'+(landuse_json[x].properties.landuse_type)+'</b>').addTo(mymap));
+                }
+                visualize_landuse_layers[filename] = landuse_layer_list;
+            }else{
+                var landuse_layer_list = visualize_landuse_layers[filename];
+                for(x in landuse_layer_list){
+                    mymap.removeLayer(landuse_layer_list[x]);
+                }
+                delete visualize_landuse_layers[ filename ];
             }
         }
 
@@ -1310,7 +1417,7 @@
 
         
         function refresh_trafficzone_list(){
-            $("#trafficzone-summary").html(zone_landuse_settings.length);
+            $("#trafficzone-summary").html(computeTotal(trafficzone_summaries));
             var mainDiv = $('#trafficzone-included-files');
             $(mainDiv).empty();
             {% for file in trafficzone_filenames %}
@@ -1341,6 +1448,38 @@
             $('#trafficzone-modal').closeModal();
         }
 
+        function refresh_landuse_list(){
+            $("#landuse-summary").html(computeTotal(landuse_summaries));
+            var mainDiv = $('#landuse-included-files');
+            $(mainDiv).empty();
+            {% for file in landuse_filenames %}
+            if(!(typeof landuse_files['{{file}}'] === 'undefined')){
+                var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                var inputDiv = $("<input />").addClass("with-gap").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
+                               .attr("id","{{file}}")
+                               .attr("value","{{file}}")
+                               .attr("type","checkbox");
+                $(inputDiv).on("click", function(event){
+                    visualize_landuse($(this));
+                });
+                if(!(typeof visualize_landuse_layers['{{file}}'] === 'undefined')){
+                    $(inputDiv).prop("checked",true);
+                }
+
+                var pDiv = $("<label></label>").addClass("col s10 truncate-file").attr("style","top:0rem !important;padding-left:30px !important;").attr("for","{{file}}").html('{{file}}')
+                var aDiv = $("<a></a>").addClass("secondary-content col s2").attr("onclick","deletefile('landuse','{{file}}')");
+                var iDiv = $("<i></i>").addClass("black-text material-icons").html('delete');
+                //var deleteBtn = $("<button></button>").addClass("col s4 btn waves-effect").html("delete").attr("onclick","deletefile('amenity','{{file}}')");
+                aDiv.append(iDiv);
+                listDiv.append(inputDiv);
+                listDiv.append(pDiv);
+                listDiv.append(aDiv);
+                mainDiv.append(listDiv);
+            }
+            {% endfor %}
+            $('#landuse-modal').closeModal();
+        }
+
         function refresh_household_list(){
             $("#household-summary").html(computeTotal(household_summaries));
             var mainDiv = $('#household-included-files');
@@ -1352,6 +1491,13 @@
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
                                .attr("type","checkbox");
+                $(inputDiv).on("click", function(event){
+                    visualize_household($(this));
+                });
+                if(!(typeof visualize_households['{{file}}'] === 'undefined')){
+                    $(inputDiv).prop("checked",true);
+                }
+
                 var pDiv = $("<label></label>").addClass("col s10 truncate-file").attr("style","top:0rem !important;padding-left:30px !important;").attr("for","{{file}}").html('{{file}}')
                 var aDiv = $("<a></a>").addClass("secondary-content col s2").attr("onclick","deletefile('household','{{file}}')");
                 var iDiv = $("<i></i>").addClass("black-text material-icons").html('delete');
