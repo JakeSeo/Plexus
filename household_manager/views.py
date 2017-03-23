@@ -17,7 +17,6 @@ def index(request):
 def manage(request, filename):
     with open('media/households/' + filename, encoding='utf8') as f:
         json_data = json.load(f)
-        print(json_data)
 
     context = {
         'filename': filename,

@@ -12,6 +12,7 @@ from shapely.geometry.polygon import LinearRing, Polygon
 from shapely.geometry.multipolygon import MultiPolygon
 import geojson
 import io
+from django.utils.safestring import mark_safe
 
 
 def index(request):
@@ -19,37 +20,27 @@ def index(request):
     return render(request, 'landuse_manager/index.html', context)
 
 
-def manage(request):
-    with open('media/landuse/landusegeojson.geojson', encoding="utf-8") as f:
+def manage(request, filename):
+    with open('media/landuse/' + filename, encoding="utf-8") as f:
         json_data = json.load(f)
     context = {
-        'amenities': json.dumps(json_data)
+        'json_data': mark_safe(json_data),
+        'filename': filename
     }
-    return render(request, 'LandUse-Manager.html', context)
+    return render(request, 'landuse_manager/LandUse-Manager.html', context)
 
-def manageSave(request):
+def manageSave(request, filename):
     if request.is_ajax() and request.POST:
         data = request.POST.get('landuse')
         print("DATA: " + str(data))
-        dump = geojson.loads(data)
-    # f = open("media/amenities/amenitiesedited.json", 'w', encoding="utf-8")
-    # f.write("[\n")
-    # ctr = 0
-    # for item in data:
-    #     if ctr != 0:
-    #         f.write(",\n")
-    #     f.write(data[ctr])
-    #     ctr = ctr + 1
-    # f.write("\n]")
-    # f.close()
 
         geom_in_geojson = geojson.loads(data)
-        with open("media/landuse/landuse--edited.geojson", 'w', encoding="utf-8") as outfile:
+        with open("media/landuse/" + filename, 'w', encoding="utf-8") as outfile:
             geojson.dump(geom_in_geojson, outfile, indent=4, sort_keys=True)
     #return tmp_file[1]
         return HttpResponse("got the json")
 
-    return render(request, 'Landuse-Manager.html')
+    return render(request, 'landuse_manager/Landuse-Manager.html')
 
 
 def choose(request):

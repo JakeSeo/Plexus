@@ -14,6 +14,8 @@ from shapely.geometry.polygon import LinearRing, Polygon
 from shapely.geometry.multipolygon import MultiPolygon
 from django.shortcuts import render_to_response
 from django.contrib import messages
+from django.utils.safestring import mark_safe
+
 
 def index(request):
     context = {}
@@ -28,28 +30,23 @@ def index(request):
 #    }
 #    return render(request, 'Amenities-Manager.html', context)
 
-def manage(request):
-    if request.is_ajax() and request.POST:
-        print("nagrequest")
-        data = request.POST.get('filename')
-        print("data " + data)
-        with open('media/amenities/' + data, encoding="utf-8") as f:
-                json_data = json.load(f)
-                context = {
-                    'amenities': json.dumps(json_data)
-                }
+def manage(request, filename):
+    print(filename)
+    with open('media/amenities/' + filename, encoding="utf-8") as f:
+            json_data = json.load(f)
+            context = {
+                'amenities': mark_safe(json_data),
+                'filename': filename
+            }
 
-    #return render(request, 'Amenities-Manager.html', context)
-    return HttpResponse("success")
-    #return render_to_response('amenities_manager/Amenities_Manager.html', context)
-        #messages.add_message(request, messages.INFO, "Your Message")
-        #return redirect('manageLoad')
-    #return render_to_response('manageLoad', context)
-
-def manageLoad(request):
     return render(request, 'Amenities-Manager.html', context)
 
-def manageSave(request):
+
+#def manageLoad(request):
+   # return render(request, 'Amenities-Manager.html', context)
+
+
+def manageSave(request, filename):
     if request.is_ajax() and request.POST:
         data = request.POST.get('amenities')
         print("DATA: " + str(data))
@@ -66,7 +63,7 @@ def manageSave(request):
     # f.close()
 
         geom_in_geojson = geojson.loads(data)
-        with open("media/amenities/amenitiesedited.geojson", 'w', encoding="utf-8") as outfile:
+        with open("media/amenities/" + filename, 'w', encoding="utf-8") as outfile:
             geojson.dump(geom_in_geojson, outfile, indent=4, sort_keys=True)
     #return tmp_file[1]
         return HttpResponse("got the json")
