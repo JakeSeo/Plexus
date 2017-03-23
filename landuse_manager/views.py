@@ -80,7 +80,7 @@ def choose(request):
         'filemanager_filenames': landuse_documents,
         'file_manager_page_title': file_manager_page_title
     }
-    return render(request, 'File-Manager.html', context)
+    return render(request, 'landuse_manager/File-Manager.html', context)
 
 def cleanLandUse(source, srcExtension):
     # ctr = 0
