@@ -99,6 +99,7 @@ def choose(request):
             newfile.doc_name = original_name
             newfile.save()
             cleanAmenities(original_name, extension)
+            print("done cleaning amenities")
             #return redirect('choose')
     else:
         form = DocumentForm()
@@ -111,9 +112,15 @@ def choose(request):
 
 
 def cleanAmenities(source, srcExtension):
+    print("in cleaning amenities + " + source + srcExtension)
     type = "amenity"
     if srcExtension == ".json":
         f = io.open("media/amenities/" + source + "_cleaned.geojson", 'w', encoding="utf-8")
+        f.write("{\"type\": \"FeatureCollection\",")
+        f.write("\"generator\": \"overpass-turbo\",")
+        f.write("\"copyright\": \"The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.\",")
+        f.write("\"timestamp\": \"2017-03-19T12:47:02Z\",")
+        f.write("\"features\":")
         f.write("[\n")
         ctr = 0
         index = -1
@@ -251,10 +258,16 @@ def cleanAmenities(source, srcExtension):
                 f.write("\"coordinates\": [" + str(data['long']) + ", " + str(data['latitude']) + "]}")
                 f.write("}")
         f.write("\n]")
+        f.write("}")
         f.close()
         z.close()
     elif srcExtension == ".geojson":
         f = io.open("media/amenities/" + source + "_cleaned.geojson", 'w', encoding="utf-8")
+        f.write("{\"type\": \"FeatureCollection\",")
+        f.write("\"generator\": \"overpass-turbo\",")
+        f.write("\"copyright\": \"The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.\",")
+        f.write("\"timestamp\": \"2017-03-19T12:47:02Z\",")
+        f.write("\"features\":")
         f.write("[\n")
         ctr = 0
         index = -1
@@ -418,5 +431,6 @@ def cleanAmenities(source, srcExtension):
                     f.write("\"coordinates\": [" + str(point.x) + ", " + str(point.y) + "]}")
                 f.write("}")
         f.write("\n]")
+        f.write("}")
         f.close()
         z.close()
