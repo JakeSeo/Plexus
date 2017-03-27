@@ -12,27 +12,18 @@
     <link type="text/css" rel="stylesheet" href="{% static 'css/LeafletStyleSheet.css' %}"/>
     <link type="text/css" rel="stylesheet" href="{% static 'css/materialize/css/materialize.min.css' %}"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
-    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
+    <script src="{% static 'leaflet/leaflet.js' %}"></script>
     <!--<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>-->
     <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>-->
 
-    <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"/>
-    <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.0/leaflet.draw.css"/>
-    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.css">
 
-    <script src="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.0/leaflet.draw.js"></script>
-    <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
-    <script src="{% static 'leaflet/heatmap.js' %}"></script>
-    <script src="{% static 'leaflet/leaflet-heatmap.js' %}"></script>
+    <!--<link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">-->
+    <!--<link rel="stylesheet" href="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.css">-->
+
+    <!--<script src="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.js"></script>-->
+    <script src="{% static 'js/jquery-3.1.0.min.js' %}"></script>
+    <script src="{% static 'leaflet/leaflet-heat.js' %}"></script>
     <script src="{% static 'js/PruneCluster.js' %}"></script>
 </head>
 
@@ -242,7 +233,7 @@
             </div>
         </div>
         <div class="row" id="inbox">
-            <div class="row" style="margin-bottom:10px !important;">
+            <div class="row" style="">
                 <div class="col s1">
                     &nbsp;
                 </div>
@@ -270,7 +261,13 @@
 
             <div class="divider"></div>
 
-            <div class="row">
+            <div class="row" style="margin-top:0 !important; padding-top:0 !important;">
+                <input type="checkbox" id="analyzed-zones-box" style="padding:0 !important; margin:0 !important;"/>
+                <label for="analyzed-zones-box" class="checkbox-style"
+                       style="padding-left:20px;padding-right:20px">Display analyzed zones</label>
+                <input type="checkbox" id="total-od-checkbox" style="padding:0 !important; margin:0 !important;"/>
+                <label for="total-od-checkbox" class="checkbox-style"
+                       style="padding-left:20px;padding-right:20px">Display zonal OD of trips</label>
                 <p class="filters-header">Filters</p>
 
                 <p class="modes-header">Types of trips</p>
@@ -291,12 +288,12 @@
 
                 <div class="trips-checkboxes">
                     <form action="#">
-                        <input type="checkbox" id="test1"/>
-                        <label for="test1" class="checkbox-style"
-                               style="padding-left:20px;padding-right:20px">Jeep</label>
-                        <input type="checkbox" id="test2"/>
-                        <label for="test2" class="checkbox-style"
-                               style="padding-left:20px;padding-right:20px">Bus</label>
+                        <input class="with-gap" name="group1" type="radio" id="total-od-radio"/>
+                            <label for="total-od-radio">All</label>
+                        <input class="with-gap" name="group1" type="radio" id="jeep-od-radio"/>
+                            <label for="jeep-od-radio">Jeep</label>
+                        <input class="with-gap" name="group1" type="radio" id="bus-od-radio"/>
+                            <label for="bus-od-radio">Bus</label>
                     </form>
                 </div>
             </div>
@@ -450,10 +447,11 @@
 <script type="text/javascript">
         var colors = ['#ff4b00', '#bac900', '#EC1813', '#55BCBE', '#D2204C', '#FF0000', '#ada59a', '#3e647e'],
         pi2 = Math.PI * 2;
-        var max_attracted=0, max_produced=0, max_score_basis = 0;
+        var max_attracted=0, max_produced=0, max_score_basis = 0, max_distrib = 0;
         var taz_analyzed = [];
 
         var visualize_analyzed_layers = [];
+        var visualize_od_layers = [];
 
         var visualize_amenities = [];
         var visualize_households = [];
@@ -797,6 +795,74 @@
             return compressedArray;
         }
 
+        $('#total-od-checkbox').click(function() {
+            alert("lenk OD: "+visualize_od_layers.length);
+            if(visualize_od_layers.length>0){
+                if($('#total-od-checkbox').is(':checked')){
+                    for(var i=0; i<visualize_od_layers.length; i++){
+                        visualize_od_layers[i].addTo(mymap);
+                    }
+                }else{
+                    for(var i=0; i<visualize_od_layers.length; i++){
+                        mymap.removeLayer(visualize_od_layers[i]);
+                        $('#total-od-radio').prop("checked", false);
+                    }
+                }
+            }else{
+                $('#total-od-checkbox').prop("checked", false);
+                alert("no zone selected");
+            }
+        });
+
+        function od_style(value) {
+            return {
+                color: getColor_distrib(value),
+                weight: 2,
+                opacity: 1
+            };
+        }
+
+        function getColor_distrib(d) {
+            return d > (max_distrib *0.9) ? '#FF0AE7' :
+                   d > (max_distrib *0.65)  ? '#B816C6' :
+                   d > (max_distrib *0.3)  ? '#59279C' :
+                              '#13347C';
+        }
+
+        function visualize_od(zone_index){
+            if(visualize_od_layers.length > 0){
+                for(var i=0; i<visualize_od_layers.length; i++){
+                    mymap.removeLayer(visualize_od_layers[i]);
+                }
+                visualize_od_layers = [];
+            }
+            $('#total-od-checkbox').prop("checked", true);
+            $('#total-od-radio').prop("checked", true);
+            var centroid = JSON.parse(taz_analyzed[zone_index].centroid);
+            var origin_lat = centroid.coordinates[1];
+            var origin_long = centroid.coordinates[0];
+            for(var i=0; i<zonal_od[zone_index].length; i++){
+                var dest_centroid = JSON.parse(taz_analyzed[i].centroid);
+                var dest_lat = dest_centroid.coordinates[1];
+                var dest_long = dest_centroid.coordinates[0];
+                visualize_od_layers.push(new L.Polyline([[origin_lat, origin_long],[dest_lat, dest_long]], od_style(zonal_od[zone_index][i])).addTo(mymap));
+            }
+        }
+
+        /*function visualize_od_mode1(zone_index){
+            //calibrate min,max
+            for(var i=0; i<zonal_od[zone_index].length; i++){
+                //visualize_od_layers.push(L.polyline, od_style(zonal_od[zone_index][i]));
+            }
+        }
+
+        function visualize_od_mode2(zone_index){
+            //calibrate min,max
+            for(var i=0; i<zonal_od[zone_index].length; i++){
+                //visualize_od_layers.push(L.polyline, od_style(zonal_od[zone_index][i]));
+            }
+        }*/
+
         $("#run-analysis-btn").click(function(){
             if(custom_index_length(amenity_files)>0 && custom_index_length(household_files)>0 && custom_index_length(trafficzone_files)){
                 $("#overlay").css("display","inline");
@@ -811,24 +877,24 @@
                         "landuse_files[]": comrpressArray(landuse_files)
                     },
                     success: function(data) {
+                        max_distrib = data.max_distrib;
                         zonal_od = data.zonal_od;
                         max_attracted = data.max_trip_attracted;
                         max_produced = data.max_trip_produced;
+                        console.log("hayyy1ko: "+data.taz_json);
                         json_response = JSON.parse(data.taz_json);
-                        console.log(json_response.length+" LENK");
+                        //console.log(json_response.length+" LENK");
+                        console.log("hayyy: "+json_response);
                         $(json_response).each(function(key, data) {
                             var zone_feature = JSON.parse(data.zone_feature);
                             data.NAME_2 = zone_feature.properties.NAME_2;
                             taz_analyzed.push(data);
-                            visualize_analyzed_layers.push(L.geoJson(zone_feature, {style: {
-                                fillColor: '#0000FF',
-                                weight: 2,
-                                opacity: 1,
-                                color: 'white',
-                                dashArray: '3',
-                                fillOpacity: 0.7
-                            }}).bindTooltip(getAnalyzedTooltip(zone_feature.properties.NAME_2, data)).addTo(mymap));
-                            //console.log(key+":"+data.zone_polygon.__geom__);
+                            max_score_basis = max_produced;
+                            var zone_geo = L.geoJson(zone_feature, mystyle(data)).bindTooltip(getAnalyzedTooltip(zone_feature.properties.NAME_2, data));
+                            $('#trip-produced-radio').prop("checked", true);
+                            zone_geo.on('click', function(e) { visualize_od(key); });
+                            visualize_analyzed_layers.push(zone_geo.addTo(mymap));
+                            $("#analyzed-zones-box").prop("checked",true);
                         });
                         refresh_zone_details();
                         $("#overlay").css("display","none");
@@ -839,6 +905,18 @@
                 }); 
             }else{
                 alert("amenity or household files are empty!");
+            }
+        });
+
+        $("#analyzed-zones-box").click(function(){
+            if($("#analyzed-zones-box").is(':checked')){
+                for(x in visualize_analyzed_layers){
+                    visualize_analyzed_layers[x].addTo(mymap).bringToFront();
+                }
+            }else{
+                for(x in visualize_analyzed_layers){
+                    mymap.removeLayer(visualize_analyzed_layers[x]);
+                }
             }
         });
 
@@ -1117,7 +1195,7 @@
                                 "trafficzone_filename" : filename
                             },
                             success: function(data) {
-                                alert("TRAFFICZONE WENT");
+                                //alert("TRAFFICZONE WENT");
 
                                 filename = data.trafficzone_filename;
                                 count = data.no_trafficzones;
@@ -1131,7 +1209,7 @@
                                 });
                                 visualize_trafficzones[filename] = trafficzones_marker;
                                 refresh_trafficzone_list();
-                                alert("DONE WENT");
+                                //alert("DONE WENT");
                             },
                             failure: function(data) {
                                 alert('Error occurred.');
@@ -1171,7 +1249,7 @@
                                 });
                                 visualize_landuses[filename] = landuses_marker;
                                 refresh_landuse_list();
-                                alert("DONE WENT");
+                                //alert("DONE WENT");
                             },
                             failure: function(data) {
                                 alert('Error occurred.');
@@ -1297,15 +1375,10 @@
         function visualize_amenity(inputElem){
             var filename = $(inputElem).val();
             if($(inputElem).is(':checked')){
-                /*var amenity_json = visualize_amenities[filename];
-                var amenity_layer_list = [];
-                for(x in amenity_json){
-                    amenity_layer_list.push(L.geoJSON(amenity_json[x]).addTo(mymap));
-                }*/
 
                 visualize_amenities[filename] = true;
                 //visualize_amenity_layers[filename].addTo(mymap);// = amenity_layer_list;
-                mymap.addLayer(visualize_amenity_layers[filename]);
+                mymap.addLayer(visualize_amenity_layers[filename]).bringToFront();
             }else{
                 mymap.removeLayer(visualize_amenity_layers[filename]);
                 delete visualize_amenities[ filename ];
@@ -1318,6 +1391,7 @@
                 visualize_households[filename] = true;
                 //visualize_amenity_layers[filename].addTo(mymap);// = amenity_layer_list;
                 mymap.addLayer(visualize_household_layers[filename]);
+                visualize_household_layers[filename].bringToFront();
             }else{
                 mymap.removeLayer(visualize_household_layers[filename]);
                 delete visualize_households[ filename ];
@@ -1325,7 +1399,7 @@
         }
 
         function visualize_trafficzone(inputElem){
-            alert("pressed input elem");
+            //alert("pressed input elem");
             var filename = $(inputElem).val();
             if($(inputElem).is(':checked')){
                 var trafficzone_json = visualize_trafficzones[filename];
@@ -1338,7 +1412,7 @@
                                         color: 'white',
                                         dashArray: '3',
                                         fillOpacity: 0.7
-                                    }}).bindTooltip('<b>Zone #'+(trafficzone_json[x].properties.NAME_2)+'</b>').addTo(mymap));
+                                    }}).bindTooltip('<b>Zone #'+(trafficzone_json[x].properties.NAME_2)+'</b>').addTo(mymap).bringToFront());
                 }
                 visualize_trafficzone_layers[filename] = trafficzone_layer_list;
             }else{
@@ -1351,7 +1425,7 @@
         }
 
         function visualize_landuse(inputElem){
-            alert("pressed input elem");
+            //alert("pressed input elem");
             var filename = $(inputElem).val();
             if($(inputElem).is(':checked')){
                 var landuse_json = visualize_landuses[filename];
@@ -1365,7 +1439,7 @@
                                         color: 'white',
                                         dashArray: '3',
                                         fillOpacity: 0.7
-                                    }}).bindTooltip('<b>Zone #'+(landuse_json[x].properties.landuse_type)+'</b>').addTo(mymap));
+                                    }}).bindTooltip('<b>Zone #'+(landuse_json[x].properties.landuse_type)+'</b>').addTo(mymap).bringToFront());
                 }
                 visualize_landuse_layers[filename] = landuse_layer_list;
             }else{
@@ -1536,7 +1610,7 @@
         $("#delete-file").click(function(){
             type = to_delete.type;
             filename = to_delete.name;
-            alert(type+":"+filename);
+            //alert(type+":"+filename);
             if(type=="amenity"){
                 if(!(typeof visualize_amenities[filename] === 'undefined')){
                     mymap.removeLayer(visualize_amenity_layers[filename]);
@@ -1626,10 +1700,11 @@
         
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            maxZoom: 17,
+            maxZoom: 18,
             id: 'xgb7.1jd5j7o2',
             accessToken: 'pk.eyJ1IjoieGdiNyIsImEiOiJjaXR6dGgxaHEwZnJjMm9vODRjbXk2NTczIn0.JGHOHRx1UpItrRAG1B0Fyw'
         }).addTo(mymap);
+
 
 
 

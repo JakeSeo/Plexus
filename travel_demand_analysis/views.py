@@ -73,7 +73,8 @@ def run_analysis(request):
         td = TripDistribution(overall_trip_production, overall_trip_attraction)
         #distribution = td.getTripDistribution()
         distribution = td.getDummyOD(len(overall_trip_production), len(overall_trip_production))
-        pandas_distrib = pd.DataFrame(distribution, columns=range(0, len(overall_trip_production)))
+        flattened_distrib = [val for sublist in distribution for val in sublist]
+        #pandas_distrib = pd.DataFrame(distribution, columns=range(0, len(overall_trip_production)))
         #zonal_od_matrix = json.dumps(distribution, indent=4)
         #print(" od_matrix: "+str(zonal_od_matrix))
 
@@ -89,6 +90,7 @@ def run_analysis(request):
         data['max_trip_attracted'] = max(overall_trip_attraction)
         data['taz_json'] = zone_info_json
         data['zonal_od'] = distribution
+        data['max_default_distrib'] = max(flattened_distrib)
         return HttpResponse(json.dumps(data), content_type='application/json')
     return HttpResponse("Non ajax post request")
 

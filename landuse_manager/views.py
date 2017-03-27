@@ -22,7 +22,7 @@ def index(request):
 
 
 def manage(request, filename):
-    with open('media/landuse/' + filename, encoding="utf-8") as f:
+    with open('media/landuses/' + filename, encoding="utf-8") as f:
         json_data = json.load(f)
     context = {
         'json_data': mark_safe(json_data),
@@ -36,7 +36,7 @@ def manageSave(request, filename):
         print("DATA: " + str(data))
 
         geom_in_geojson = geojson.loads(data)
-        with open("media/landuse/" + filename, 'w', encoding="utf-8") as outfile:
+        with open("media/landuses/" + filename, 'w', encoding="utf-8") as outfile:
             geojson.dump(geom_in_geojson, outfile, indent=4, sort_keys=True)
     #return tmp_file[1]
         return HttpResponse("got the json")

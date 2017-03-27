@@ -2,6 +2,7 @@ import geojson
 from geojson import Feature, Polygon, FeatureCollection
 import json
 import io
+import shapely
 from shapely.geometry import shape, Point
 import pygeoj
 import pandas as pd
@@ -16,6 +17,7 @@ class TAZ:
     def __init__(self):
         self.zone_feature = None
         self.zone_polygon = None
+        self.centroid = None
         self.trips = 0
         self.trips_produced = 0
         self.trips_attracted = 0
@@ -96,6 +98,7 @@ class TripAnalyzer:
             for feature in geofile:
                 polygon = shape(feature.geometry)
                 raw_taz = TAZ()
+                raw_taz.centroid = geojson.dumps(shapely.geometry.geo.shape(feature.geometry).centroid)
                 raw_taz.zone_feature = geojson.dumps(feature)
                 raw_taz.zone_polygon = polygon
                 self.traffic_analysis_zones.append(raw_taz)
