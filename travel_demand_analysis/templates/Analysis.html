@@ -170,8 +170,9 @@
             <div class="row input-field col s12">
                 <ul class="collection with-header">
                     <li class="collection-item" style="font-size:20px !important;">
-                        <div>Amenities<a id="add-amenity-file" class="secondary-content"><i
-                                class="black-text material-icons">add</i></a></div>
+                        <div>Amenities <a id="add-amenity-file" class="secondary-content"><i
+                                class="black-text material-icons">add</i></a><a id="amenity-tooltip" class="secondary-content tooltipped"><i
+                                class="black-text material-icons">info</i></a></div>
                     </li>
                     <div id="amenity-included-files">
 
@@ -193,7 +194,8 @@
                 <ul class="collection with-header">
                     <li class="collection-item" style="font-size:20px !important;">
                         <div>Land Use<a id="add-landuse-file" class="secondary-content"><i
-                                class="black-text material-icons">add</i></a></div>
+                                class="black-text material-icons">add</i></a><a id="landuse-tooltip" class="secondary-content tooltipped"><i
+                                class="black-text material-icons">info</i></a></div>
                     </li>
                     <div id="landuse-included-files">
 
@@ -232,7 +234,7 @@
                 </ul>
             </div>
         </div>
-        <form class="row" id="inbox">
+        <div class="row" id="inbox">
             <div class="row" style="">
                 <div class="col s1">
                     &nbsp;
@@ -262,6 +264,8 @@
             <div class="divider"></div>
 
             <div class="row" style="margin-top:0 !important; padding-top:0 !important;">
+
+                <p class="filters-header">Filters</p>
                 <div class="trips-checkboxes">
                         <input type="checkbox" id="analyzed-zones-box" style="padding:0 !important; margin:0 !important;"/>
                         <label for="analyzed-zones-box" class="checkbox-style"
@@ -271,20 +275,12 @@
                                style="padding-left:20px;padding-right:20px">Display zonal OD of trips</label>
 
                 </div>
-                <p class="filters-header">Filters</p>
-
                 <p class="modes-header">Types of trips</p>
                 <div class="trips-checkboxes">
-                    <form action="#">
-                        <p>
                             <input class="with-gap" name="group1" type="radio" id="trip-produced-radio"/>
                             <label for="trip-produced-radio">Trips Produced</label>
-                        </p>
-                        <p>
                             <input class="with-gap" name="group1" type="radio" id="trip-attracted-radio"/>
                             <label for="trip-attracted-radio">Trips Attracted</label>
-                        </p>
-                    </form>
                 </div>
 
                 <p class="modes-header">Modes of transportation</p>
@@ -448,6 +444,8 @@
 <!----------------------------------------------------- SCRIPTS ------------------------------------------->
 
 <script type="text/javascript">
+        var landuse_categories = ['residential', 'commercial', 'parks', 'industrial', 'agriculture', 'utilities', 'other'];
+        var colors_landuse = ['red', 'yellow', 'green', 'black', 'blue', 'pink', 'orange'];
         var colors = ['#ff4b00', '#bac900', '#EC1813', '#55BCBE', '#D2204C', '#FF0000', '#ada59a', '#3e647e'],
         pi2 = Math.PI * 2;
         var max_attracted=0, max_produced=0, max_score_basis = 0, max_distrib = 0;
@@ -552,13 +550,10 @@
             iconUrl: "{% static 'leaflet/images/amenity_entertainment.png' %}"
         }
     });
+        var amenity_categories = ['sustenance','education','transport','healthcare','finance',
+                                  'commerce','entertainment','other'];
 
-        var zone_landuse_settings = ['commercial','parks','industrial','agriculture','residential',
-                                     'commercial','parks','industrial','agriculture','residential',
-                                     'commercial','parks','industrial','agriculture','residential',
-                                     'utilities','other'];
-        var landuse_categories = ['commercial','parks','industrial','agriculture','residential',
-                                  'utilities','other'];
+
         var traffic_analysis_zones_layers = [];
         var to_delete;
 
@@ -617,7 +612,6 @@
                     if (size > 0) {
 
                         stroke = size != 1;
-
                         canvas.beginPath();
                         canvas.moveTo(center, center);
                         canvas.fillStyle = colors[i];
@@ -665,8 +659,34 @@
         });
 
         $( document ).ready(function() {
+            var div_landuse_tooltip = "<div class=\"row\" style=\"width:280px !important;\">";
+            div_landuse_tooltip += "<div class=\"col s12\" style=\"font-weight: bold; background-color:#3e647e;\">Landuse color codes:"
+                                            +"</div>";
+            for(var i=0; i<landuse_categories.length; i++){
+                div_landuse_tooltip += "<div class=\"col s12\" style=\"font-weight: bold; color:"+colors_landuse[i]+";\">"
+                                            +landuse_categories[i]+"</div>";
+            }
+            div_landuse_tooltip += "</div>";
+            $("#landuse-tooltip").attr("data-tooltip",div_landuse_tooltip);
+
+            var div_amenity_tooltip = "<div class=\"row\" style=\"width:280px !important;\">";
+            div_amenity_tooltip += "<div class=\"col s12\" style=\"font-weight: bold; background-color:#3e647e;\">Amenity color codes:"
+                                            +"</div>";
+            for(var i=0; i<amenity_categories.length; i++){
+                div_amenity_tooltip += "<div class=\"col s12\" style=\"font-weight: bold; color:"+colors[i]+";\">"
+                                            +amenity_categories[i]+"</div>";
+            }
+            div_amenity_tooltip += "</div>";
+
+            $("#amenity-tooltip").attr("data-tooltip",div_amenity_tooltip);
 
 
+
+            $('.tooltipped').each(function(index, element) {
+                var span = $('#' + $(element).attr('data-tooltip-id') + '>span:first-child');
+                span.before($(element).attr('data-tooltip'));
+                span.remove();
+            });
             L.Mask = L.Polygon.extend({
                 options: {
                     stroke: false,
@@ -821,9 +841,22 @@
         function od_style(value) {
             return {
                 color: getColor_distrib(value),
-                weight: 2,
+                weight: 4,
                 opacity: 1
             };
+        }
+
+        function getColor_landuse(landuse) {
+            switch(landuse)
+            {
+                case "residential": return 'red'; break;
+                case "commercial":  return 'yellow'; break;
+                case "parks":  return 'green'; break;
+                case "industrial":  return 'black'; break;
+                case "agriculture":  return 'blue'; break;
+                case "utilities": return 'pink'; break;
+                default:  return 'orange'; break;
+            }
         }
 
         function getColor_distrib(d) {
@@ -849,7 +882,15 @@
                 var dest_centroid = JSON.parse(taz_analyzed[i].centroid);
                 var dest_lat = dest_centroid.coordinates[1];
                 var dest_long = dest_centroid.coordinates[0];
-                visualize_od_layers.push(new L.Polyline([[origin_lat, origin_long],[dest_lat, dest_long]], od_style(zonal_od[zone_index][i])).addTo(mymap));
+                var poly_od = new L.Polyline([[origin_lat, origin_long],[dest_lat, dest_long]], od_style(zonal_od[zone_index][i]));
+                poly_od.bindPopup(zonal_od[zone_index][i]+" trips", {maxWidth: "auto"});
+                poly_od.on('mouseover', function (e) {
+                    this.openPopup();
+                });
+                poly_od.on('mouseout', function (e) {
+                    this.closePopup();
+                });
+                visualize_od_layers.push(poly_od.addTo(mymap));
             }
         }
 
@@ -930,6 +971,8 @@
         }
 
         function refresh_zone_details(){
+            alert("zonedeets:");
+            console.log("zonedeets:");
             var zone_details = $("#table-zone-details").empty();
             for(x in taz_analyzed){
                 var outerDiv = $("<div></div>").addClass("col s12 outer-detail-zone-entry");
@@ -1096,7 +1139,7 @@
             $("#edit-landuse-modal").openModal({dismissible:false});
         });
         
-        function initializeLanduseModal(){
+        /*function initializeLanduseModal(){
             var ulDiv = $("#edit-landuse-modal").find("#edit-landuse-modal-ul");
             $(ulDiv).empty();
             
@@ -1114,9 +1157,9 @@
                 $(selectDiv).clone().appendTo(liDiv);
                 liDiv.appendTo(ulDiv);
             }
-        }
+        }*/
 
-        $("#edit-landuse-modal-ok-btn").click(function() {
+        /*$("#edit-landuse-modal-ok-btn").click(function() {
             var bool_landuse = 0;
             selectDivs = $("#edit-landuse-modal").find("[name='landuse-selector']");
             for(var x=0; x<zone_landuse_settings.length; x++){
@@ -1128,14 +1171,14 @@
                     zone_landuse_settings[x] = val_lu;
                 }
             }
-            
+
             if(bool_landuse == 0){
                 $("#edit-landuse-modal").closeModal();
             }else{
                 bool_landuse = 0;
                 alert("Not all zones have land use.");
             }
-        });
+        });*/
 
         $("#household-modal-ok-btn").click(function() {
             $("#overlay").css("display","inline");
@@ -1345,6 +1388,30 @@
                                     e.population = cluster.population;
                                     return e;
                                 };
+
+                                pruneCluster.BuildLeafletCluster = function(cluster,position) {
+                                    var m = new L.Marker(position, {
+                                        icon: pruneCluster.BuildLeafletClusterIcon(cluster)
+                                      });
+                                    var divStyle= "<div class=\"row\" style=\"width:140px;\">";
+                                    for(var i=0; i<cluster.stats.length; i++){
+                                        if(cluster.stats[i]!=0){
+                                            divStyle += "<div class=\"col s9\" style=\"font-weight: bold; color:"+colors[i]+";\">"
+                                            +amenity_categories[i]
+                                            +":</div><div class=\"col s3\">"+cluster.stats[i]+"</div>";
+                                        }
+                                    }
+                                    divStyle += "</div>";
+
+                                    m.bindPopup(divStyle, {maxWidth: "auto"});
+                                    m.on('mouseover', function (e) {
+                                        this.openPopup();
+                                    });
+                                    m.on('mouseout', function (e) {
+                                        this.closePopup();
+                                    });
+                                    return m;
+                                };
                                 $(amenities_json.features).each(function(key, data) {
                                     console.log("DATA:"+data.properties);
                                     var marker = new PruneCluster.Marker(data.properties.latitude, data.properties.longitude);
@@ -1364,6 +1431,7 @@
                                     }
                                     pruneCluster.RegisterMarker(marker);
                                 });
+                                pruneCluster.Cluster.Size = 10;
                                 pruneCluster.ProcessView();
                                 visualize_amenity_layers[filename] = pruneCluster;
                                 refresh_amenity_list();
@@ -1438,7 +1506,7 @@
                 for(x in landuse_json){
                     console.log(landuse_json[x]);
                     landuse_layer_list.push(L.geoJSON(landuse_json[x], {style: {
-                                        fillColor: '#42FF0C',
+                                        fillColor: getColor_landuse(landuse_json[x].properties.landuse_type),
                                         weight: 2,
                                         opacity: 1,
                                         color: 'white',
