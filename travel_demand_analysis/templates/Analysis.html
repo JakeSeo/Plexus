@@ -860,6 +860,10 @@
         }
 
         function getColor_distrib(d) {
+            console.log("maxdistrib: "+max_distrib+", curr: "+d);
+            console.log(">90:"+(d > (max_distrib *0.9)));
+            console.log(">65:"+(d > (max_distrib *0.65)));
+            console.log(">30:"+(d > (max_distrib *0.3)));
             return d > (max_distrib *0.9) ? '#FF0AE7' :
                    d > (max_distrib *0.65)  ? '#B816C6' :
                    d > (max_distrib *0.3)  ? '#59279C' :
@@ -882,6 +886,7 @@
                 var dest_centroid = JSON.parse(taz_analyzed[i].centroid);
                 var dest_lat = dest_centroid.coordinates[1];
                 var dest_long = dest_centroid.coordinates[0];
+                console.log("STRONGER: "+zonal_od[zone_index][i]);
                 var poly_od = new L.Polyline([[origin_lat, origin_long],[dest_lat, dest_long]], od_style(zonal_od[zone_index][i]));
                 poly_od.bindPopup(zonal_od[zone_index][i]+" trips", {maxWidth: "auto"});
                 poly_od.on('mouseover', function (e) {
@@ -926,7 +931,7 @@
                         zonal_od = data.zonal_od;
                         max_attracted = data.max_trip_attracted;
                         max_produced = data.max_trip_produced;
-                        console.log("hayyy1ko: "+data.taz_json);
+                        //console.log("hayyy1ko: "+data.taz_json);
                         json_response = JSON.parse(data.taz_json);
                         taz_analyzed = [];
                         visualize_analyzed_layers = [];
@@ -1206,7 +1211,7 @@
                                 household_files[filename] = filename;
                                 household_summaries[filename] = count;
 
-                                console.log("mga bahay:"+data.households_json);
+                                //console.log("mga bahay:"+data.households_json);
                                 households_json = JSON.parse(data.households_json);
                                 addressPoints = households_json.map(function (p) {return [p.latitude, p.longitude] });
                                 var heat = L.heatLayer(addressPoints);
@@ -1413,7 +1418,7 @@
                                     return m;
                                 };
                                 $(amenities_json.features).each(function(key, data) {
-                                    console.log("DATA:"+data.properties);
+                                    //console.log("DATA:"+data.properties);
                                     var marker = new PruneCluster.Marker(data.properties.latitude, data.properties.longitude);
                                     marker.data.name = data.properties.name;
                                     marker.data.category_name = data.properties.amenity_type;
@@ -1504,7 +1509,7 @@
                 var landuse_json = visualize_landuses[filename];
                 var landuse_layer_list = [];
                 for(x in landuse_json){
-                    console.log(landuse_json[x]);
+                    //console.log(landuse_json[x]);
                     landuse_layer_list.push(L.geoJSON(landuse_json[x], {style: {
                                         fillColor: getColor_landuse(landuse_json[x].properties.landuse_type),
                                         weight: 2,

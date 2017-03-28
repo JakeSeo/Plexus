@@ -1,4 +1,5 @@
 import pandas as pd
+from random import randint
 
 class TripGeneration:
     def __init__(self, pathToData, dependent_col_name):
@@ -235,4 +236,4 @@ class TripDistribution:
         return B
 
     def getDummyOD(self, cols, row):
-        return [[x for x in range(row)] for y in range(cols)]
+        return [[randint(0,1200) for x in range(row)] for y in range(cols)]
