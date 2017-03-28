@@ -448,7 +448,7 @@
         var colors_landuse = ['red', 'yellow', 'green', 'black', 'blue', 'pink', 'orange'];
         var colors = ['#ff4b00', '#bac900', '#EC1813', '#55BCBE', '#D2204C', '#FF0000', '#ada59a', '#3e647e'],
         pi2 = Math.PI * 2;
-        var max_attracted=0, max_produced=0, max_score_basis = 0, max_distrib = 0;
+        var max_attracted=0, max_produced=0, max_score_basis = 0, max_distrib = 0, max_distrib_jeep = 0, max_distrib_bus = 0, chosen_zone_index=-1;
         var taz_analyzed = [];
 
         var visualize_analyzed_layers = [];
@@ -477,7 +477,7 @@
         var landuse_summaries = [];
 
         var taz_name_lbl = [];
-        var zonal_od = [];
+        var zonal_od = [], zonal_od_jeep=[], zonal_od_bus=[];
 
         var OtherMarker = L.Icon.extend({
         options: {
@@ -774,6 +774,52 @@
         });
 
 
+        $('#total-od-radio').click(function() {
+            if(visualize_od_layers.length>0){
+                if($('#total-od-radio').is(':checked')){
+                    for(var i=0; i<visualize_od_layers.length; i++){
+                        visualize_od_layers[i].setStyle(od_style(zonal_od[chosen_zone_index][i],max_distrib));
+                        visualize_od_layers[i].setPopupContent(zonal_od[chosen_zone_index][i]+" trips");
+                    }
+                }
+            }else{
+                //$('#total-od-radio').prop("checked", false);
+                Materialize.toast('Pick a zone to verify its overall OD', 4000);
+                //alert("no zone selected");
+            }
+        });
+
+        $('#jeep-od-radio').click(function() {
+            if(visualize_od_layers.length>0){
+                if($('#jeep-od-radio').is(':checked')){
+                    for(var i=0; i<visualize_od_layers.length; i++){
+                        visualize_od_layers[i].setStyle(od_style(zonal_od_jeep[chosen_zone_index][i],max_distrib_jeep));
+                        visualize_od_layers[i].setPopupContent(zonal_od_jeep[chosen_zone_index][i]+" trips");
+
+                    }
+                }
+            }else{
+                //$('#jeep-od-radio').prop("checked", false);
+                Materialize.toast('Pick a zone to verify its jeep OD', 4000);
+                //alert("no zone selected");
+            }
+        });
+
+        $('#bus-od-radio').click(function() {
+            if(visualize_od_layers.length>0){
+                if($('#bus-od-radio').is(':checked')){
+                    for(var i=0; i<visualize_od_layers.length; i++){
+                        visualize_od_layers[i].setStyle(od_style(zonal_od_bus[chosen_zone_index][i],max_distrib_bus));
+                        visualize_od_layers[i].setPopupContent(zonal_od_bus[chosen_zone_index][i]+" trips");
+                    }
+                }
+            }else{
+                //$('#bus-od-radio').prop("checked", false);
+                Materialize.toast('Pick a zone to verify its jeep OD', 4000);
+                //alert("no zone selected");
+            }
+        });
+
         $('#trip-produced-radio').click(function() {
            if(taz_analyzed.length>0){
                if($('#trip-produced-radio').is(':checked')){
@@ -838,9 +884,9 @@
             }
         });
 
-        function od_style(value) {
+        function od_style(value, max_val) {
             return {
-                color: getColor_distrib(value),
+                color: getColor_distrib(value, max_val),
                 weight: 4,
                 opacity: 1
             };
@@ -859,59 +905,64 @@
             }
         }
 
-        function getColor_distrib(d) {
-            console.log("maxdistrib: "+max_distrib+", curr: "+d);
+        function getColor_distrib(d, max_val) {
+            /*console.log("maxdistrib: "+max_distrib+", curr: "+d);
             console.log(">90:"+(d > (max_distrib *0.9)));
             console.log(">65:"+(d > (max_distrib *0.65)));
-            console.log(">30:"+(d > (max_distrib *0.3)));
-            return d > (max_distrib *0.9) ? '#FF0AE7' :
-                   d > (max_distrib *0.65)  ? '#B816C6' :
-                   d > (max_distrib *0.3)  ? '#59279C' :
+            console.log(">30:"+(d > (max_distrib *0.3)));*/
+            return d > (max_val *0.9) ? '#FF0AE7' :
+                   d > (max_val *0.65)  ? '#B816C6' :
+                   d > (max_val *0.3)  ? '#59279C' :
                               '#13347C';
         }
 
         function visualize_od(zone_index){
-            if(visualize_od_layers.length > 0){
-                for(var i=0; i<visualize_od_layers.length; i++){
-                    mymap.removeLayer(visualize_od_layers[i]);
+            if($('#total-od-radio').prop("checked") || $('#jeep-od-radio').prop("checked") || $('#bus-od-radio').prop("checked")){
+                if($('#total-od-checkbox').prop("checked")==false){
+                    alert("Activate box for displaying OD to verify the OD of this zone");
                 }
-                visualize_od_layers = [];
-            }
-            $('#total-od-checkbox').prop("checked", true);
-            $('#total-od-radio').prop("checked", true);
-            var centroid = JSON.parse(taz_analyzed[zone_index].centroid);
-            var origin_lat = centroid.coordinates[1];
-            var origin_long = centroid.coordinates[0];
-            for(var i=0; i<zonal_od[zone_index].length; i++){
-                var dest_centroid = JSON.parse(taz_analyzed[i].centroid);
-                var dest_lat = dest_centroid.coordinates[1];
-                var dest_long = dest_centroid.coordinates[0];
-                console.log("STRONGER: "+zonal_od[zone_index][i]);
-                var poly_od = new L.Polyline([[origin_lat, origin_long],[dest_lat, dest_long]], od_style(zonal_od[zone_index][i]));
-                poly_od.bindPopup(zonal_od[zone_index][i]+" trips", {maxWidth: "auto"});
-                poly_od.on('mouseover', function (e) {
-                    this.openPopup();
-                });
-                poly_od.on('mouseout', function (e) {
-                    this.closePopup();
-                });
-                visualize_od_layers.push(poly_od.addTo(mymap));
+                var curr_max = -1, curr_zonal_od = [];
+                if($('#total-od-radio').prop("checked")){
+                    curr_zonal_od = zonal_od;
+                    curr_max = max_distrib;
+                }else if($('#jeep-od-radio').prop("checked")){
+                    curr_zonal_od = zonal_od_jeep;
+                    curr_max = max_distrib_jeep;
+                }else{
+                    curr_zonal_od = zonal_od_bus;
+                    curr_max = max_distrib_bus;
+                }
+                chosen_zone_index=zone_index;
+                if(visualize_od_layers.length > 0){
+                    for(var i=0; i<visualize_od_layers.length; i++){
+                        mymap.removeLayer(visualize_od_layers[i]);
+                    }
+                    visualize_od_layers = [];
+                }
+                $('#total-od-checkbox').prop("checked", true);
+                $('#total-od-radio').prop("checked", true);
+                var centroid = JSON.parse(taz_analyzed[zone_index].centroid);
+                var origin_lat = centroid.coordinates[1];
+                var origin_long = centroid.coordinates[0];
+                for(var i=0; i<curr_zonal_od[zone_index].length; i++){
+                    var dest_centroid = JSON.parse(taz_analyzed[i].centroid);
+                    var dest_lat = dest_centroid.coordinates[1];
+                    var dest_long = dest_centroid.coordinates[0];
+                    //console.log("STRONGER: "+zonal_od[zone_index][i]);
+                    var poly_od = new L.Polyline([[origin_lat, origin_long],[dest_lat, dest_long]], od_style(curr_zonal_od[zone_index][i],curr_max));
+                    poly_od.bindPopup(curr_zonal_od[zone_index][i]+" trips", {maxWidth: "auto"});
+                    poly_od.on('mouseover', function (e) {
+                        this.openPopup();
+                    });
+                    poly_od.on('mouseout', function (e) {
+                        this.closePopup();
+                    });
+                    visualize_od_layers.push(poly_od.addTo(mymap));
+                }
+            }else{
+                alert("Please pick a mode.");
             }
         }
-
-        /*function visualize_od_mode1(zone_index){
-            //calibrate min,max
-            for(var i=0; i<zonal_od[zone_index].length; i++){
-                //visualize_od_layers.push(L.polyline, od_style(zonal_od[zone_index][i]));
-            }
-        }
-
-        function visualize_od_mode2(zone_index){
-            //calibrate min,max
-            for(var i=0; i<zonal_od[zone_index].length; i++){
-                //visualize_od_layers.push(L.polyline, od_style(zonal_od[zone_index][i]));
-            }
-        }*/
 
         $("#run-analysis-btn").click(function(){
             if(custom_index_length(landuse_files)>0 && custom_index_length(amenity_files)>0 && custom_index_length(household_files)>0 && custom_index_length(trafficzone_files)){
@@ -928,10 +979,13 @@
                     },
                     success: function(data) {
                         max_distrib = data.max_distrib;
+                        max_distrib_jeep = data.max_distrib_jeep;
+                        max_distrib_bus = data.max_distrib_bus;
                         zonal_od = data.zonal_od;
+                        zonal_od_jeep = data.zonal_od_jeep;
+                        zonal_od_bus = data.zonal_od_bus;
                         max_attracted = data.max_trip_attracted;
                         max_produced = data.max_trip_produced;
-                        //console.log("hayyy1ko: "+data.taz_json);
                         json_response = JSON.parse(data.taz_json);
                         taz_analyzed = [];
                         visualize_analyzed_layers = [];

@@ -1,5 +1,7 @@
 import pandas as pd
 from random import randint
+import random
+from math import exp
 
 class TripGeneration:
     def __init__(self, pathToData, dependent_col_name):
@@ -237,3 +239,81 @@ class TripDistribution:
 
     def getDummyOD(self, cols, row):
         return [[randint(0,1200) for x in range(row)] for y in range(cols)]
+
+
+class ModalSplit:
+    def __init__(self, od_matrix, pathToData):
+        self.od_matrix = od_matrix
+        self.pathToData = pathToData
+        self.travel_costs = []
+        self.travel_probabilities = []
+        self.modes = ['jeep', 'bus']
+
+    def computeGeneralizedCosts(self, zone_number):
+        # data = pd.read_csv(self.pathToData, index_col=0)
+        self.travel_costs = [None] * len(self.modes)
+        for x in range(0, len(self.modes)):
+            self.travel_costs[x] = random.randrange(1, 4)
+
+        # Compute for generalized cost for each mode for this specific zone
+        # populate self.travel_costs with the travel costs
+        self.computeModalProbabilities()
+
+    def computeModalProbabilities(self):
+        self.travel_probabilities = [None] * len(self.modes)
+        sum = 0
+        # print(len(self.travel_costs))
+        for x in range(0, len(self.modes)):
+            sum += exp(-self.travel_costs[x])
+        for x in range(0, len(self.modes)):
+            self.travel_probabilities[x] = exp(-self.travel_costs[x]) / sum
+            print(str(x)+"travel probs:"+str(self.travel_probabilities[x]))
+            # print(self.travel_costs)
+            # print(self.travel_probabilities)
+
+    def getPartitionedTripsByMode(self, total_trips):
+        return total_trips * self.travel_probabilities[0], self.travel_probabilities[1], self.travel_probabilities[2]
+
+    def process_od_matrix(self):
+        # print("size:"+str(len(self.od_matrix))+","+str(len(self.od_matrix[0])))
+        # df = DataFrame(columns=('lib', 'qty1', 'qty2'))
+        # for i in range(5):
+        # df.loc[i] = [randint(-1,1) for n in range(3)]
+        cols = list(range(len(self.od_matrix[0])))
+        df_list = []
+        for x in range(0, len(self.modes)):
+            df = []
+            df_list.append(df)
+
+        for y in range(0, len(self.od_matrix)):
+            self.computeGeneralizedCosts(y)
+            for z in range(0, len(self.modes)):
+                od_row = []
+                for x in range(0, len(self.od_matrix[0])):
+                    # print("x:"+str(x)+" y:"+str(y)+" z:"+str(z))
+                    od_row.append(round(self.od_matrix[y][x] * self.travel_probabilities[z], 2))
+                df_list[z].append(od_row)
+
+        return df_list
+
+    def process_od_matrix2(self):
+        # print("size:"+str(len(self.od_matrix))+","+str(len(self.od_matrix[0])))
+        # df = DataFrame(columns=('lib', 'qty1', 'qty2'))
+        # for i in range(5):
+        # df.loc[i] = [randint(-1,1) for n in range(3)]
+        cols = list(range(len(self.od_matrix[0])))
+        df_list = []
+        for x in range(0, len(self.modes)):
+            df = pd.DataFrame(columns=cols)
+            df_list.append(df)
+
+        for y in range(0, len(self.od_matrix)):
+            self.computeGeneralizedCosts(y)
+            for z in range(0, len(self.modes)):
+                od_row = []
+                for x in range(0, len(self.od_matrix[0])):
+                    # print("x:"+str(x)+" y:"+str(y)+" z:"+str(z))
+                    od_row.append(round(self.od_matrix[x][y] * self.travel_probabilities[z], 2))
+                df_list[z].loc[y] = od_row
+
+        return df_list
