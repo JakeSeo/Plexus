@@ -9,11 +9,13 @@
 
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="{% static 'css/personalized.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'intro/introjs.css' %}"/>
     <link type="text/css" rel="stylesheet" href="{% static 'css/LeafletStyleSheet.css' %}"/>
     <link type="text/css" rel="stylesheet" href="{% static 'css/materialize/css/materialize.min.css' %}"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
     <script src="{% static 'leaflet/leaflet.js' %}"></script>
+    <script src="{% static 'intro/intro.js' %}"></script>
     <!--<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>-->
     <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>-->
 
@@ -25,12 +27,12 @@
     <script src="{% static 'js/jquery-3.1.0.min.js' %}"></script>
     <script src="{% static 'leaflet/leaflet-heat.js' %}"></script>
     <script src="{% static 'js/PruneCluster.js' %}"></script>
+    <script type="text/javascript" src="{% static 'css/materialize/js/materialize.min.js' %}"></script>
 </head>
 
 <body>
 <!--Import jQuery before materialize.js-->
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="{% static 'css/materialize/js/materialize.min.js' %}"></script>
+
 
 
 <div id="file-modal" class="modal medium-modal">
@@ -165,7 +167,7 @@
     <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;">Save</a>
 </div>
 <div class="body-content row">
-    <div class="side-nav-bg col s2" style="padding:0 !important;margin:0 !important;height:100% !important;">
+    <div class="side-nav-bg col s2" style="padding:0 !important;margin:0 !important;height:100% !important;" data-position="right" data-intro="Import here the files that you uploaded in the data managers" data-step="1">
         <div class="row content-fields">
             <div class="row input-field col s12">
                 <ul class="collection with-header">
@@ -221,7 +223,7 @@
     <div id="mapid" class="col s8 main-bg"></div>
 
     <div class="side-nav-bg col s2">
-        <div id="runanalysis" class="row" style="margin-top:20px; margin-bottom:20px !important;">
+        <div id="runanalysis" class="row" style="margin-top:20px; margin-bottom:20px !important;" data-position="left" data-intro="Once importing at least one of each of the data, you can now run the analysis" data-step="2">
             <a id="run-analysis-btn" class="light-green btn col s10"
                style="font-size: 14px !important; margin-left:18px !important;">Run
                 Analysis</a>
@@ -444,6 +446,7 @@
 <!----------------------------------------------------- SCRIPTS ------------------------------------------->
 
 <script type="text/javascript">
+        var bool_done_intr_add_file = false;
         var landuse_categories = ['residential', 'commercial', 'parks', 'industrial', 'agriculture', 'utilities', 'other'];
         var colors_landuse = ['red', 'yellow', 'green', 'black', 'blue', 'pink', 'orange'];
         var colors = ['#ff4b00', '#bac900', '#EC1813', '#55BCBE', '#D2204C', '#FF0000', '#ada59a', '#3e647e'],
@@ -738,6 +741,7 @@
                      }
                  }
             });
+            introJs().start();
         });
 
         L.LabelOverlay = (L.Layer || L.Class).extend({
@@ -992,6 +996,24 @@
                         $(json_response).each(function(key, data) {
                             var zone_feature = JSON.parse(data.zone_feature);
                             data.NAME_2 = zone_feature.properties.NAME_2;
+                            console.log("NAME_2: "+data.NAME_2);
+                            lu_commercial_obj = data.lu_commercial_obj;
+                            lu_parks_obj = data.lu_parks_obj;
+                            lu_industrial_obj = data.lu_industrial_obj;
+                            lu_agriculture_obj = data.lu_agriculture_obj;
+                            lu_residential_obj = data.lu_residential_obj;
+                            lu_utilities_obj = data.lu_utilities_obj;
+                            lu_other_obj = data.lu_other_obj;
+
+                            console.log(lu_commercial_obj.name+" area: "+lu_commercial_obj.area*1000000);
+                            console.log(lu_parks_obj.name+" area: "+lu_parks_obj.area*1000000);
+                            console.log(lu_industrial_obj.name+" area: "+lu_industrial_obj.area*1000000);
+                            console.log(lu_agriculture_obj.name+" area: "+lu_agriculture_obj.area*1000000);
+                            console.log(lu_residential_obj.name+" area: "+lu_residential_obj.area*1000000);
+                            console.log(lu_utilities_obj.name+" area: "+lu_utilities_obj.area*1000000);
+                            console.log(lu_other_obj.name+" area: "+lu_other_obj.area*1000000);
+
+
                             taz_analyzed.push(data);
                             max_score_basis = max_produced;
                             var zone_geo = L.geoJson(zone_feature, mystyle(data)).bindTooltip(getAnalyzedTooltip(zone_feature.properties.NAME_2, data));
@@ -1590,6 +1612,11 @@
             {% for file in amenity_filenames %}
             if(!(typeof amenity_files['{{file}}'] === 'undefined')){
                 var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                if(bool_done_intr_add_file == false){
+                    listDiv.addClass("add-file-intro");
+                    listDiv.attr("data-intro","You can visualize the files you import by ticking the box on their left hand side");
+                    listDiv.attr("data-step", "1");
+                }
                 var inputDiv = $("<input />").addClass("with-gap visualize-amenities").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
@@ -1619,6 +1646,12 @@
             }*/
 
             $('#amenity-modal').closeModal();
+            console.log("honesty: "+bool_done_intr_add_file);
+            if(bool_done_intr_add_file == false){
+                alert("went intro dynamic!");
+                bool_done_intr_add_file = true;
+                introJs(".add-file-intro").start();
+            }
         }
 
         
@@ -1629,6 +1662,10 @@
             {% for file in trafficzone_filenames %}
             if(!(typeof trafficzone_files['{{file}}'] === 'undefined')){
                 var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                if(bool_done_intr_add_file == false){
+                    listDiv.addClass("add-file-intro");
+                    listDiv.attr("data-intro","You can visualize the files you import by ticking the box on their left hand side");
+                }
                 var inputDiv = $("<input />").addClass("with-gap").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
@@ -1652,6 +1689,10 @@
             }
             {% endfor %}
             $('#trafficzone-modal').closeModal();
+            if(bool_done_intr_add_file == false){
+                bool_done_intr_add_file = true;
+                introJs(".add-file-intro").start();
+            }
         }
 
         function refresh_landuse_list(){
@@ -1661,6 +1702,10 @@
             {% for file in landuse_filenames %}
             if(!(typeof landuse_files['{{file}}'] === 'undefined')){
                 var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                if(bool_done_intr_add_file == false){
+                    listDiv.addClass("add-file-intro");
+                    listDiv.attr("data-intro","You can visualize the files you import by ticking the box on their left hand side");
+                }
                 var inputDiv = $("<input />").addClass("with-gap").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
@@ -1684,6 +1729,10 @@
             }
             {% endfor %}
             $('#landuse-modal').closeModal();
+            if(bool_done_intr_add_file == false){
+                bool_done_intr_add_file = true;
+                introJs(".add-file-intro").start();
+            }
         }
 
         function refresh_household_list(){
@@ -1693,6 +1742,10 @@
             {% for file in household_filenames %}
             if(!(typeof household_files['{{file}}'] === 'undefined')){
                 var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                if(bool_done_intr_add_file == false){
+                    listDiv.addClass("add-file-intro");
+                    listDiv.attr("data-intro","You can visualize the files you import by ticking the box on their left hand side");
+                }
                 var inputDiv = $("<input />").addClass("with-gap").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
@@ -1716,6 +1769,10 @@
             }
             {% endfor %}
             $('#household-modal').closeModal();
+            if(bool_done_intr_add_file == false){
+                bool_done_intr_add_file = true;
+                introJs(".add-file-intro").start();
+            }
         }
 
 

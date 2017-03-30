@@ -1,4 +1,7 @@
-production_attribute_names = ['no_hh', 'no_mem', 'no_mem_educ', 'no_mem_work', 'avg_income',
+production_attribute_names = ['no_hh', 'no_mem', 'no_mem_educwork', 'avg_income',
+                   'lu_ind_commercial', 'lu_ind_parks', 'lu_ind_industrial',
+                   'lu_ind_agriculture','lu_ind_residential', 'lu_ind_utilities']
+production_attribute_names2 = ['no_hh', 'avg_income','no_mem', 'no_mem_educ', 'no_mem_work',
                    'lu_ind_commercial', 'lu_ind_parks', 'lu_ind_industrial',
                    'lu_ind_agriculture','lu_ind_residential', 'lu_ind_utilities']
 production_attribute_intercept = 1

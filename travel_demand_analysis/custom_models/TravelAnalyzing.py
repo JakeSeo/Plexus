@@ -24,8 +24,7 @@ class TAZ:
         self.main_landuse = ""
         self.no_hh = 0
         self.no_mem = 0
-        self.no_mem_educ = 0
-        self.no_mem_work = 0
+        self.no_mem_educwork = 0
         self.total_income = 0
         self.total_amenities = 0
         self.no_amty_sustenance = 0
@@ -77,11 +76,21 @@ class TAZ:
     def get_attr_vals(self):
         if(self.no_hh>0):
             self.total_income = self.total_income/self.no_hh
-        return [self.trips, self.no_hh, self.no_mem, self.no_mem_educ, self.no_mem_work, self.total_income,
+        return [self.trips, self.no_hh, self.no_mem, self.no_mem_educwork, self.total_income,
                 self.no_amty_sustenance, self.no_amty_education, self.no_amty_transport, self.no_amty_healthcare,
                 self.no_amty_finance, self.no_amty_commerce, self.no_amty_entertainment, self.no_amty_other,
                 self.lu_ind_commercial, self.lu_ind_parks, self.lu_ind_industrial, self.lu_ind_agriculture,
                 self.lu_ind_residential, self.lu_ind_utilities]
+
+    def get_attr_vals2(self):
+        if(self.no_hh>0):
+            self.total_income = self.total_income/self.no_hh
+        return [self.trips, self.no_hh, self.no_mem, self.no_mem_educwork, self.total_income,
+                self.no_amty_sustenance, self.no_amty_education, self.no_amty_transport, self.no_amty_healthcare,
+                self.no_amty_finance, self.no_amty_commerce, self.no_amty_entertainment, self.no_amty_other,
+                self.lu_commercial_obj.area, self.lu_parks_obj.area, self.lu_industrial_obj.area,
+                self.lu_agriculture_obj.area, self.lu_residential_obj.area, self.lu_utilities_obj.area,
+                self.lu_other_obj.area]
 
 class TripAnalyzer:
     def __init__(self, taz_geo_files, cbms_files, amenity_files, landuse_files):
@@ -95,7 +104,9 @@ class TripAnalyzer:
     def trip_analyze(self):
         for file in self.taz_geo_files:
             geofile = pygeoj.load("media/trafficzones/"+str(file))
+            ctr = 0
             for feature in geofile:
+                #print(str(ctr)+".) ZONE NAME: "+str(feature.properties['NAME_2']))
                 polygon = shape(feature.geometry)
                 raw_taz = TAZ()
                 raw_taz.centroid = geojson.dumps(shapely.geometry.geo.shape(feature.geometry).centroid)
@@ -117,8 +128,7 @@ class TripAnalyzer:
                             if zone.zone_polygon.contains(point):
                                 zone.no_hh = zone.no_hh + 1
                                 zone.no_mem = zone.no_mem + int(json_obj['phsize'])
-                                zone.no_mem_educ = zone.no_mem_educ + int(json_obj['toteduc'])
-                                zone.no_mem_work = zone.no_mem_work + int(json_obj['totjob'])
+                                zone.no_mem_educwork = zone.no_mem_educwork + int(json_obj['toteduc'])+ int(json_obj['totjob'])
                                 zone.total_income = zone.total_income + float(json_obj['totin'])
                                 falinany = 1
                         if(falinany == 0):
@@ -228,16 +238,18 @@ class TripAnalyzer:
         #     else:
         #         self.traffic_analysis_zones[index].main_landuse = "other"
 
-        cols = ['trips','no_hh','no_mem','no_mem_educ','no_mem_work','avg_income','no_amty_sustenance',
+        cols = ['trips','no_hh','no_mem','no_mem_educwork','avg_income','no_amty_sustenance',
                 'no_amty_education','no_amty_transport','no_amty_healthcare','no_amty_finance',
                 'no_amty_commerce','no_amty_entertainment','no_amty_other','lu_ind_commercial',
                 'lu_ind_parks', 'lu_ind_industrial', 'lu_ind_agriculture','lu_ind_residential',
-                'lu_ind_utilities']
+                'lu_ind_utilities', 'lu_ind_others']
+
+
 
         pre_tripgen_table = pd.DataFrame(columns=cols)
 
         for index, zone in enumerate(self.traffic_analysis_zones):
-            pre_tripgen_table.loc[index] = zone.get_attr_vals()
+            pre_tripgen_table.loc[index] = zone.get_attr_vals2()
 
         #zone_info_json = json.dumps([ob.__dict__ for ob in self.traffic_analysis_zones], default=lambda o: o.__dict__, indent=4, sort_keys=True)
         return pre_tripgen_table, self.traffic_analysis_zones
