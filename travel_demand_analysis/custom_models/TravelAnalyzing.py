@@ -174,6 +174,17 @@ class TripAnalyzer:
                             elif amenity_type == "other":
                                 zone.no_amty_other = zone.no_amty_other + 1
 
+        for index, zone in enumerate(self.traffic_analysis_zones):
+            print("#"+str(index))
+            print("sustenance: "+str(zone.no_amty_sustenance))
+            print("education: "+str(zone.no_amty_education))
+            print("transport: "+str(zone.no_amty_transport))
+            print("healthcare: "+str(zone.no_amty_healthcare))
+            print("finance: "+str(zone.no_amty_finance))
+            print("commerce: "+str(zone.no_amty_commerce))
+            print("entertainment: "+str(zone.no_amty_entertainment))
+            print("other: "+str(zone.no_amty_other))
+
 
         for file in self.landuse_files:
             with open("media/landuses/" + str(file), encoding="utf-8") as json_data:
