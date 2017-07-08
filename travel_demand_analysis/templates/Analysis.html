@@ -9,11 +9,13 @@
 
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="{% static 'css/personalized.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'intro/introjs.css' %}"/>
     <link type="text/css" rel="stylesheet" href="{% static 'css/LeafletStyleSheet.css' %}"/>
     <link type="text/css" rel="stylesheet" href="{% static 'css/materialize/css/materialize.min.css' %}"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
     <script src="{% static 'leaflet/leaflet.js' %}"></script>
+    <script src="{% static 'intro/intro.js' %}"></script>
     <!--<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>-->
     <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>-->
 
@@ -25,12 +27,12 @@
     <script src="{% static 'js/jquery-3.1.0.min.js' %}"></script>
     <script src="{% static 'leaflet/leaflet-heat.js' %}"></script>
     <script src="{% static 'js/PruneCluster.js' %}"></script>
+    <script type="text/javascript" src="{% static 'css/materialize/js/materialize.min.js' %}"></script>
 </head>
 
 <body>
 <!--Import jQuery before materialize.js-->
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="{% static 'css/materialize/js/materialize.min.js' %}"></script>
+
 
 
 <div id="file-modal" class="modal medium-modal">
@@ -165,24 +167,24 @@
     <a class="light-green btn right col s1" style="font-size: 12px !important; margin-left:18px !important;">Save</a>
 </div>
 <div class="body-content row">
-    <div class="side-nav-bg col s2" style="padding:0 !important;margin:0 !important;height:100% !important;">
+    <div class="side-nav-bg col s2" style="padding:0 !important;margin:0 !important;height:100% !important;" data-position="right" data-intro="Import here the files that you uploaded in the data managers" data-step="1">
         <div class="row content-fields">
             <div class="row input-field col s12">
                 <ul class="collection with-header">
                     <li class="collection-item" style="font-size:20px !important;">
-                        <div>Amenities <a id="add-amenity-file" class="secondary-content"><i
+                        <div>Amenities <a style="cursor:pointer" id="add-amenity-file" class="secondary-content"><i
                                 class="black-text material-icons">add</i></a><a id="amenity-tooltip" class="secondary-content tooltipped"><i
                                 class="black-text material-icons">info</i></a></div>
                     </li>
                     <div id="amenity-included-files">
-
+                        <li id="sample-added-file" data-step="2" data-intro="You can visualize the files you import on the map by ticking the box on their left hand side" class="collection-item row add-file-intro" style="padding-left:10px !important; padding-right:10px !important;" name="LatestAmenities_cleaned.geojson"><input class="with-gap visualize-amenities" style="margin:0 !important; padding:0 !important;" name="file-checkbox" id="LatestAmenities_cleaned.geojson" value="LatestAmenities_cleaned.geojson" type="checkbox"><label class="col s10 truncate-file" style="top:0rem !important;padding-left:30px !important;" for="LatestAmenities_cleaned.geojson">LatestAmenities_cleaned.geojson</label><a class="secondary-content col s2" onclick="deletefile('amenity','LatestAmenities_cleaned.geojson')"><i class="black-text material-icons">delete</i></a></li>
                     </div>
                 </ul>
             </div>
             <div class="row input-field col s12">
                 <ul class="collection with-header">
                     <li class="collection-item" style="font-size:20px !important;">
-                        <div>Households<a id="add-household-file" class="secondary-content"><i
+                        <div>Households<a style="cursor:pointer" id="add-household-file" class="secondary-content"><i
                                 class="black-text material-icons">add</i></a></div>
                     </li>
                     <div id="household-included-files">
@@ -193,7 +195,7 @@
             <div class="row input-field col s12">
                 <ul class="collection with-header">
                     <li class="collection-item" style="font-size:20px !important;">
-                        <div>Land Use<a id="add-landuse-file" class="secondary-content"><i
+                        <div>Land Use<a style="cursor:pointer" id="add-landuse-file" class="secondary-content"><i
                                 class="black-text material-icons">add</i></a><a id="landuse-tooltip" class="secondary-content tooltipped"><i
                                 class="black-text material-icons">info</i></a></div>
                     </li>
@@ -205,7 +207,7 @@
             <div class="row input-field col s12">
                 <ul class="collection with-header">
                     <li class="collection-item" style="font-size:20px !important;">
-                        <div>TAZ<a id="add-trafficzone-file" class="secondary-content"><i
+                        <div>TAZ<a style="cursor:pointer" id="add-trafficzone-file" class="secondary-content"><i
                                 class="black-text material-icons">add</i></a></div>
                     </li>
                     <div id="trafficzone-included-files">
@@ -221,7 +223,7 @@
     <div id="mapid" class="col s8 main-bg"></div>
 
     <div class="side-nav-bg col s2">
-        <div id="runanalysis" class="row" style="margin-top:20px; margin-bottom:20px !important;">
+        <div id="runanalysis" class="row" style="margin-top:20px; margin-bottom:20px !important;" data-position="left" data-intro="Once importing at least one of each of the data, you can now run the analysis" data-step="3">
             <a id="run-analysis-btn" class="light-green btn col s10"
                style="font-size: 14px !important; margin-left:18px !important;">Run
                 Analysis</a>
@@ -263,7 +265,7 @@
 
             <div class="divider"></div>
 
-            <div class="row" style="margin-top:0 !important; padding-top:0 !important;">
+            <div class="row" style="margin-top:0 !important; padding-top:0 !important;" data-intro="After the analysis has completed, this section will help in visualizing the results of the analysis." data-step="4" data-position="left">
 
                 <p class="filters-header">Filters</p>
                 <div class="trips-checkboxes">
@@ -444,6 +446,7 @@
 <!----------------------------------------------------- SCRIPTS ------------------------------------------->
 
 <script type="text/javascript">
+        var bool_done_intr_add_file = false;
         var landuse_categories = ['residential', 'commercial', 'parks', 'industrial', 'agriculture', 'utilities', 'other'];
         var colors_landuse = ['red', 'yellow', 'green', 'black', 'blue', 'pink', 'orange'];
         var colors = ['#ff4b00', '#bac900', '#EC1813', '#55BCBE', '#D2204C', '#FF0000', '#ada59a', '#3e647e'],
@@ -478,6 +481,9 @@
 
         var taz_name_lbl = [];
         var zonal_od = [], zonal_od_jeep=[], zonal_od_bus=[];
+
+
+
 
         var OtherMarker = L.Icon.extend({
         options: {
@@ -658,7 +664,13 @@
             }
         });
 
+
+
         $( document ).ready(function() {
+            introJs().onexit(function() {
+                    $("#sample-added-file").remove();
+            }).start();
+
             var div_landuse_tooltip = "<div class=\"row\" style=\"width:280px !important;\">";
             div_landuse_tooltip += "<div class=\"col s12\" style=\"font-weight: bold; background-color:#3e647e;\">Landuse color codes:"
                                             +"</div>";
@@ -738,6 +750,7 @@
                      }
                  }
             });
+            introJs().start();
         });
 
         L.LabelOverlay = (L.Layer || L.Class).extend({
@@ -966,6 +979,12 @@
 
         $("#run-analysis-btn").click(function(){
             if(custom_index_length(landuse_files)>0 && custom_index_length(amenity_files)>0 && custom_index_length(household_files)>0 && custom_index_length(trafficzone_files)){
+                if(visualize_analyzed_layers.length>0){
+                    for(x in visualize_analyzed_layers){
+                        mymap.removeLayer(visualize_analyzed_layers[x]);
+                    }
+                    visualize_analyzed_layers = [];
+                }
                 $("#overlay").css("display","inline");
                 //$("#loader-modal").openModal({dismissible:false});
                 $.ajax({
@@ -992,6 +1011,18 @@
                         $(json_response).each(function(key, data) {
                             var zone_feature = JSON.parse(data.zone_feature);
                             data.NAME_2 = zone_feature.properties.NAME_2;
+                            console.log("NAME_2: "+data.NAME_2);
+                            lu_commercial_obj = data.lu_commercial_obj;
+                            lu_parks_obj = data.lu_parks_obj;
+                            lu_industrial_obj = data.lu_industrial_obj;
+                            lu_agriculture_obj = data.lu_agriculture_obj;
+                            lu_residential_obj = data.lu_residential_obj;
+                            lu_utilities_obj = data.lu_utilities_obj;
+                            lu_other_obj = data.lu_other_obj;
+
+
+
+
                             taz_analyzed.push(data);
                             max_score_basis = max_produced;
                             var zone_geo = L.geoJson(zone_feature, mystyle(data)).bindTooltip(getAnalyzedTooltip(zone_feature.properties.NAME_2, data));
@@ -1016,7 +1047,7 @@
         $("#analyzed-zones-box").click(function(){
             if($("#analyzed-zones-box").is(':checked')){
                 for(x in visualize_analyzed_layers){
-                    visualize_analyzed_layers[x].addTo(mymap).bringToFront();
+                    visualize_analyzed_layers[x].addTo(mymap);
                 }
             }else{
                 for(x in visualize_analyzed_layers){
@@ -1030,7 +1061,7 @@
         }
 
         function refresh_zone_details(){
-            alert("zonedeets:");
+            //alert("zonedeets:");
             console.log("zonedeets:");
             var zone_details = $("#table-zone-details").empty();
             for(x in taz_analyzed){
@@ -1389,7 +1420,7 @@
 
         function mystyle(feature) {
             if(max_score_basis == max_produced){
-                alert("COLOR PRODUCED");
+                //alert("COLOR PRODUCED");
                 return {
                     fillColor: getColor_production(feature.trips_produced),
                     weight: 2,
@@ -1399,7 +1430,7 @@
                     fillOpacity: 0.7
                 };
             }else{
-                alert("COLOR ATTRACTED");
+                //alert("COLOR ATTRACTED");
                 return {
                     fillColor: getColor_attraction(feature.trips_attracted),
                     weight: 2,
@@ -1490,7 +1521,7 @@
                                     }
                                     pruneCluster.RegisterMarker(marker);
                                 });
-                                pruneCluster.Cluster.Size = 10;
+                                pruneCluster.Cluster.Size = 25;
                                 pruneCluster.ProcessView();
                                 visualize_amenity_layers[filename] = pruneCluster;
                                 refresh_amenity_list();
@@ -1510,7 +1541,7 @@
 
                 visualize_amenities[filename] = true;
                 //visualize_amenity_layers[filename].addTo(mymap);// = amenity_layer_list;
-                mymap.addLayer(visualize_amenity_layers[filename]).bringToFront();
+                mymap.addLayer(visualize_amenity_layers[filename]);
             }else{
                 mymap.removeLayer(visualize_amenity_layers[filename]);
                 delete visualize_amenities[ filename ];
@@ -1523,7 +1554,7 @@
                 visualize_households[filename] = true;
                 //visualize_amenity_layers[filename].addTo(mymap);// = amenity_layer_list;
                 mymap.addLayer(visualize_household_layers[filename]);
-                visualize_household_layers[filename].bringToFront();
+                visualize_household_layers[filename];
             }else{
                 mymap.removeLayer(visualize_household_layers[filename]);
                 delete visualize_households[ filename ];
@@ -1544,7 +1575,7 @@
                                         color: 'white',
                                         dashArray: '3',
                                         fillOpacity: 0.7
-                                    }}).bindTooltip('<b>Zone #'+(trafficzone_json[x].properties.NAME_2)+'</b>').addTo(mymap).bringToFront());
+                                    }}).bindTooltip('<b>Zone #'+(trafficzone_json[x].properties.NAME_2)+'</b>').addTo(mymap));
                 }
                 visualize_trafficzone_layers[filename] = trafficzone_layer_list;
             }else{
@@ -1571,7 +1602,7 @@
                                         color: 'white',
                                         dashArray: '3',
                                         fillOpacity: 0.7
-                                    }}).bindTooltip('<b>Zone #'+(landuse_json[x].properties.landuse_type)+'</b>').addTo(mymap).bringToFront());
+                                    }}).bindTooltip('<b>Zone #'+(landuse_json[x].properties.landuse_type)+'</b>').addTo(mymap));
                 }
                 visualize_landuse_layers[filename] = landuse_layer_list;
             }else{
@@ -1590,6 +1621,11 @@
             {% for file in amenity_filenames %}
             if(!(typeof amenity_files['{{file}}'] === 'undefined')){
                 var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                if(bool_done_intr_add_file == false){
+                    listDiv.addClass("add-file-intro");
+                    listDiv.attr("data-intro","You can visualize the files you import by ticking the box on their left hand side");
+                    listDiv.attr("data-step", "1");
+                }
                 var inputDiv = $("<input />").addClass("with-gap visualize-amenities").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
@@ -1619,6 +1655,12 @@
             }*/
 
             $('#amenity-modal').closeModal();
+            console.log("honesty: "+bool_done_intr_add_file);
+            if(bool_done_intr_add_file == false){
+                //alert("went intro dynamic!");
+                bool_done_intr_add_file = true;
+                introJs(".add-file-intro").start();
+            }
         }
 
         
@@ -1629,6 +1671,10 @@
             {% for file in trafficzone_filenames %}
             if(!(typeof trafficzone_files['{{file}}'] === 'undefined')){
                 var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                if(bool_done_intr_add_file == false){
+                    listDiv.addClass("add-file-intro");
+                    listDiv.attr("data-intro","You can visualize the files you import by ticking the box on their left hand side");
+                }
                 var inputDiv = $("<input />").addClass("with-gap").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
@@ -1652,6 +1698,10 @@
             }
             {% endfor %}
             $('#trafficzone-modal').closeModal();
+            if(bool_done_intr_add_file == false){
+                bool_done_intr_add_file = true;
+                introJs(".add-file-intro").start();
+            }
         }
 
         function refresh_landuse_list(){
@@ -1661,6 +1711,10 @@
             {% for file in landuse_filenames %}
             if(!(typeof landuse_files['{{file}}'] === 'undefined')){
                 var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                if(bool_done_intr_add_file == false){
+                    listDiv.addClass("add-file-intro");
+                    listDiv.attr("data-intro","You can visualize the files you import by ticking the box on their left hand side");
+                }
                 var inputDiv = $("<input />").addClass("with-gap").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
@@ -1684,6 +1738,10 @@
             }
             {% endfor %}
             $('#landuse-modal').closeModal();
+            if(bool_done_intr_add_file == false){
+                bool_done_intr_add_file = true;
+                introJs(".add-file-intro").start();
+            }
         }
 
         function refresh_household_list(){
@@ -1693,6 +1751,10 @@
             {% for file in household_filenames %}
             if(!(typeof household_files['{{file}}'] === 'undefined')){
                 var listDiv = $("<li></li>").addClass("collection-item row").attr("style","padding-left:10px !important; padding-right:10px !important;").attr("name", "{{file}}");
+                if(bool_done_intr_add_file == false){
+                    listDiv.addClass("add-file-intro");
+                    listDiv.attr("data-intro","You can visualize the files you import by ticking the box on their left hand side");
+                }
                 var inputDiv = $("<input />").addClass("with-gap").attr("style","margin:0 !important; padding:0 !important;").attr("name","file-checkbox")
                                .attr("id","{{file}}")
                                .attr("value","{{file}}")
@@ -1716,6 +1778,10 @@
             }
             {% endfor %}
             $('#household-modal').closeModal();
+            if(bool_done_intr_add_file == false){
+                bool_done_intr_add_file = true;
+                introJs(".add-file-intro").start();
+            }
         }
 
 

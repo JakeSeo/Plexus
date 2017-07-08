@@ -125,8 +125,15 @@ class TripGeneration:
             df.loc[x] = [int(prod_score), int(attr_score)]
             productionScores.append(int(prod_score))
             attractionScores.append(int(attr_score))
-            # print("Zone "+str(x)+": Production="+str(prod_score)+" , Attraction="+str(attr_score))
-        return df, productionScores, attractionScores;
+            print("Zone "+str(x)+": Production="+str(prod_score)+" , Attraction="+str(attr_score))
+
+        print("prodscores: " + str(productionScores))
+        print("attrscores: " + str(attractionScores))
+        balancing_factor = sum(productionScores)/sum(attractionScores)
+        balanced_attractionScores = [i * balancing_factor for i in attractionScores]
+
+        print("balanced attr scores: " + str(balanced_attractionScores))
+        return df, productionScores, balanced_attractionScores;
         # print("Total Production="+str(total_production)+" , Total Attraction="+str(total_attraction))
 
     def getTripProductionScores(self):

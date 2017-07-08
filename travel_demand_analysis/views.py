@@ -85,8 +85,8 @@ def run_analysis(request):
             pandas_modsplit.to_csv("media/SAMPLE_ZONAL_modsplit"+str(index)+".csv", encoding='utf-8')
 
         for index, zone_info in enumerate(taz_info_preanalysis):
-            zone_info.trips_produced = overall_trip_production[index]
-            zone_info.trips_attracted = overall_trip_attraction[index]
+            zone_info.trips_produced = round(overall_trip_production[index], 2)
+            zone_info.trips_attracted = round(overall_trip_attraction[index], 2)
 
         flattened_distrib_jeep = [val for sublist in list_of_dataframes_by_mode[0] for val in sublist]
         flattened_distrib_bus = [val for sublist in list_of_dataframes_by_mode[1] for val in sublist]

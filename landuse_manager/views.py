@@ -94,7 +94,7 @@ def cleanLandUse(source, srcExtension):
     f.write("[\n")
     ctr = 0
     index = -1
-    with open("media/landuses/" + source + srcExtension) as z:
+    with open("media/landuses/" + source + srcExtension, encoding="utf-8") as z:
         m = json.load(z)
         print(json.dumps(m))
         for data in m['features']:

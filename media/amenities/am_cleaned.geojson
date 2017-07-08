@@ -1,0 +1,182 @@
+[
+    {
+        "geometry": {
+            "coordinates": [
+                121.0413791,
+                14.5599022
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "transport",
+            "capacity": "200",
+            "id": "0",
+            "latitude": "14.5599022",
+            "longitude": "121.0413791",
+            "name": "Shell"
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.99537,
+                14.5407941
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "other",
+            "capacity": "200",
+            "id": "1",
+            "latitude": "14.5407941",
+            "longitude": "120.99537",
+            "name": "Daughters of St Paul (nunnery)"
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.9936534,
+                14.5465323
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "commerce",
+            "capacity": "200",
+            "id": "2",
+            "latitude": 14.5465323,
+            "longitude": 120.9936534,
+            "name": "LBC"
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.995639,
+                14.5485397
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "other",
+            "capacity": "200",
+            "id": "3",
+            "latitude": "14.5485397",
+            "longitude": "120.995639",
+            "name": ""
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.994976,
+                14.5406976
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "education",
+            "capacity": "200",
+            "id": "4",
+            "latitude": "14.5406976",
+            "longitude": "120.994976",
+            "name": "Gideon Academy"
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.993215,
+                14.5480819
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "education",
+            "capacity": "200",
+            "id": "5",
+            "latitude": "14.5480819",
+            "longitude": "120.993215",
+            "name": "The Peartree Academy"
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.9936354,
+                14.5450079
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "healthcare",
+            "capacity": "200",
+            "id": "6",
+            "latitude": "14.5450079",
+            "longitude": "120.9936354",
+            "name": "Dr.Elvira Manalto-Lagrosa Health Center"
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.9961085,
+                14.5501004
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "commerce",
+            "capacity": "200",
+            "id": "7",
+            "latitude": "14.5501004",
+            "longitude": "120.9961085",
+            "name": "Cartimar Market"
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.992324,
+                14.5525005
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "transport",
+            "capacity": "200",
+            "id": "8",
+            "latitude": 14.5525005,
+            "longitude": 120.992324,
+            "name": "LandBank"
+        },
+        "type": "Feature"
+    },
+    {
+        "geometry": {
+            "coordinates": [
+                120.994444,
+                14.5445527
+            ],
+            "type": "Point"
+        },
+        "properties": {
+            "amenity_type": "internet",
+            "capacity": "200",
+            "id": "9",
+            "latitude": "14.5445527",
+            "longitude": "120.994444",
+            "name": "YJ! Cyber Cafe"
+        },
+        "type": "Feature"
+    }
+]
